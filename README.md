@@ -6,13 +6,13 @@ Progetto di tecnologie web, su un e-commerce
 
 Stack: ~~MEAN~~ LAMP (DAMP)
 
-* Docker/Linux/Windows
-* Apache
-* MySQL
-* PHP
+- Docker/Linux/Windows
+- Apache
+- MySQL
+- PHP
 
 ## TODO
 
-[ ] Back-End
-[ ] Front-End
-[ ] Mockup
+- [ ] Back-End
+- [ ] Front-End
+- [ ] Mockup
