@@ -2,7 +2,7 @@
 
 Progetto di tecnologie web, su un e-commerce
 
-## Tecnology
+## Technology
 
 Stack: ~~MEAN~~ LAMP (DAMP)
 
