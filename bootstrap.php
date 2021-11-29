@@ -6,7 +6,7 @@ define("IMG_DIR", "./img/");
 
 //Load Libs
 include_once("lib/autoload.php");
-LoadClasses();
+//LoadClasses();
 
 //Load other files
 
