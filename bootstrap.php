@@ -12,5 +12,12 @@ include_once("lib/autoload.php");
 
 
 //Define Variables
-$dbh = new database\DatabaseHelper("localhost", "root", "", "e-commerce");
+$database_connection = array(
+    "servername"=>"localhost", 
+    "username"=>"root",
+    "password"=>"",
+    "dbname"=>"e-commerce"
+);
+//$dbh = new database\DatabaseHelper(...$database_connection);
+$dbm = new database\DatabaseManager(...$database_connection);
 ?>
