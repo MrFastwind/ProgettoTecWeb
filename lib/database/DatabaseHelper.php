@@ -50,21 +50,21 @@ class DatabaseHelper{
          * getProducts
          *
          * @param  int $n
-         * @return void
+         * @return array
          */
-        public function getProducts($n=-1){
+        public function getProducts(int $start=0, int $n=-1):array{
             $query = <<<SQL
             SELECT ProductID, Product.Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
             FROM Product, User, Category
             WHERE UserID=VendorID AND Product.CategoryID=Category.CategoryID
-            ORDER BY CategoryID
+            ORDER BY Category.Name
             SQL;
-            if($n > 0){
-                $query .= " LIMIT ?";
+            if($n > 0 && $start>-1){
+                $query .= " LIMIT ? OFFSET ?";
             }
             $stmt = $this->db->prepare($query);
-            if($n > 0){
-                $stmt->bind_param('i',$n);
+            if($n > 0 && $start>-1){
+                $stmt->bind_param('ii',$n,$start);
             }
             $stmt->execute();
             $result = $stmt->get_result();
@@ -128,20 +128,60 @@ class DatabaseHelper{
             SELECT ProductID, Product.Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
             FROM Product, User, Category
             WHERE Category.CategoryID=? AND UserID=VendorID AND Product.CategoryID=Category.CategoryID
-            SKIP ?
-            LIMIT ?
+            LIMIT ? OFFSET ?
             SQL;
             $stmt = $this->db->prepare($query);
-            $stmt->bind_param('iii',$idcategory,$start,$n);
+            $stmt->bind_param('iii',$idcategory,$n,$start);
             $stmt->execute();
             $result = $stmt->get_result();
 
             return $result->fetch_all(MYSQLI_ASSOC);
         }
-
-        public function createProduct(string $name, string $description)
+        
+        /**
+         * getProductsLike
+         *
+         * @param  mixed $search
+         * @param  mixed $start
+         * @param  mixed $n
+         * @return array
+         */
+        public function getProductsLike(string $search,$start=0,$n=10):array{
+            $search = '%'.$search.'%';
+            $query = <<<SQL
+            SELECT ProductID, Product.Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
+            FROM Product, User, Category
+            WHERE ( Product.Name LIKE ? OR Product.Description LIKE ?) AND UserID=VendorID AND Product.CategoryID=Category.CategoryID
+            LIMIT ? OFFSET ?
+            SQL;
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param('ssii',$search,$search,$n,$start);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        
+        /**
+         * createProduct
+         *
+         * @param  mixed $name
+         * @param  mixed $description
+         * @return bool
+         */
+        public function createProduct(string $name, string $description, string $image, int $quantity, int $price, int $vendorId, int $categoryId):bool
         {
-            # code...
+            $query = <<<SQL
+            BEGIN
+            INSERT INTO Product (Name,Image,Description,Quantity,Price,VendorID,CategoryID)
+            VALUES (?,?,?,?,?,?,?)
+            COMMIT
+            SQL;
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param('ssss',$name,$image,$description,$quantity,$price,$vendorId,$categoryId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            return $result->fetch_all(MYSQLI_ASSOC);
         }
 
         ## User
