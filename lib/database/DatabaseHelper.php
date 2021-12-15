@@ -1,12 +1,9 @@
 <?php
 
 namespace database{
-    include_once ("user.php");
-    include_once ("product.php");
-    include_once ("factory.php");
     use mysqli;
 
-    class DatabaseHelper{
+class DatabaseHelper{
         private $db;
 
         public function __construct($servername, $username, $password, $dbname){
@@ -15,30 +12,8 @@ namespace database{
                 die("Connection failed: " . $this->db->connect_error);
             }        
         }
-        /**
-         * getRandomProducts
-         * 
-         * @param int $n the number of random item to return, default is 1
-         * @return array containing a dictionary of id, name, image_path, description of Product
-         */
-        public function getRandomProducts($n=1){
-            $query = <<<SQL
-            SELECT ProductID, Name, Image, Description, Quantity, Price, Category.Name as Category, Username as Vendor
-            FROM Product, Category, 
-            WHERE Category.CategoryID = Product.CategoryID
-            ORDER BY RAND()
-            LIMIT ?
-            SQL;
-            $stmt = $this->db->prepare($query);
-            if ($stmt == false){
-                var_dump($this->db->error);
-            }
-            $stmt->bind_param('i',$n);
-            $stmt->execute();
-            $result = $stmt->get_result();
 
-            return $result->fetch_all(MYSQLI_ASSOC);
-        }
+        ## Category
         
         /**
          * getCategories
@@ -69,6 +44,8 @@ namespace database{
             return $result->fetch_all(MYSQLI_ASSOC);
         }
         
+        ## Product
+
         /**
          * getProducts
          *
@@ -114,6 +91,31 @@ namespace database{
 
             return $result->fetch_all(MYSQLI_ASSOC);
         }
+
+        /**
+         * getRandomProducts
+         * 
+         * @param int $n the number of random item to return, default is 1
+         * @return array containing a dictionary of id, name, image_path, description of Product
+         */
+        public function getRandomProducts($n=1){
+            $query = <<<SQL
+            SELECT ProductID, Name, Image, Description, Quantity, Price, Category.Name as Category, Username as Vendor
+            FROM Product, Category, 
+            WHERE Category.CategoryID = Product.CategoryID
+            ORDER BY RAND()
+            LIMIT ?
+            SQL;
+            $stmt = $this->db->prepare($query);
+            if ($stmt == false){
+                var_dump($this->db->error);
+            }
+            $stmt->bind_param('i',$n);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
         
         /**
          * getProductsByCategory
@@ -121,19 +123,28 @@ namespace database{
          * @param  int $idcategory
          * @return array
          */
-        public function getProductsByCategory($idcategory){
+        public function getProductsByCategory($idcategory,$start=0,$n=10){
             $query = <<<SQL
             SELECT ProductID, Product.Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
             FROM Product, User, Category
             WHERE Category.CategoryID=? AND UserID=VendorID AND Product.CategoryID=Category.CategoryID
+            SKIP ?
+            LIMIT ?
             SQL;
             $stmt = $this->db->prepare($query);
-            $stmt->bind_param('i',$idcategory);
+            $stmt->bind_param('iii',$idcategory,$start,$n);
             $stmt->execute();
             $result = $stmt->get_result();
 
             return $result->fetch_all(MYSQLI_ASSOC);
         }
+
+        public function createProduct(string $name, string $description)
+        {
+            # code...
+        }
+
+        ## User
         
         /**
          * getUsers
