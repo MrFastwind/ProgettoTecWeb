@@ -64,6 +64,14 @@ namespace database{
             return new Product(...$item);
         }
 
+        public function getProductsLike(string $query,$length,$start_position):iterable{
+            if (!$this->areArgsCorrects($length,$start_position)){
+                return array();
+            }
+            $table = $this->dbh->getProductsLike($query,$start_position,$length);
+            return $this->productList($table);
+        }
+
         /**
          * getProductByCategory
          *
@@ -72,12 +80,21 @@ namespace database{
          * @param  int $length of the table list
          * @return Products[]
          */
-        public function getProductByCategory($idCategory,$start_position = 0,$length = 10): iterable
+        public function getProductsByCategory($idCategory,$start_position = 0,$length = 10): iterable
         {
-            if ($length < 1 or $start_position < 0){
+            if (!$this->areArgsCorrects($length,$start_position)){
                 return array();
             }
             $table = $this->dbh->getProductsByCategory($idCategory,$start_position,$length);
+            return $this->productList($table);
+        }
+
+        public function getProducts($start_position = 0,$length = 10):iterable
+        {
+            if (!$this->areArgsCorrects($length,$start_position)){
+                return array();
+            }
+            $table = $this->dbh->getProducts($start_position, $length);
             return $this->productList($table);
         }
 
@@ -101,6 +118,14 @@ namespace database{
                 }
             }
             return $collection;
+        }
+
+        protected function areArgsCorrects(int $length,int $start):bool
+        {
+            if ($length < 1 or $start < 0){
+                return false;
+            }
+            return true;
         }
 
     }
