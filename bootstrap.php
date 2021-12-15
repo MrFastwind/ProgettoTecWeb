@@ -18,6 +18,7 @@ $database_connection = array(
     "password"=>"",
     "dbname"=>"e-commerce"
 );
+
 //$dbh = new database\DatabaseHelper(...$database_connection);
 $dbm = new database\DatabaseManager(...$database_connection);
 ?>

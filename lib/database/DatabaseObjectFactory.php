@@ -1,5 +1,7 @@
 <?php
 namespace database{
+    //TODO: divide in multiple factories
+    use password_utils as pu;
     class DatabaseObjectFactory{
 
         private $dbh;
@@ -27,6 +29,19 @@ namespace database{
             $user['isVendor'] = (bool)$user['isVendor'];
 
             return new User(...$user);
+        }
+
+        public function getUserBy(string $Name, string $Password ): User
+        {
+            $user = $this->dbh->getUserByName($Name);
+            if(is_array($user)){
+                if(pu\verifyPassword($Password,$user["PasswordHash"])){
+                    return $this->getUser($user["UserID"]);
+                }
+                throw new WrongPassword();
+            }
+            
+            return null;
         }
                 
         /**
@@ -64,7 +79,7 @@ namespace database{
             return new Product(...$item);
         }
 
-        public function getProductsLike(string $query,$length,$start_position):iterable{
+        public function getProductsLike(string $query,$start_position=0,$length=10):iterable{
             if (!$this->areArgsCorrects($length,$start_position)){
                 return array();
             }
