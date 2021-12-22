@@ -10,9 +10,6 @@ define('LABEL_RANDOM', 'random');
 define('LABEL_START', 'start');
 define('LABEL_LENGTH', 'length');
 
-
-
-
 //$search = $_GET['search'];
 //$random = (bool)$_GET['random'];
 //$start = (int)$_GET['start'];
