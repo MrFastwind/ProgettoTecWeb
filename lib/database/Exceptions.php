@@ -32,11 +32,19 @@ namespace database{
         }
     }
 
+    class UserExistAlready extends DatabaseException{
+        const Message="The User already exist!";
+
+        public function __construct($code = 405, Throwable $previous = null) {
+            parent::__construct($this::Message, $code, $previous);
+        }
+    } 
+
     class ProductNotExist extends DatabaseException
     {
         const Message="The Product does not exist!";
 
-        public function __construct($code = 405, Throwable $previous = null) {
+        public function __construct($code = 414, Throwable $previous = null) {
             parent::__construct($this::Message, $code, $previous);
         }
     }

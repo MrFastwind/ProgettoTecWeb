@@ -2,14 +2,23 @@
 
 namespace database{
 
-    use JetBrains\PhpStorm\ArrayShape;
     use LengthException;
     use mysqli;
     use mysqli_sql_exception;
-    use mysqli_stmt;
+    use mysqli_driver;
 
 class DatabaseHelper{
         private $db;
+
+        public function __construct($servername, $username, $password, $dbname, $report_mode=MYSQLI_REPORT_STRICT){
+            $driver = new mysqli_driver();
+            $driver->report_mode = $report_mode;
+            $this->db = new mysqli($servername, $username, $password, $dbname);
+            if ($this->db->connect_error) {
+                die("Connection failed: " . $this->db->connect_error);
+            }
+        }
+
         const USER_QUERY = <<<SQL
         SELECT UserID, Username, Email, PasswordHash, EXISTS(
                 SELECT *
@@ -23,13 +32,19 @@ class DatabaseHelper{
         FROM User
         SQL;
 
-        public function __construct($servername, $username, $password, $dbname){
-            $this->db = new mysqli($servername, $username, $password, $dbname);
-            if ($this->db->connect_error) {
-                die("Connection failed: " . $this->db->connect_error);
-            }        
-        }
-
+        
+        /**
+         * executeQuery
+         *
+         * @param  string $query
+         * @param  int $result_mode
+         * @param  string $params_string
+         * @param  array $params
+         * @return mixed false if fails to execute
+         * @throws mysqli_sql_exception if statement syntax is wrong
+         * @throws LengthException if the number of parameters is different from the string
+         * @throws mysqliBindException if the type of bind is wrong
+         */
         private function executeQuery(string $query, int $result_mode=MYSQLI_ASSOC,string $params_string='', ...$params):mixed{
             $stmt = $this->db->prepare($query);
             if (!$stmt){
@@ -57,6 +72,8 @@ class DatabaseHelper{
          *
          * @return array containing a dictionary of id, name of Category
          */
+        //TODO: CHANGE to executeQuery
+        //TODO: CHANGE to single/multi rows
         public function getCategories(){
             $stmt = $this->db->prepare("SELECT * FROM Category");
             $stmt->execute();
@@ -72,6 +89,8 @@ class DatabaseHelper{
          * @param  int $idcategory the id of the category
          * @return string containing the name
          */
+        //TODO: CHANGE to executeQuery
+        //TODO: CHANGE to single row
         public function getCategoryById($idcategory){
             $stmt = $this->db->prepare("SELECT Name FROM Category WHERE CategoryID=?");
             $stmt->bind_param('i',$idcategory);
@@ -89,6 +108,7 @@ class DatabaseHelper{
          * @param  int $n
          * @return array
          */
+        //TODO: CHANGE to executeQuery
         public function getProducts(int $start=0, int $n=-1):array{
             $query = <<<SQL
             SELECT ProductID, Product.Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
@@ -115,6 +135,8 @@ class DatabaseHelper{
          * @param  int $id of the Product
          * @return array as the dictionary of Product 
          */
+        //TODO: CHANGE to executeQuery
+        //TODO: CHANGE to single row
         public function getProductById($id){
             $query = <<<SQL
             SELECT ProductID, Product.Name as Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
@@ -135,6 +157,7 @@ class DatabaseHelper{
          * @param int $n the number of random item to return, default is 1
          * @return array containing a dictionary of id, name, image_path, description of Product
          */
+        //TODO: CHANGE to executeQuery
         public function getRandomProducts($n=1){
             $query = <<<SQL
             SELECT ProductID, Name, Image, Description, Quantity, Price, Category.Name as Category, Username as Vendor
@@ -160,6 +183,7 @@ class DatabaseHelper{
          * @param  int $idcategory
          * @return array
          */
+        //TODO: CHANGE to executeQuery
         public function getProductsByCategory($idcategory,$start=0,$n=10){
             $query = <<<SQL
             SELECT ProductID, Product.Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
@@ -183,6 +207,7 @@ class DatabaseHelper{
          * @param  mixed $n
          * @return array
          */
+        //TODO: CHANGE to executeQuery
         public function getProductsLike(string $search,$start=0,$n=10):array{
             $search = '%'.$search.'%';
             $query = <<<SQL
@@ -205,6 +230,9 @@ class DatabaseHelper{
          * @param  mixed $description
          * @return bool
          */
+
+         //TODO: CHANGE to executeQuery
+         //TODO: CHANGE to boolean result
         public function createProduct(string $name, string $description, string $image, int $quantity, int $price, int $vendorId, int $categoryId):bool
         {
             $query = <<<SQL
@@ -228,6 +256,7 @@ class DatabaseHelper{
          *
          * @return array
          */
+        //TODO: CHANGE to executeQuery
         public function getUsers(){
             $query = $this::USER_QUERY . " WHERE Enable = True";
             $stmt = $this->db->prepare($query);
@@ -236,20 +265,38 @@ class DatabaseHelper{
 
             return $result->fetch_all(MYSQLI_ASSOC);
         }
-
+        
+        /**
+         * getUserById
+         *
+         * @param  int $userid
+         * @return array
+         */
         public function getUserById($userid){
 
             $query = $this::USER_QUERY . " WHERE Enable = True AND UserID=?";
 
-            $stmt = $this->db->prepare($query);
-            if ($stmt == false){
-                var_dump($this->db->error);
-            }
-            $stmt->bind_param('iii',$userid,$userid,$userid);
-            $stmt->execute();
-            $result = $stmt->get_result();
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'iii',$userid,$userid,$userid);
 
-            return $result->fetch_all(MYSQLI_ASSOC);
+            if(!$result || empty($result)){
+                throw new UserNotExist();
+            }            
+            return $result[0];
+        }
+        
+        /**
+         * getUserByName
+         *
+         * @param  int $name
+         * @return void
+         */
+        //TODO: CHANGE to single row
+        public function getUserByName(string $name)
+        {
+            $query = $this::USER_QUERY .' '. <<<SQL
+            WHERE Username = ? OR Email = $name
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC, 'ss',...[$name,$name])[0];
         }
         
         /**
@@ -259,6 +306,8 @@ class DatabaseHelper{
          * @param  mixed $password hashed
          * @return array as dictionary of User
          */
+        //TODO: CHANGE to executeQuery
+        //TODO: CHANGE to boolean result
         public function checkLogin($username, $password){
             $query = "SELECT UserID, Username, Email FROM Users WHERE Enable = True AND Username = ? AND PasswordHash = ?";
             $stmt = $this->db->prepare($query);
@@ -268,37 +317,45 @@ class DatabaseHelper{
 
             return $result->fetch_all(MYSQLI_ASSOC);
         }
-        
-        public function getUserByName(string $name)
-        {
-            $query = $this::USER_QUERY .' '. <<<SQL
-            WHERE Username = ? OR Email = $name
-            SQL;
-            $stmt=$this->db->prepare($query);
-            $stmt->bind_param('ss',$name,$name);
-            $stmt->execute();
-            $result = $stmt->get_result();
 
-            return $result->fetch_all(MYSQLI_ASSOC);
+        //TODO: CHANGE to executeQuery
+        //TODO: CHANGE to boolean result
+        public function registerClient($username, $password, $email){
+            $id = $this->registerUser($username, $password, $email);
+            if(!$id){
+                throw new UserExistAlready();
+            }
+            $this->addUserToClientById($id);
+            return $this->getUserById($id);
         }
 
-        public function registerClient($username, $password, $email){
+        //TODO: CHANGE to boolean result
+        private function registerUser($username, $password, $email): mixed{
             $query = <<<SQL
-            BEGIN
             INSERT INTO Users (Username,PasswordHash,Email)
             VALUES (?,?,?)
-            INSERT INTO Client (UserID)
-            VALUES (LAST_INSERT_ID())
-            COMMIT
             SQL;
-            $stmt = $this->db->prepare($query);
-            $stmt->bind_param('ssss',$username,$password,$email,$username);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            return $result->fetch_all(MYSQLI_ASSOC);
+            try{
+                if($this->executeQuery($query,MYSQLI_ASSOC,'ssss',...[$username,$password,$email,$username])){
+                    return $this->getUserByName($username)[0]['UserID'];
+                }
+                return false;
+            }catch(mysqli_sql_exception $e){
+                return false;
+            }
         }
 
+        //TODO: CHANGE to executeQuery
+        //TODO: CHANGE to boolean result
+        public function addUserToClientById(int $userId){
+            $query=<<<SQL
+                INSERT INTO Client (UserID)
+                VALUES (?)
+            SQL;
+        }
+
+        //TODO: CHANGE to executeQuery
+        //TODO: CHANGE to row
         public function getCartByUser($userid){
             $query = <<<SQL
             SELECT ProductID, Product.Name, Image, Description, CartItem.Quantity as ItemQuantity, Price
