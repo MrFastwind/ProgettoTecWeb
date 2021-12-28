@@ -1,14 +1,14 @@
 <?php
-    require_once("./bootstrap.php");
+
+use function shop\login;
+
+require_once("./bootstrap.php");
 
     if(isset($_POST["username"]) && isset($_POST["password"])){
-        $result = $dbh->checkLogin($_POST["username"], $_POST["password"]);
-        if(count($result)==0){
+        $result = login($_POST["username"], $_POST["password"], $dbm);
+        if(!$result){
             $templateParams["erroreLogin"] = "Username o password errati";
         }
-        //else{
-            //registerLoggedUser($result[0]);//
-        //}
     }
 
     if(isUserLoggedIn()){

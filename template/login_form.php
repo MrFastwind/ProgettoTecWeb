@@ -11,7 +11,10 @@
                 <label for="password">Password:</label><input type="password" id="password" name="password" />
             </li>
             <li>
-                <input type="submit" name="submit" value="Invia" />
+                <input type="submit" name="submit" value="Accedi" />
             </li>
         </ul>
+        <footer>
+            <p>Non hai un account? <a href="login_form.php">Registrati</a></p>
+        </footer>
 </form>
