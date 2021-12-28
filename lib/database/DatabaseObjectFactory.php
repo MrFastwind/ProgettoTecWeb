@@ -30,18 +30,16 @@ namespace database{
 
             return new User(...$user);
         }
-
-        public function getUserBy(string $Name, string $Password ): User
-        {
-            $user = $this->dbh->getUserByName($Name);
-            if(is_array($user)){
-                if(pu\verifyPassword($Password,$user["PasswordHash"])){
-                    return $this->getUser($user["UserID"]);
-                }
-                throw new WrongPassword();
-            }
-            
-            return null;
+        
+        /**
+         * getUserBy
+         *
+         * @param  string $Name
+         * @return User
+         */
+        public function getUserBy(string $Name): User
+        {          
+            return new User(...$this->dbh->getUserByName($Name));
         }
                 
         /**

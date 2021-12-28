@@ -40,12 +40,12 @@ class DatabaseRequests{
          * @param  int $result_mode
          * @param  string $params_string
          * @param  array $params
-         * @return mixed false if fails to execute
+         * @return array|false false if fails to execute
          * @throws mysqli_sql_exception if statement syntax is wrong
          * @throws LengthException if the number of parameters is different from the string
          * @throws mysqliBindException if the type of bind is wrong
          */
-        private function executeQuery(string $query, int $result_mode=MYSQLI_ASSOC,string $params_string='', ...$params):mixed{
+        private function executeQuery(string $query, int $result_mode=MYSQLI_ASSOC,string $params_string='', ...$params):array|false{
             $stmt = $this->db->prepare($query);
             if (!$stmt){
                 throw new mysqli_sql_exception("Statement query syntax is wrong!");
@@ -286,6 +286,7 @@ class DatabaseRequests{
 
             $result = $this->executeQuery($query,MYSQLI_ASSOC,'iii',$userid,$userid,$userid);
 
+            //TODO: change in 2 checks, it could be a db error.
             if(!$result || empty($result)){
                 throw new UserNotExist();
             }            
@@ -296,15 +297,19 @@ class DatabaseRequests{
          * getUserByName
          *
          * @param  int $name
-         * @return void
+         * @return array
+         * @throws UserNotExist
          */
-        //TODO: CHANGE to single row
-        public function getUserByName(string $name)
+        public function getUserByName(string $name):array
         {
             $query = $this::USER_QUERY .' '. <<<SQL
             WHERE Username = ? OR Email = $name
             SQL;
-            return $this->executeQuery($query,MYSQLI_ASSOC, 'ss',...[$name,$name])[0];
+            $user = $this->executeQuery($query,MYSQLI_ASSOC, 'ss',...[$name,$name]);
+            if(empty($user)){
+                throw new UserNotExist();
+            }
+            return $user[0];
         }
         
         /**
