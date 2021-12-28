@@ -64,6 +64,14 @@ class DatabaseRequests{
 
             return $stmt->get_result()->fetch_all($result_mode);
         }
+        
+        /**
+         * hasRowsChanged
+         * @return bool
+         */
+        private function hasRowsChanged():bool{
+            return $this->db->affected_rows>0;
+        }
 
         ## Category
         
@@ -317,41 +325,59 @@ class DatabaseRequests{
 
             return $result->fetch_all(MYSQLI_ASSOC);
         }
-
-        //TODO: CHANGE to executeQuery
-        //TODO: CHANGE to boolean result
-        public function registerClient($username, $password, $email){
+        
+        /**
+         * registerClient
+         *
+         * @param  string $username
+         * @param  string $password
+         * @param  string $email
+         * @return int
+         * @throws UserExistAlready when can't make a user
+         */
+        public function registerClient(string $username, string $password, string $email){
             $id = $this->registerUser($username, $password, $email);
-            if(!$id){
-                throw new UserExistAlready();
-            }
             $this->addUserToClientById($id);
-            return $this->getUserById($id);
+            return $id;
         }
-
-        //TODO: CHANGE to boolean result
-        private function registerUser($username, $password, $email): mixed{
+        
+        /**
+         * registerUser
+         *
+         * @param  string $username
+         * @param  string $password
+         * @param  string $email
+         * @return int
+         * @throws UserExistAlready if can't add user
+         */
+        private function registerUser($username, $password, $email): int{
             $query = <<<SQL
             INSERT INTO Users (Username,PasswordHash,Email)
             VALUES (?,?,?)
             SQL;
-            try{
-                if($this->executeQuery($query,MYSQLI_ASSOC,'ssss',...[$username,$password,$email,$username])){
-                    return $this->getUserByName($username)[0]['UserID'];
-                }
-                return false;
-            }catch(mysqli_sql_exception $e){
-                return false;
-            }
-        }
 
-        //TODO: CHANGE to executeQuery
-        //TODO: CHANGE to boolean result
-        public function addUserToClientById(int $userId){
+            if($this->executeQuery($query,MYSQLI_ASSOC,'ssss',...[$username,$password,$email,$username])){
+                return $this->getUserByName($username)[0]['UserID'];
+            }
+            throw new UserExistAlready();
+        }
+        
+        /**
+         * addUserToClientById
+         *
+         * @param  int $userId
+         * @return bool
+         */
+        public function addUserToClientById(int $userId):bool{
             $query=<<<SQL
                 INSERT INTO Client (UserID)
                 VALUES (?)
             SQL;
+            $this->executeQuery($query,MYSQLI_ASSOC,"i",$userId);
+            if($this->hasRowsChanged()){
+                return true;
+            }
+            return false;
         }
 
         //TODO: CHANGE to executeQuery
