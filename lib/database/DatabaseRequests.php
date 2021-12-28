@@ -7,7 +7,7 @@ namespace database{
     use mysqli_sql_exception;
     use mysqli_driver;
 
-class DatabaseHelper{
+class DatabaseRequests{
         private $db;
 
         public function __construct($servername, $username, $password, $dbname, $report_mode=MYSQLI_REPORT_STRICT){

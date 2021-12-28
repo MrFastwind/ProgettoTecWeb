@@ -2,7 +2,7 @@
 namespace shop{
 
     use database\User;
-    use database\DatabaseHelper;
+    use database\DatabaseRequests;
     use database\DatabaseManager;
     use password_utils;
 
@@ -25,10 +25,10 @@ namespace shop{
      * @param  string $user
      * @param  string $password
      * @param  string $email
-     * @param  DatabaseHelper $databaseHelper
+     * @param  DatabaseRequests $databaseHelper
      * @return User 
      */
-    function registerClient(string $user, string $password, string $email, DatabaseHelper $databaseHelper):User{
+    function registerClient(string $user, string $password, string $email, DatabaseRequests $databaseHelper):User{
         $salted = password_utils\generatePassword($password);
         $id_user = $databaseHelper->registerClient($user,$salted,$email);
         if(!$id_user){

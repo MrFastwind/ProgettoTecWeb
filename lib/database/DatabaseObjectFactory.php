@@ -6,7 +6,7 @@ namespace database{
 
         private $dbh;
 
-        public function __construct(DatabaseHelper $dbh)
+        public function __construct(DatabaseRequests $dbh)
         {
             $this->dbh = $dbh;
         }
