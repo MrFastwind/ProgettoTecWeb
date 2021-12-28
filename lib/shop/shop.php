@@ -2,7 +2,7 @@
 namespace shop{
 
     use database\DatabaseManager;
-    class shop{
+    class Shop{
         
 
         public function __construct(private DatabaseManager $dbm){
