@@ -36,6 +36,7 @@ namespace database{
          *
          * @param  string $Name
          * @return User
+         * @throws UserNotExists
          */
         public function getUserBy(string $Name): User
         {          
