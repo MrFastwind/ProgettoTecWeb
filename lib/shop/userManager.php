@@ -44,7 +44,7 @@ class UserManager{
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new EmailIsInvalid($email);
             $salted = PasswordUtils::generatePassword($password);
             $id_user = $this->dbm->getRequests()->registerClient($user,$salted,$email);
-            return $this->dbm->getFactory()->getUser($id_user["UserID"]);
+            return $this->dbm->getFactory()->getUser($id_user);
         }
     }
 }

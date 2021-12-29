@@ -20,10 +20,8 @@ namespace database{
         public function getUser(int $id): User
         {
             $user = $this->dbh->getUserById($id);
-            if (empty($user)) {
+            if (!is_array($user)) {
                 return NULL;
-            }else {
-                $user=$user[0];
             }
             $user['isClient'] = (bool)$user['isClient'];
             $user['isVendor'] = (bool)$user['isVendor'];

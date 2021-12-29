@@ -44,12 +44,12 @@ class DatabaseRequests{
          * @param  int $result_mode
          * @param  string $params_string
          * @param  array $params
-         * @return array|false false if fails to execute
+         * @return array|bool false if fails to execute true if is not a set
          * @throws mysqli_sql_exception if statement syntax is wrong
          * @throws LengthException if the number of parameters is different from the string
          * @throws mysqliBindException if the type of bind is wrong
          */
-        private function executeQuery(string $query, int $result_mode=MYSQLI_ASSOC,string $params_string='', ...$params):array|false{
+        private function executeQuery(string $query, int $result_mode=MYSQLI_ASSOC,string $params_string='', ...$params):array|bool{
             $stmt = $this->db->prepare($query);
             if (!$stmt){
                 throw new mysqli_sql_exception($this->db->error);
@@ -65,8 +65,12 @@ class DatabaseRequests{
             if(!$stmt->execute()){
                 return false;
             }
+            $result = $stmt->get_result();
+            if(!$result){
+                return true;
+            }
 
-            return $stmt->get_result()->fetch_all((int)$result_mode);
+            return $result->fetch_all((int)$result_mode);
         }
         
         /**
@@ -306,14 +310,16 @@ class DatabaseRequests{
          */
         public function getUserByName(string $name):array
         {
-            $query = $this::USER_QUERY .' '. <<<SQL
-            WHERE Username = ? OR Email = $name
+            $query = <<<SQL
+            SELECT UserID
+            FROM User
+            WHERE Username = ? OR Email = ?
             SQL;
-            $user = $this->executeQuery($query,MYSQLI_ASSOC, 'ss',...[$name,$name]);
-            if(empty($user)){
+            $user = $this->executeQuery($query,MYSQLI_ASSOC, 'ss',$name,$name);
+            if(!is_array($user)){
                 throw new exceptions\UserNotExist();
             }
-            return $user[0];
+            return $this->getUserById($user[0]["UserID"]);
         }
         
         /**
@@ -366,7 +372,7 @@ class DatabaseRequests{
             SQL;
 
             if($this->executeQuery($query,MYSQLI_ASSOC,'sss',$username,$password,$email)){
-                return $this->getUserByName($username)[0]['UserID'];
+                return $this->getUserByName($username)['UserID'];
             }
             throw new exceptions\UserExistAlready();
         }
