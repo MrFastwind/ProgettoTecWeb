@@ -3,11 +3,10 @@ namespace shop{
 
     require_once($_SERVER["DOCUMENT_ROOT"] . "/bootstrap.php");
     use database\User;
-    use database\DatabaseRequests;
     use database\DatabaseManager;
-    use database\UserNotExist;
-    use database\WrongPassword;
-    use password_utils;
+    use database\exceptions\UserNotExist;
+    use database\exceptions\WrongPassword;
+    use utils\PasswordUtils;
 
 class UserManager{
 
@@ -25,7 +24,7 @@ class UserManager{
         function login(string $user, string $password):User{
 
             $userData = $this->dbm->getFactory()->getUserBy($user);
-            if(password_utils\verifyPassword($password,$userData->PasswordHash)){
+            if(PasswordUtils::verifyPassword($password,$userData->PasswordHash)){
                 return $userData;
             }
             throw new WrongPassword();
@@ -43,7 +42,7 @@ class UserManager{
         function registerClient(string $user, string $password, string $email):User{
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new EmailIsInvalid($email);
-            $salted = password_utils\generatePassword($password);
+            $salted = PasswordUtils::generatePassword($password);
             $id_user = $this->dbm->getRequests()->registerClient($user,$salted,$email);
             return $this->dbm->getFactory()->getUser($id_user["UserID"]);
         }

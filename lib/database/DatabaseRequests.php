@@ -2,11 +2,15 @@
 
 namespace database{
 
+    use database\exceptions\mysqliBindException;
+    use database\exceptions\UserExistAlready;
+    use database\exceptions\UserNotExist;
     use LengthException;
     use mysqli;
     use mysqli_sql_exception;
     use mysqli_driver;
 
+    //TODO:REFACTOR CODE (TO LONG)
 class DatabaseRequests{
         private $db;
 
@@ -48,13 +52,13 @@ class DatabaseRequests{
         private function executeQuery(string $query, int $result_mode=MYSQLI_ASSOC,string $params_string='', ...$params):array|false{
             $stmt = $this->db->prepare($query);
             if (!$stmt){
-                throw new mysqli_sql_exception("Statement query syntax is wrong!");
+                throw new mysqli_sql_exception($this->db->error);
             }
             if (strlen($params_string)>0){
                 if(strlen($params_string)!=count($params)){
                     throw new LengthException("Statement binds and number parameters doesn't match!");                    
                 }
-                if (!$stmt->bind_param($params_string,$params)){
+                if (!$stmt->bind_param($params_string,...$params)){
                     throw new mysqliBindException();
                 }
             }
@@ -62,7 +66,7 @@ class DatabaseRequests{
                 return false;
             }
 
-            return $stmt->get_result()->fetch_all($result_mode);
+            return $stmt->get_result()->fetch_all((int)$result_mode);
         }
         
         /**
@@ -288,7 +292,7 @@ class DatabaseRequests{
 
             //TODO: change in 2 checks, it could be a db error.
             if(!$result || empty($result)){
-                throw new UserNotExist();
+                throw new exceptions\UserNotExist();
             }            
             return $result[0];
         }
@@ -307,7 +311,7 @@ class DatabaseRequests{
             SQL;
             $user = $this->executeQuery($query,MYSQLI_ASSOC, 'ss',...[$name,$name]);
             if(empty($user)){
-                throw new UserNotExist();
+                throw new exceptions\UserNotExist();
             }
             return $user[0];
         }
@@ -357,14 +361,14 @@ class DatabaseRequests{
          */
         private function registerUser($username, $password, $email): int{
             $query = <<<SQL
-            INSERT INTO Users (Username,PasswordHash,Email)
+            INSERT INTO User (Username,PasswordHash,Email)
             VALUES (?,?,?)
             SQL;
 
-            if($this->executeQuery($query,MYSQLI_ASSOC,'ssss',...[$username,$password,$email,$username])){
+            if($this->executeQuery($query,MYSQLI_ASSOC,'sss',$username,$password,$email)){
                 return $this->getUserByName($username)[0]['UserID'];
             }
-            throw new UserExistAlready();
+            throw new exceptions\UserExistAlready();
         }
         
         /**
