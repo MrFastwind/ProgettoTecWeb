@@ -41,6 +41,8 @@ class UserManager{
          * @throws UserExistAlready when can't make a user
          */
         function registerClient(string $user, string $password, string $email):User{
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new EmailIsInvalid($email);
             $salted = password_utils\generatePassword($password);
             $id_user = $this->dbm->getRequests()->registerClient($user,$salted,$email);
             return $this->dbm->getFactory()->getUser($id_user["UserID"]);
