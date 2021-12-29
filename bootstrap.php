@@ -1,5 +1,8 @@
 <?php
 session_start();
+if (basename(__FILE__) == basename("bootstrap.php")) {
+    header('Location: index.php');
+  }
 
 //Defines
 define("IMG_DIR", "./img/");
