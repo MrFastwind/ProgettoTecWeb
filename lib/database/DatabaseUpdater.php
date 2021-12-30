@@ -4,7 +4,7 @@ namespace database{
 
     class DatabaseUpdater
     {
-        public function __construct(private DatabaseHelper $dbh){
+        public function __construct(private DatabaseRequests $dbh){
         }
         
         /**

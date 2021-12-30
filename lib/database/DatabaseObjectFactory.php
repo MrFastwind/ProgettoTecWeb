@@ -6,7 +6,7 @@ namespace database{
 
         private $dbh;
 
-        public function __construct(DatabaseHelper $dbh)
+        public function __construct(DatabaseRequests $dbh)
         {
             $this->dbh = $dbh;
         }
@@ -20,28 +20,25 @@ namespace database{
         public function getUser(int $id): User
         {
             $user = $this->dbh->getUserById($id);
-            if (empty($user)) {
+            if (!is_array($user)) {
                 return NULL;
-            }else {
-                $user=$user[0];
             }
             $user['isClient'] = (bool)$user['isClient'];
             $user['isVendor'] = (bool)$user['isVendor'];
 
             return new User(...$user);
         }
-
-        public function getUserBy(string $Name, string $Password ): User
-        {
-            $user = $this->dbh->getUserByName($Name);
-            if(is_array($user)){
-                if(pu\verifyPassword($Password,$user["PasswordHash"])){
-                    return $this->getUser($user["UserID"]);
-                }
-                throw new WrongPassword();
-            }
-            
-            return null;
+        
+        /**
+         * getUserBy
+         *
+         * @param  string $Name
+         * @return User
+         * @throws UserNotExists
+         */
+        public function getUserBy(string $Name): User
+        {          
+            return new User(...$this->dbh->getUserByName($Name));
         }
                 
         /**

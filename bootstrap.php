@@ -22,6 +22,9 @@ $database_connection = array(
     "dbname"=>"e-commerce"
 );
 
-//$dbh = new database\DatabaseHelper(...$database_connection);
+// Database Manager
 $dbm = new database\DatabaseManager(...$database_connection);
+
+// Shop Manager
+$shop = new shop\Shop($dbm);
 ?>
