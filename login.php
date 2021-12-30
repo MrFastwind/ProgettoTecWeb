@@ -1,17 +1,11 @@
 <?php
 
-use function shop\login;
 
 require_once("./bootstrap.php");
 
     if(isset($_POST["username"]) && isset($_POST["password"])){
-        $result = login($_POST["username"], $_POST["password"], $dbm);
-        if(!$result){
-            $templateParams["erroreLogin"] = "Username o password errati";
-        }
-        else{
-            registerLoggedUser($result);
-        }
+        $user = $shop->getUserManager()->login($_POST["username"], $_POST["password"]); //TODO: add error message in case of wrong pw
+        registerLoggedUser($result);
     }
 
     if(isUserLoggedIn()){

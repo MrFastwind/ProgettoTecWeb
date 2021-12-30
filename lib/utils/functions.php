@@ -14,9 +14,9 @@ function isUserLoggedIn(){
 }
 
 function registerLoggedUser($user){
-    $_SESSION["username"] = $user["username"];
-    $_SESSION["isClient"] = $user["isClient"];
-    $_SESSION["isVendor"] = $user["isVendor"];
+    $_SESSION["username"] = $user->Username;
+    $_SESSION["isClient"] = $user->isClient;
+    $_SESSION["isVendor"] = $user->isVendor;
 }
 
 ?>

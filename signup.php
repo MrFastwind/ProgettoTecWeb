@@ -1,13 +1,10 @@
 <?php
 
-use function shop\login;
-use function shop\registerClient;
-
 require_once("./bootstrap.php");
 
     if(isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["email"])){
-        registerClient($_POST["username"], $_POST["password"], $_POST["email"], $dbm);
-        registerLoggedUser(login($_POST["username"], $_POST["password"], $dbm));
+        $user = $shop->getUserManager()->registerClient($_POST["username"], $_POST["password"], $_POST["email"]); //TODO: add error message in case of invalid email
+        registerLoggedUser($user);
     }
 
     if(isUserLoggedIn()){
