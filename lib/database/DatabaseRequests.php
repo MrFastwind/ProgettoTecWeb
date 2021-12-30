@@ -129,8 +129,10 @@ class DatabaseRequests{
             $param_string = '';
             $query = <<<SQL
             SELECT ProductID, Product.Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
-            FROM Product, User, Category
-            WHERE UserID=VendorID AND Product.CategoryID=Category.CategoryID
+            FROM User, Product
+            LEFT JOIN Category
+            ON Product.CategoryID=Category.CategoryID
+            WHERE UserID=VendorID 
             ORDER BY Category.Name
             SQL;
             if($random){

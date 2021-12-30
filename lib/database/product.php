@@ -15,19 +15,7 @@ class Product extends DatabaseObject{
             public int $Price,
             public string $Vendor,
             public string $Category
-
-
-        )
-        {}
-        
-        /**
-         * getAsArray
-         *
-         * @return array
-         *//*
-        public function getAsArray():array{
-            return array($this);
-        }*/
+        ){}
 
         public function pushToDatabase()
         {
