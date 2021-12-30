@@ -1,5 +1,5 @@
 <form action="#" method="POST">
-    <h2>Signup</h2>
+    <h2>Sign up</h2>
         <ul>
             <li>
                 <input type="text" id="username" name="username"/>

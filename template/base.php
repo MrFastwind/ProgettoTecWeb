@@ -8,7 +8,22 @@
 <body>
     <header>
         <nav>
-            <!--TODO: hamburger menu-->
+            <div> <input type="text"></div> <!--TODO: make search bar-->
+            <ul>
+                <li>
+                    <a href="catalogo.php">Catalogo</a>
+                </li>
+                <li>
+                    <a href="#">Carrello</a> <!--TODO: add cart link-->
+                </li>
+            </ul>
+            <ul class="login">
+                <?php if(!isUserLoggedIn()): ?>
+                    <li><a href="login.php">Login</a></li>
+                <?php else: ?>
+                    <li><button>Logout</button></li> <!--TODO: add logout-->
+                <?php endif; ?>
+            </ul>
         </nav>
         <div>
             <!--TODO: add logo-->

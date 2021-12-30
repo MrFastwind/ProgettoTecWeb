@@ -9,6 +9,9 @@ require_once("./bootstrap.php");
         if(!$result){
             $templateParams["erroreLogin"] = "Username o password errati";
         }
+        else{
+            registerLoggedUser($result);
+        }
     }
 
     if(isUserLoggedIn()){
