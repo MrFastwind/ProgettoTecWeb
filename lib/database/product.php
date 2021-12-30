@@ -1,7 +1,10 @@
 <?php
 
 namespace database{
-    class Product{
+
+    use Exception;
+
+class Product extends DatabaseObject{
         
         public function __construct(
             public int $ProductID,
@@ -16,6 +19,20 @@ namespace database{
 
         )
         {}
+        
+        /**
+         * getAsArray
+         *
+         * @return array
+         *//*
+        public function getAsArray():array{
+            return array($this);
+        }*/
+
+        public function pushToDatabase()
+        {
+            throw new Exception("Not Implemented!");
+        }
     }
     
 }
