@@ -6,6 +6,7 @@ namespace shop{
     use database\DatabaseManager;
     use database\exceptions\UserNotExist;
     use database\exceptions\WrongPassword;
+    use shop\exceptions\EmailIsInvalid;
     use utils\PasswordUtils;
 
 class UserManager{
