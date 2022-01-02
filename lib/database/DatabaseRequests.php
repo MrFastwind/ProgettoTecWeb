@@ -86,16 +86,15 @@ class DatabaseRequests{
         /**
          * getCategories
          *
-         * @return array containing a dictionary of id, name of Category
+         * @return array
          */
-        //TODO: CHANGE to executeQuery
-        //TODO: CHANGE to single/multi rows
-        public function getCategories(){
-            $stmt = $this->db->prepare("SELECT * FROM Category");
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            return $result->fetch_all(MYSQLI_ASSOC);
+        public function getCategories():array{
+            $query= "SELECT * FROM Category";
+            $result = $this->executeQuery($query,MYSQLI_ASSOC);
+            if(is_array($result)){
+                return $result;
+            }
+            return array();
         }
 
             
@@ -105,15 +104,13 @@ class DatabaseRequests{
          * @param  int $idcategory the id of the category
          * @return string containing the name
          */
-        //TODO: CHANGE to executeQuery
-        //TODO: CHANGE to single row
-        public function getCategoryById($idcategory){
-            $stmt = $this->db->prepare("SELECT Name FROM Category WHERE CategoryID=?");
-            $stmt->bind_param('i',$idcategory);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            return $result->fetch_all(MYSQLI_ASSOC);
+        public function getCategoryById($idcategory):array|false{
+            $result = $this->executeQuery("SELECT Name FROM Category WHERE CategoryID=?"
+                ,MYSQLI_ASSOC,'i',$idcategory);
+            if(is_array($result)){
+                return $result[0];
+            }
+            return false;
         }
         
         ## Product
@@ -156,32 +153,28 @@ class DatabaseRequests{
          * getProductById
          *
          * @param  int $id of the Product
-         * @return array as the dictionary of Product 
+         * @return array|false as the dictionary of Product or false if not exist
          */
-        //TODO: CHANGE to executeQuery
-        //TODO: CHANGE to single row
-        public function getProductById($id){
+        public function getProductById($id):array|false{
             $query = <<<SQL
             SELECT ProductID, Product.Name as Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
             FROM Product, User, Category
             WHERE ProductID=? AND UserID=VendorID AND Product.CategoryID=Category.CategoryID
             SQL;
-            $stmt = $this->db->prepare($query);
-            $stmt->bind_param('i',$id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            return $result->fetch_all(MYSQLI_ASSOC);
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$id);
+            if(is_array($result)){
+                return $result[0];
+            }
+            return false;
         }
 
         /**
          * getRandomProducts
          * 
          * @param int $n the number of random item to return, default is 1
-         * @return array containing a dictionary of id, name, image_path, description of Product
+         * @return array containing dictionaries of id, name, image_path, description of Product
          */
-        //TODO: CHANGE to executeQuery
-        public function getRandomProducts($n=1){
+        public function getRandomProducts($n=1):array{
             $query = <<<SQL
             SELECT ProductID, Name, Image, Description, Quantity, Price, Category.Name as Category, Username as Vendor
             FROM Product, Category, 
@@ -189,15 +182,11 @@ class DatabaseRequests{
             ORDER BY RAND()
             LIMIT ?
             SQL;
-            $stmt = $this->db->prepare($query);
-            if ($stmt == false){
-                var_dump($this->db->error);
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$n);
+            if(is_array($result)){
+                return $result;
             }
-            $stmt->bind_param('i',$n);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            return $result->fetch_all(MYSQLI_ASSOC);
+            return array();
         }
         
         /**
@@ -206,20 +195,19 @@ class DatabaseRequests{
          * @param  int $idcategory
          * @return array
          */
-        //TODO: CHANGE to executeQuery
-        public function getProductsByCategory($idcategory,$start=0,$n=10){
+        public function getProductsByCategory($idcategory,$start=0,$n=10):array{
             $query = <<<SQL
             SELECT ProductID, Product.Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
             FROM Product, User, Category
             WHERE Category.CategoryID=? AND UserID=VendorID AND Product.CategoryID=Category.CategoryID
             LIMIT ? OFFSET ?
             SQL;
-            $stmt = $this->db->prepare($query);
-            $stmt->bind_param('iii',$idcategory,$n,$start);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            return $result->fetch_all(MYSQLI_ASSOC);
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,
+                'iii',$idcategory,$n,$start);
+            if(is_array($result)){
+                return $result;
+            }
+            return array();
         }
         
         /**
@@ -228,10 +216,9 @@ class DatabaseRequests{
          * @param  mixed $search
          * @param  mixed $start
          * @param  mixed $n
-         * @return array
+         * @return array|bool
          */
-        //TODO: CHANGE to executeQuery
-        public function getProductsLike(string $search,$start=0,$n=10):array{
+        public function getProductsLike(string $search,$start=0,$n=10):array|bool{
             $search = '%'.$search.'%';
             $query = <<<SQL
             SELECT ProductID, Product.Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
@@ -239,11 +226,11 @@ class DatabaseRequests{
             WHERE ( Product.Name LIKE ? OR Product.Description LIKE ?) AND UserID=VendorID AND Product.CategoryID=Category.CategoryID
             LIMIT ? OFFSET ?
             SQL;
-            $stmt = $this->db->prepare($query);
-            $stmt->bind_param('ssii',$search,$search,$n,$start);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            return $result->fetch_all(MYSQLI_ASSOC);
+            $result=$this->executeQuery($query,MYSQLI_ASSOC,'ssii',$search,$search,$n,$start);
+            if(is_array($result)){
+                return $result;
+            }
+            return $result;
         }
         
         /**
@@ -253,9 +240,6 @@ class DatabaseRequests{
          * @param  mixed $description
          * @return bool
          */
-
-         //TODO: CHANGE to executeQuery
-         //TODO: CHANGE to boolean result
         public function createProduct(string $name, string $description, string $image, int $quantity, int $price, int $vendorId, int $categoryId):bool
         {
             $query = <<<SQL
@@ -264,12 +248,8 @@ class DatabaseRequests{
             VALUES (?,?,?,?,?,?,?)
             COMMIT
             SQL;
-            $stmt = $this->db->prepare($query);
-            $stmt->bind_param('ssss',$name,$image,$description,$quantity,$price,$vendorId,$categoryId);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            return $result->fetch_all(MYSQLI_ASSOC);
+            return $this->executeQuery($query,MYSQLI_ASSOC,'ssss',
+                $name,$image,$description,$quantity,$price,$vendorId,$categoryId);
         }
 
         ## User
@@ -279,14 +259,13 @@ class DatabaseRequests{
          *
          * @return array
          */
-        //TODO: CHANGE to executeQuery
-        public function getUsers(){
+        public function getUsers():array{
             $query = $this::USER_QUERY . " WHERE Enable = True";
-            $stmt = $this->db->prepare($query);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            return $result->fetch_all(MYSQLI_ASSOC);
+            $result = $this->executeQuery($query);
+            if(is_array($result)){
+                return $result;
+            }
+            return array();
         }
         
         /**
@@ -294,14 +273,12 @@ class DatabaseRequests{
          *
          * @param  int $userid
          * @return array
+         * @throws UserNotExist
          */
-        public function getUserById($userid){
+        public function getUserById($userid):array{
 
             $query = $this::USER_QUERY . " WHERE Enable = True AND UserID=?";
-
             $result = $this->executeQuery($query,MYSQLI_ASSOC,'iii',$userid,$userid,$userid);
-
-            //TODO: change in 2 checks, it could be a db error.
             if(!$result || empty($result)){
                 throw new exceptions\UserNotExist();
             }            
@@ -327,25 +304,6 @@ class DatabaseRequests{
                 throw new exceptions\UserNotExist();
             }
             return $this->getUserById($user[0]["UserID"]);
-        }
-        
-        /**
-         * checkLogin
-         *
-         * @param  mixed $username of the user
-         * @param  mixed $password hashed
-         * @return array as dictionary of User
-         */
-        //TODO: CHANGE to executeQuery
-        //TODO: CHANGE to boolean result
-        public function checkLogin($username, $password){
-            $query = "SELECT UserID, Username, Email FROM Users WHERE Enable = True AND Username = ? AND PasswordHash = ?";
-            $stmt = $this->db->prepare($query);
-            $stmt->bind_param('ss',$username, $password);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            return $result->fetch_all(MYSQLI_ASSOC);
         }
         
         /**
@@ -402,22 +360,18 @@ class DatabaseRequests{
             return false;
         }
 
-        //TODO: CHANGE to executeQuery
-        //TODO: CHANGE to row
-        public function getCartByUser($userid){
+        public function getCartByUser($userid):array|false{
             $query = <<<SQL
             SELECT ProductID, Product.Name, Image, Description, CartItem.Quantity as ItemQuantity, Price
             FROM Client, CartItem, Product
             WHERE UserID = ? AND Client.CartID = CartItem.CartID AND Product.ProductID = CartItem.ProductID
             SQL;
-            $stmt = $this->db->prepare($query);
-            $stmt->bind_param('i',$userid);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            return $result->fetch_all(MYSQLI_ASSOC);
+            $result = $this->executeQuery($query,'i',$userid);
+            if(is_array($result)){
+                return $result;
+            }
+            return false;
         }
-
     }
 }
 ?>
