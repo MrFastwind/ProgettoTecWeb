@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (basename(__FILE__) == basename("bootstrap.php")) {
+if (basename($_SERVER['SCRIPT_NAME']) == basename("bootstrap.php")) {
     header('Location: index.php');
   }
 

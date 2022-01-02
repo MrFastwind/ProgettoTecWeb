@@ -1,7 +1,10 @@
 <?php
 
 namespace database{
-    class Product{
+
+    use Exception;
+
+class Product extends DatabaseObject{
         
         public function __construct(
             public int $ProductID,
@@ -12,10 +15,12 @@ namespace database{
             public int $Price,
             public string $Vendor,
             public string $Category
+        ){}
 
-
-        )
-        {}
+        public function pushToDatabase()
+        {
+            throw new Exception("Not Implemented!");
+        }
     }
     
 }

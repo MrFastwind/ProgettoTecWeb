@@ -124,25 +124,32 @@ class DatabaseRequests{
          * @param  int $n
          * @return array
          */
-        //TODO: CHANGE to executeQuery
-        public function getProducts(int $start=0, int $n=-1):array{
+        public function getProducts(int $start=0, int $n=-1, bool $random=false):array{
+            $params = array();
+            $param_string = '';
             $query = <<<SQL
             SELECT ProductID, Product.Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
-            FROM Product, User, Category
-            WHERE UserID=VendorID AND Product.CategoryID=Category.CategoryID
+            FROM User, Product
+            LEFT JOIN Category
+            ON Product.CategoryID=Category.CategoryID
+            WHERE UserID=VendorID 
             ORDER BY Category.Name
             SQL;
+            if($random){
+                $query .= ", rand()";
+            }
             if($n > 0 && $start>-1){
                 $query .= " LIMIT ? OFFSET ?";
+                $params[] = $n;
+                $params[] = $start;
+                $param_string .= "ii";  
             }
-            $stmt = $this->db->prepare($query);
-            if($n > 0 && $start>-1){
-                $stmt->bind_param('ii',$n,$start);
-            }
-            $stmt->execute();
-            $result = $stmt->get_result();
 
-            return $result->fetch_all(MYSQLI_ASSOC);
+            $result_set=$this->executeQuery($query,MYSQLI_ASSOC,$param_string,...$params);
+            if(is_array($result_set)){
+                return $result_set;
+            }
+            return array();
         }
         
         /**

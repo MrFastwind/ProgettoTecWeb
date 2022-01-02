@@ -100,19 +100,27 @@ namespace database{
             $table = $this->dbh->getProductsByCategory($idCategory,$start_position,$length);
             return $this->productList($table);
         }
-
-        public function getProducts($start_position = 0,$length = 10):iterable
+        
+        /**
+         * getProducts
+         *
+         * @param  mixed $start_position
+         * @param  mixed $length
+         * @param  mixed $random
+         * @return array
+         */
+        public function getProducts($start_position = 0,$length = 10,bool $random=false):array
         {
             if (!$this->areArgsCorrects($length,$start_position)){
                 return array();
             }
-            $table = $this->dbh->getProducts($start_position, $length);
+            $table = $this->dbh->getProducts($start_position, $length, $random);
             return $this->productList($table);
         }
 
         # Utility
         
-        protected function productList(array $table):iterable{
+        protected function productList(array $table):array{
             $collection = array();
             if(!empty($table)){
                 foreach ($table as $key => $value) {

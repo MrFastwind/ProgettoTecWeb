@@ -2,7 +2,9 @@
 
 namespace database{
 
-    class User{
+    use Exception;
+
+class User extends DatabaseObject{
 
         public function __construct(
             public int $UserID,
@@ -11,8 +13,11 @@ namespace database{
             public string $PasswordHash,
             public mixed $isClient,
             public mixed $isVendor
-        ){
+        ){}
 
+        public function pushToDatabase()
+        {
+            throw new Exception("Not Implemented!");
         }
     }
 }
