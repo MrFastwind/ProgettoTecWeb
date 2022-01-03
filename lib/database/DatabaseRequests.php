@@ -350,8 +350,8 @@ class DatabaseRequests{
          */
         public function addUserToClientById(int $userId):bool{
             $query=<<<SQL
-                INSERT INTO Client (UserID)
-                VALUES (?)
+            INSERT INTO Client (UserID)
+            VALUES (?)
             SQL;
             $this->executeQuery($query,MYSQLI_ASSOC,"i",$userId);
             if($this->hasRowsChanged()){
@@ -360,9 +360,17 @@ class DatabaseRequests{
             return false;
         }
 
+        //Cart
+        
+        /**
+         * getCartByUser
+         *
+         * @param  mixed $userid
+         * @return array
+         */
         public function getCartByUser($userid):array|false{
             $query = <<<SQL
-            SELECT ProductID, Product.Name, Image, Description, CartItem.Quantity as ItemQuantity, Price
+            SELECT Client.CartID as CartID, ProductID, Product.Name as ItemName, Image, Description, CartItem.Quantity as ItemQuantity, Price
             FROM Client, CartItem, Product
             WHERE UserID = ? AND Client.CartID = CartItem.CartID AND Product.ProductID = CartItem.ProductID
             SQL;
@@ -371,6 +379,95 @@ class DatabaseRequests{
                 return $result;
             }
             return false;
+        }
+
+        /**
+         * addItemToCart
+         * add product to cart with a quantity, use {@see database\DatabaseRequests::updateQuantityInCart} to update the quantity
+         * 
+         * @param  mixed $cartId
+         * @param  mixed $productId
+         * @param  mixed $number number of item to add by default 1
+         * @return bool
+         */
+        public function addItemToCart(int $cartId, int $productId, int $number=1):bool{
+            $query = <<<SQL
+            INSERT INTO CartItem(CartID,ProductID,Quantity)
+            VALUES (?,?,?)            
+            SQL;
+
+            return $this->executeQuery($query,MYSQLI_ASSOC,'iii',$cartId,$productId,$number);
+        }
+        
+        /**
+         * updateQuantityInCart
+         * update the quantity, to add the item in the cart use {@see database\DatabaseRequests::addItemToCart} 
+         *
+         * @param  mixed $cartId
+         * @param  mixed $productId
+         * @param  mixed $number
+         * @return bool
+         */
+        public function updateQuantityInCart(int $cartId, int $productId, int $number):bool{
+            $query = <<<SQL
+            UPDATE CartItem
+            SET Quantity=?
+            WHERE CartID=? AND ProductID=?          
+            SQL;
+
+            return $this->executeQuery($query,MYSQLI_ASSOC,'iii',$number,$cartId,$productId);
+        }
+                
+        /**
+         * removeItemFromCart
+         * delete item from cart, use {@see database\DatabaseRequests::updateQuantityInCart} to change the quantity
+         *
+         * @param  mixed $productId
+         * @param  mixed $cartId
+         * @return bool
+         */
+        public function removeItemFromCart($productId,$cartId):bool{
+            $query = <<<SQL
+            DELETE FROM CartItem
+            WHERE CartID=? AND ProductID=?          
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$cartId,$productId);
+        }
+        
+        /**
+         * createCartForUser
+         *
+         * @param  mixed $userId
+         * @return bool
+         */
+        public function createCartForUser($userId):bool{
+            $query =<<<SQL
+            BEGIN;
+            INSERT INTO Cart (UserID)
+            VALUE(?);
+            UPDATE User
+            SET CartID=LAST_INSERT_ID()
+            WHERE UserID=?;
+            END;
+            SQL;
+
+            return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$userId,$userId);
+        }
+        
+        /**
+         * deleteCart
+         *
+         * @param  mixed $cartId
+         * @return bool
+         */
+        //TODO: check if delete cascade works
+        public function deleteCart($cartId):bool{
+            $query =<<<SQL
+            DELETE FROM Cart
+            WHERE CartID=?
+            SQL;
+
+            return $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
         }
     }
 }
