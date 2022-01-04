@@ -1,6 +1,8 @@
 <?php
 namespace database{
     //TODO: divide in multiple factories
+
+    use database\exceptions\NotClient;
     use password_utils as pu;
     class DatabaseObjectFactory{
 
@@ -117,6 +119,30 @@ namespace database{
             $table = $this->dbh->getProducts($start_position, $length, $random);
             return $this->productList($table);
         }
+
+
+        //Cart
+
+        public function getUserCart($userId):Cart{
+            $cart = $this->dbh->getClientCart($userId);
+            switch($cart){
+                case false:
+                    throw new NotClient();
+                case null:
+                    $this->dbh->createCartForUser($userId);
+                    $cart = $this->dbh->getClientCart($userId);
+            }
+
+            $result = $this->dbh->getCartByUser($userId);
+            if(is_array($result)){
+                $items = array();
+                foreach($result as $item){
+                    $items[$item['CartItemID']]=new CartItem(...$item);
+                }
+                return new Cart($cart,$userId,$items);
+            }
+        }
+
 
         # Utility
         

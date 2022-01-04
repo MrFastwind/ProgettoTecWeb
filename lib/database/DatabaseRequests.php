@@ -365,18 +365,77 @@ class DatabaseRequests{
         /**
          * getCartByUser
          *
-         * @param  mixed $userid
+         * @param  int $userid
          * @return array
          */
-        public function getCartByUser($userid):array|false{
+        public function getCartByUser(int $userid):array|false{
             $query = <<<SQL
-            SELECT Client.CartID as CartID, ProductID, Product.Name as ItemName, Image, Description, CartItem.Quantity as ItemQuantity, Price
+            SELECT CartItemID, Cart.CartID as CartID, ProductID, CartItem.Quantity as Quantity
             FROM Client, CartItem, Product
             WHERE UserID = ? AND Client.CartID = CartItem.CartID AND Product.ProductID = CartItem.ProductID
             SQL;
-            $result = $this->executeQuery($query,'i',$userid);
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$userid);
             if(is_array($result)){
                 return $result;
+            }
+            return false;
+        }
+
+        /**
+         * getCart
+         *
+         * @param  int $userid
+         * @return array
+         */
+        public function getCart(int $cartId):array|false{
+            $query = <<<SQL
+            SELECT CartItemID, Cart.CartID as CartID, ProductID, CartItem.Quantity as Quantity
+            FROM CartItem, Product
+            WHERE CartItem.CartID = ? AND Product.ProductID = CartItem.ProductID
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
+            if(is_array($result)){
+                return $result;
+            }
+            return false;
+        }
+        
+        /**
+         * userHaveCart
+         *
+         * @param  int $userId
+         * @return bool
+         */
+        public function userHaveCart(int $userId):bool{
+            $query = <<<SQL
+            SELECT EXISTS (
+                SELECT 1
+                FROM User
+                WHERE UserID=? AND CartID IS NOT NULL
+            )AS RESULT
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$userId);
+            if(is_array($result)){
+                return $result[0]['RESULT'];
+            }
+            return false;
+        }
+        
+        /**
+         * getClientCart
+         *
+         * @param  int $clientId
+         * @return null|int|false lase if it's not a client
+         */
+        public function getClientCart(int $clientId):null|int|false{
+            $query = <<<SQL
+            SELECT CartID
+            FROM Client
+            WHERE UserID = ?
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$clientId);
+            if(is_array($result) && !empty($result)){
+                return empty($result[0]['CartID'])?null:$result[0]['CartID'];
             }
             return false;
         }
