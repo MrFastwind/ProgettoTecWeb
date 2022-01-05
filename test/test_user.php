@@ -5,6 +5,7 @@ namespace test{
 
     use database\DatabaseManager;
     use database\User;
+    use Exception;
     use shop\Shop;
 
 
@@ -41,7 +42,11 @@ namespace test{
             foreach(["registerUser","loginUser"] as $it){
                 try{
                     call_user_func([$this,$it]);
-                }finally{}
+                    echo "$it:OK<BR>";
+                }catch(Exception $e){
+                    echo "$it:Failed<BR>";
+                    throw $e;
+                }
             }
         }
 
