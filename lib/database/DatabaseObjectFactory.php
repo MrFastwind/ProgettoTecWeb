@@ -16,7 +16,7 @@ namespace database{
         /**
          * getUser
          *
-         * @param  mixed $id
+         * @param  int $id
          * @return User
          */
         public function getUser(int $id): User
@@ -77,8 +77,16 @@ namespace database{
             }
             return new Product(...$item);
         }
-
-        public function getProductsLike(string $query,$start_position=0,$length=10):iterable{
+                
+        /**
+         * getProductsLike
+         *
+         * @param  string $query
+         * @param  int $start_position
+         * @param  int $length
+         * @return array
+         */
+        public function getProductsLike(string $query,int $start_position=0,int $length=10):array{
             if (!$this->areArgsCorrects($length,$start_position)){
                 return array();
             }
@@ -122,22 +130,29 @@ namespace database{
 
 
         //Cart
-
-        public function getUserCart($userId):Cart{
-            $cart = $this->dbh->getClientCart($userId);
-            switch($cart){
-                case false:
-                    throw new NotClient();
-                case null:
-                    $this->dbh->createCartForUser($userId);
-                    $cart = $this->dbh->getClientCart($userId);
+        
+        /**
+         * getUserCart
+         *
+         * @param  mixed $userId
+         * @return Cart
+         * @throws NotClient
+         */
+        public function getUserCart(int $userId):Cart{
+            $user = $this->getUser($userId);
+            if(!$user->isClient){
+                throw new NotClient();
             }
+            if(!$this->dbh->userHaveCart($userId)){
+                $this->dbh->createCartForUser($userId);
+            }
+            $cart = $this->dbh->getClientCart($userId);
 
             $result = $this->dbh->getCartByUser($userId);
             if(is_array($result)){
                 $items = array();
                 foreach($result as $item){
-                    $items[$item['CartItemID']]=new CartItem(...$item);
+                    $items[$item['ProductID']]=new CartItem(...$item);
                 }
                 return new Cart($cart,$userId,$items);
             }

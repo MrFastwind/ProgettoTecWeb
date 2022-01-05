@@ -243,12 +243,10 @@ class DatabaseRequests{
         public function createProduct(string $name, string $description, string $image, int $quantity, int $price, int $vendorId, int $categoryId):bool
         {
             $query = <<<SQL
-            BEGIN
             INSERT INTO Product (Name,Image,Description,Quantity,Price,VendorID,CategoryID)
             VALUES (?,?,?,?,?,?,?)
-            COMMIT
             SQL;
-            return $this->executeQuery($query,MYSQLI_ASSOC,'ssss',
+            return $this->executeQuery($query,MYSQLI_ASSOC,'sssiiii',
                 $name,$image,$description,$quantity,$price,$vendorId,$categoryId);
         }
 
@@ -370,7 +368,7 @@ class DatabaseRequests{
          */
         public function getCartByUser(int $userid):array|false{
             $query = <<<SQL
-            SELECT CartItemID, Cart.CartID as CartID, ProductID, CartItem.Quantity as Quantity
+            SELECT CartItemID, CartItem.CartID as CartID, Product.ProductID, CartItem.Quantity as Quantity
             FROM Client, CartItem, Product
             WHERE UserID = ? AND Client.CartID = CartItem.CartID AND Product.ProductID = CartItem.ProductID
             SQL;
@@ -410,7 +408,7 @@ class DatabaseRequests{
             $query = <<<SQL
             SELECT EXISTS (
                 SELECT 1
-                FROM User
+                FROM Client
                 WHERE UserID=? AND CartID IS NOT NULL
             )AS RESULT
             SQL;
@@ -425,9 +423,12 @@ class DatabaseRequests{
          * getClientCart
          *
          * @param  int $clientId
-         * @return null|int|false lase if it's not a client
+         * @return null|int|false false if it's not a client
          */
         public function getClientCart(int $clientId):null|int|false{
+            if(!$this->getUserById($clientId)["isClient"]){
+                return false;
+            }
             $query = <<<SQL
             SELECT CartID
             FROM Client
@@ -437,7 +438,7 @@ class DatabaseRequests{
             if(is_array($result) && !empty($result)){
                 return empty($result[0]['CartID'])?null:$result[0]['CartID'];
             }
-            return false;
+            return null;
         }
 
         /**
@@ -450,6 +451,7 @@ class DatabaseRequests{
          * @return bool
          */
         public function addItemToCart(int $cartId, int $productId, int $number=1):bool{
+            $this->removeItemFromCart($cartId, $productId);
             $query = <<<SQL
             INSERT INTO CartItem(CartID,ProductID,Quantity)
             VALUES (?,?,?)            
@@ -481,11 +483,11 @@ class DatabaseRequests{
          * removeItemFromCart
          * delete item from cart, use {@see database\DatabaseRequests::updateQuantityInCart} to change the quantity
          *
-         * @param  mixed $productId
-         * @param  mixed $cartId
+         * @param  int $cartId
+         * @param  int $productId
          * @return bool
          */
-        public function removeItemFromCart($productId,$cartId):bool{
+        public function removeItemFromCart(int $cartId,int $productId):bool{
             $query = <<<SQL
             DELETE FROM CartItem
             WHERE CartID=? AND ProductID=?          
@@ -502,12 +504,12 @@ class DatabaseRequests{
         public function createCartForUser($userId):bool{
             $query =<<<SQL
             BEGIN;
-            INSERT INTO Cart (UserID)
+            INSERT INTO Cart (ClientID)
             VALUE(?);
-            UPDATE User
+            UPDATE Client
             SET CartID=LAST_INSERT_ID()
             WHERE UserID=?;
-            END;
+            COMMIT;
             SQL;
 
             return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$userId,$userId);
