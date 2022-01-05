@@ -243,12 +243,10 @@ class DatabaseRequests{
         public function createProduct(string $name, string $description, string $image, int $quantity, int $price, int $vendorId, int $categoryId):bool
         {
             $query = <<<SQL
-            BEGIN
             INSERT INTO Product (Name,Image,Description,Quantity,Price,VendorID,CategoryID)
             VALUES (?,?,?,?,?,?,?)
-            COMMIT
             SQL;
-            return $this->executeQuery($query,MYSQLI_ASSOC,'ssss',
+            return $this->executeQuery($query,MYSQLI_ASSOC,'sssiiii',
                 $name,$image,$description,$quantity,$price,$vendorId,$categoryId);
         }
 
@@ -350,8 +348,8 @@ class DatabaseRequests{
          */
         public function addUserToClientById(int $userId):bool{
             $query=<<<SQL
-                INSERT INTO Client (UserID)
-                VALUES (?)
+            INSERT INTO Client (UserID)
+            VALUES (?)
             SQL;
             $this->executeQuery($query,MYSQLI_ASSOC,"i",$userId);
             if($this->hasRowsChanged()){
@@ -360,17 +358,177 @@ class DatabaseRequests{
             return false;
         }
 
-        public function getCartByUser($userid):array|false{
+        //Cart
+        
+        /**
+         * getCartByUser
+         *
+         * @param  int $userid
+         * @return array
+         */
+        public function getCartByUser(int $userid):array|false{
             $query = <<<SQL
-            SELECT ProductID, Product.Name, Image, Description, CartItem.Quantity as ItemQuantity, Price
+            SELECT CartItemID, CartItem.CartID as CartID, Product.ProductID, CartItem.Quantity as Quantity
             FROM Client, CartItem, Product
             WHERE UserID = ? AND Client.CartID = CartItem.CartID AND Product.ProductID = CartItem.ProductID
             SQL;
-            $result = $this->executeQuery($query,'i',$userid);
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$userid);
             if(is_array($result)){
                 return $result;
             }
             return false;
+        }
+
+        /**
+         * getCart
+         *
+         * @param  int $userid
+         * @return array
+         */
+        public function getCart(int $cartId):array|false{
+            $query = <<<SQL
+            SELECT CartItemID, Cart.CartID as CartID, ProductID, CartItem.Quantity as Quantity
+            FROM CartItem, Product
+            WHERE CartItem.CartID = ? AND Product.ProductID = CartItem.ProductID
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
+            if(is_array($result)){
+                return $result;
+            }
+            return false;
+        }
+        
+        /**
+         * userHaveCart
+         *
+         * @param  int $userId
+         * @return bool
+         */
+        public function userHaveCart(int $userId):bool{
+            $query = <<<SQL
+            SELECT EXISTS (
+                SELECT 1
+                FROM Client
+                WHERE UserID=? AND CartID IS NOT NULL
+            )AS RESULT
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$userId);
+            if(is_array($result)){
+                return $result[0]['RESULT'];
+            }
+            return false;
+        }
+        
+        /**
+         * getClientCart
+         *
+         * @param  int $clientId
+         * @return null|int|false false if it's not a client
+         */
+        public function getClientCart(int $clientId):null|int|false{
+            if(!$this->getUserById($clientId)["isClient"]){
+                return false;
+            }
+            $query = <<<SQL
+            SELECT CartID
+            FROM Client
+            WHERE UserID = ?
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$clientId);
+            if(is_array($result) && !empty($result)){
+                return empty($result[0]['CartID'])?null:$result[0]['CartID'];
+            }
+            return null;
+        }
+
+        /**
+         * addItemToCart
+         * add product to cart with a quantity, use {@see database\DatabaseRequests::updateQuantityInCart} to update the quantity
+         * 
+         * @param  mixed $cartId
+         * @param  mixed $productId
+         * @param  mixed $number number of item to add by default 1
+         * @return bool
+         */
+        public function addItemToCart(int $cartId, int $productId, int $number=1):bool{
+            $this->removeItemFromCart($cartId, $productId);
+            $query = <<<SQL
+            INSERT INTO CartItem(CartID,ProductID,Quantity)
+            VALUES (?,?,?)            
+            SQL;
+
+            return $this->executeQuery($query,MYSQLI_ASSOC,'iii',$cartId,$productId,$number);
+        }
+        
+        /**
+         * updateQuantityInCart
+         * update the quantity, to add the item in the cart use {@see database\DatabaseRequests::addItemToCart} 
+         *
+         * @param  mixed $cartId
+         * @param  mixed $productId
+         * @param  mixed $number
+         * @return bool
+         */
+        public function updateQuantityInCart(int $cartId, int $productId, int $number):bool{
+            $query = <<<SQL
+            UPDATE CartItem
+            SET Quantity=?
+            WHERE CartID=? AND ProductID=?          
+            SQL;
+
+            return $this->executeQuery($query,MYSQLI_ASSOC,'iii',$number,$cartId,$productId);
+        }
+                
+        /**
+         * removeItemFromCart
+         * delete item from cart, use {@see database\DatabaseRequests::updateQuantityInCart} to change the quantity
+         *
+         * @param  int $cartId
+         * @param  int $productId
+         * @return bool
+         */
+        public function removeItemFromCart(int $cartId,int $productId):bool{
+            $query = <<<SQL
+            DELETE FROM CartItem
+            WHERE CartID=? AND ProductID=?          
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$cartId,$productId);
+        }
+        
+        /**
+         * createCartForUser
+         *
+         * @param  mixed $userId
+         * @return bool
+         */
+        public function createCartForUser($userId):bool{
+            $query =<<<SQL
+            BEGIN;
+            INSERT INTO Cart (ClientID)
+            VALUE(?);
+            UPDATE Client
+            SET CartID=LAST_INSERT_ID()
+            WHERE UserID=?;
+            COMMIT;
+            SQL;
+
+            return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$userId,$userId);
+        }
+        
+        /**
+         * deleteCart
+         *
+         * @param  mixed $cartId
+         * @return bool
+         */
+        //TODO: check if delete cascade works
+        public function deleteCart($cartId):bool{
+            $query =<<<SQL
+            DELETE FROM Cart
+            WHERE CartID=?
+            SQL;
+
+            return $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
         }
     }
 }

@@ -35,7 +35,6 @@ CREATE TABLE `Order` (
     `OrderID` INT  NOT NULL AUTO_INCREMENT,
     `Time` datetime  NOT NULL ,
     `TotalAmount` INT  NOT NULL ,
-    `ClientID` INT  NOT NULL ,
     `CartID` INT  NOT NULL ,
     `OrderStatusID` ENUM('AtStorage','Departed','Delivered','Collected')  NOT NULL ,
     PRIMARY KEY (
@@ -72,6 +71,7 @@ CREATE TABLE `Category` (
 );
 
 CREATE TABLE `Cart` (
+    `ClientID` INT  NOT NULL ,
     `CartID` INT  NOT NULL AUTO_INCREMENT,
     PRIMARY KEY (
         `CartID`
@@ -98,11 +98,16 @@ CREATE TABLE `Notification` (
 );
 
 ALTER TABLE `Client` ADD CONSTRAINT `fk_Client_UserID` FOREIGN KEY(`UserID`)
-REFERENCES `User` (`UserID`)
+REFERENCES `User` (`UserID`);
 
 
 ALTER TABLE `Client` ADD CONSTRAINT `fk_Client_CartID` FOREIGN KEY(`CartID`)
 REFERENCES `Cart` (`CartID`)
+ON DELETE SET NULL;
+
+ALTER TABLE `Cart` ADD CONSTRAINT `fk_Cart_ClientID` FOREIGN KEY(`ClientID`)
+REFERENCES `Client` (`UserID`)
+ON DELETE SET NULL;
 
 
 ALTER TABLE `Vendor` ADD CONSTRAINT `fk_Vendor_UserID` FOREIGN KEY(`UserID`)
@@ -127,7 +132,7 @@ REFERENCES `Cart` (`CartID`);
 ALTER TABLE `CartItem` ADD CONSTRAINT `fk_CartItem_ProductID` FOREIGN KEY(`ProductID`)
 REFERENCES `Product` (`ProductID`)
 ON DELETE CASCADE
-ON UPDATE NO ACTION;
+ON UPDATE CASCADE;
 
 ALTER TABLE `Notification` ADD CONSTRAINT `fk_Notification_UserID` FOREIGN KEY(`UserID`)
 REFERENCES `User` (`UserID`)
