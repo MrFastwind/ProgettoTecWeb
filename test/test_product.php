@@ -5,10 +5,12 @@ namespace test{
     use shop\Shop;
 
 require_once("../bootstrap.php");
+require_once("TestCase.php");
 
-    class TestProduct{
+    class TestProduct extends TestCase{
 
         function __construct(private Shop $shop, private DatabaseManager $dbm){
+            parent::__construct();
         }
 
 
@@ -17,16 +19,12 @@ require_once("../bootstrap.php");
             $product=$this->dbm->getFactory()->getProducts();
             assert(count($product)>0,"No Product in array");
             $product = $product[0];
-            print_r($product);
-            echo "<br>";
-            print_r($product->getAsArray());
+            //print_r($product);
+            //echo "<br>";
+            //print_r($product->getAsArray());
         }
 
     }
-
-    $test = new TestProduct($shop,$dbm);
-    $test->TestObjectToArray();
-
-
+    new TestProduct($shop,$dbm);
 }
 ?>

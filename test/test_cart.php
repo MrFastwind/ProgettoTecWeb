@@ -2,6 +2,7 @@
 
 namespace test{
     include ("../bootstrap.php");
+    include_once("TestCase.php");
 
     use database\Cart;
     use database\DatabaseManager;
@@ -11,7 +12,7 @@ namespace test{
     use Exception;
 
 
-    class TestCart{
+    class TestCart extends TestCase{
 
             private $user = "test_user";
             private $password = "test_user_password";
@@ -21,6 +22,7 @@ namespace test{
             private User $client;
 
         function __construct(private Shop $shop, private DatabaseManager $dbm){
+            parent::__construct();
         }
 
         public function beforeAll(){
@@ -52,20 +54,6 @@ namespace test{
             assert($this->dbm->getRequests()->removeItemFromCart($cart->CartID,$this->prod->ProductID),"Should have removed product to the cart!");
             $cart =$this->dbm->getFactory()->getUserCart($this->client->UserID);
             assert(!array_key_exists($this->prod->ProductID,$cart->Items),"Shouldn't have the product");
-        }
-
-        public function runTests(){
-            $this->beforeAll();
-            foreach(["getCartTest"] as $it){
-                try{
-                    call_user_func([$this,$it]);
-                    echo "$it:OK<BR>";
-                }catch(Exception $e){
-                    echo "$it:Failed<BR>";
-                    throw $e;
-                }
-            }
-            $this->afterAll();
         }
 
     }
