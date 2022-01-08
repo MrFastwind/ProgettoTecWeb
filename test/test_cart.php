@@ -9,9 +9,9 @@ namespace test{
     use database\Product;
     use shop\Shop;
     use Exception;
+    use UnexpectedValueException;
 
-
-    class TestCart{
+class TestCart{
 
             private $user = "test_user";
             private $password = "test_user_password";
@@ -54,9 +54,20 @@ namespace test{
             assert(!array_key_exists($this->prod->ProductID,$cart->Items),"Shouldn't have the product");
         }
 
+        public function zeroItemTest(){
+            $cart = $this->dbm->getFactory()->getUserCart($this->client->UserID);
+            if(!array_key_exists($this->prod->ProductID,$cart->Items)){
+                $this->dbm->getRequests()->addItemToCart($cart->CartID,$this->prod->ProductID);
+            }
+            try{
+                $this->dbm->getRequests()->updateQuantityInCart($cart->CartID,$this->prod->ProductID,0);
+            }catch(UnexpectedValueException $e){
+            }
+        }
+
         public function runTests(){
             $this->beforeAll();
-            foreach(["getCartTest"] as $it){
+            foreach(["getCartTest","zeroItemTest"] as $it){
                 try{
                     call_user_func([$this,$it]);
                     echo "$it:OK<BR>";
