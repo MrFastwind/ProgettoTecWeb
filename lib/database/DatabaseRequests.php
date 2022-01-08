@@ -459,7 +459,7 @@ class DatabaseRequests{
             $this->removeItemFromCart($cartId, $productId);
             $query = <<<SQL
             INSERT INTO CartItem(CartID,ProductID,Quantity)
-            VALUES (?,?,?)            
+            VALUES (?,?,GREATEST(?,1))            
             SQL;
 
             return $this->executeQuery($query,MYSQLI_ASSOC,'iii',$cartId,$productId,$number);
@@ -481,7 +481,7 @@ class DatabaseRequests{
             }
             $query = <<<SQL
             UPDATE CartItem
-            SET Quantity= GREATEST(?)
+            SET Quantity= GREATEST(?,1)
             WHERE CartID=? AND ProductID=?          
             SQL;
 
