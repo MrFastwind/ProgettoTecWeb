@@ -6,6 +6,7 @@ namespace database{
     use database\exceptions\UserExistAlready;
     use database\exceptions\UserNotExist;
     use LengthException;
+    use LogicException;
     use mysqli;
     use mysqli_sql_exception;
     use mysqli_driver;
@@ -13,10 +14,16 @@ namespace database{
     //TODO:REFACTOR CODE (TO LONG)
 class DatabaseRequests{
         private $db;
+        private $connection_data;
 
         public function __construct($servername, $username, $password, $dbname, $report_mode=MYSQLI_REPORT_STRICT){
             $driver = new mysqli_driver();
             $driver->report_mode = $report_mode;
+            $this->connection_data = array(
+                "hostname" => $servername,
+                "username" => $username,
+                "password" => $password,
+                "database" => $dbname);
             $this->db = new mysqli($servername, $username, $password, $dbname);
             if ($this->db->connect_error) {
                 die("Connection failed: " . $this->db->connect_error);
@@ -50,9 +57,26 @@ class DatabaseRequests{
          * @throws mysqliBindException if the type of bind is wrong
          */
         private function executeQuery(string $query, int $result_mode=MYSQLI_ASSOC,string $params_string='', ...$params):array|bool{
-            $stmt = $this->db->prepare($query);
+            return $this->executeTransactionQuery($this->db, $query, $result_mode, $params_string, ...$params);
+        }
+        
+        /**
+         * executeTransactionQuery
+         *
+         * @param  mysqli $db
+         * @param  string $query
+         * @param  int $result_mode
+         * @param  string $params_string
+         * @param  array $params
+         * @return array|bool false if fails to execute true if is not a set
+         * @throws mysqli_sql_exception if statement syntax is wrong
+         * @throws LengthException if the number of parameters is different from the string
+         * @throws mysqliBindException if the type of bind is wrong
+         */
+        private function executeTransactionQuery(mysqli $db, string $query, int $result_mode=MYSQLI_ASSOC,string $params_string='', ...$params):array|bool{
+            $stmt = $db->prepare($query);
             if (!$stmt){
-                throw new mysqli_sql_exception($this->db->error);
+                throw new mysqli_sql_exception($db->error);
             }
             if (strlen($params_string)>0){
                 if(strlen($params_string)!=count($params)){
@@ -529,6 +553,50 @@ class DatabaseRequests{
             SQL;
 
             return $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
+        }
+
+        ## Orders
+
+        public function makeOrder($userId):int|false{
+            // TODO: FIX, SQL not working
+            // Divide in multiple function?
+            throw new LogicException("Not Implemented!");
+            $query = <<<SQL
+            BEGIN;
+            INSERT INTO Order (CartID,TotalAmount)
+            VALUES (SELECT CartID
+                    FROM Client
+                    WHERE UserID = ?
+                    LIMIT 1,
+                    SELECT SUM(Price*CartItem.Quantity)
+                    FROM Cart
+                    JOIN CartItem ON CartItem.CartID=Cart.CartID
+                    JOIN Product ON CartItem.ProductID=Product.ProductID
+                    WHERE ClientID=?);
+            INSERT INTO Cart (ClientID)
+            VALUE(?);
+            UPDATE Client
+            SET CartID=LAST_INSERT_ID()
+            WHERE UserID=?;
+            COMMIT;          
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'iiii',$userId,$userId,$userId,$userId);
+            if(!$result){
+                return false;
+            }
+            return false;
+        }
+
+        public function createOrder($cartId):bool{
+            $query=<<<SQL
+            INSERT INTO Order (CartId)
+            VALUES (?);
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
+            if(!$result || empty($result)){
+                return false;
+            }
+            return $result[0]["OrderId"];
         }
     }
 }
