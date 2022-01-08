@@ -9,8 +9,9 @@ namespace database{
     use mysqli;
     use mysqli_sql_exception;
     use mysqli_driver;
+    use UnexpectedValueException;
 
-    //TODO:REFACTOR CODE (TO LONG)
+//TODO:REFACTOR CODE (TO LONG)
 class DatabaseRequests{
         private $db;
 
@@ -449,8 +450,12 @@ class DatabaseRequests{
          * @param  mixed $productId
          * @param  mixed $number number of item to add by default 1
          * @return bool
+         * @throws UnexpectedValueException if value is less than 1
          */
         public function addItemToCart(int $cartId, int $productId, int $number=1):bool{
+            if ($number<1){
+                throw new UnexpectedValueException("Value must be greater than 0, but it's $number");
+            }
             $this->removeItemFromCart($cartId, $productId);
             $query = <<<SQL
             INSERT INTO CartItem(CartID,ProductID,Quantity)
@@ -464,15 +469,19 @@ class DatabaseRequests{
          * updateQuantityInCart
          * update the quantity, to add the item in the cart use {@see database\DatabaseRequests::addItemToCart} 
          *
-         * @param  mixed $cartId
-         * @param  mixed $productId
-         * @param  mixed $number
+         * @param  int $cartId
+         * @param  int $productId
+         * @param  int $number
          * @return bool
+         * @throws UnexpectedValueException if value is less than 1
          */
         public function updateQuantityInCart(int $cartId, int $productId, int $number):bool{
+            if ($number<1){
+                throw new UnexpectedValueException("Value must be greater than 0, but it's $number");
+            }
             $query = <<<SQL
             UPDATE CartItem
-            SET Quantity=?
+            SET Quantity= GREATEST(?)
             WHERE CartID=? AND ProductID=?          
             SQL;
 
