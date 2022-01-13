@@ -3,6 +3,7 @@
 namespace database{
 
     use database\exceptions\mysqliBindException;
+    use database\exceptions\NoCart;
     use database\exceptions\UserExistAlready;
     use database\exceptions\UserNotExist;
     use LengthException;
@@ -444,12 +445,13 @@ class DatabaseRequests{
         }
         
         /**
-         * getClientCart
+         * getClientCartId
          *
          * @param  int $clientId
-         * @return null|int|false false if it's not a client
+         * @return int|false false failed
+         * @throws NoCart if has no cart
          */
-        public function getClientCart(int $clientId):null|int|false{
+        public function getClientCartId(int $clientId):int|false{
             if(!$this->getUserById($clientId)["isClient"]){
                 return false;
             }
@@ -460,9 +462,12 @@ class DatabaseRequests{
             SQL;
             $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$clientId);
             if(is_array($result) && !empty($result)){
-                return empty($result[0]['CartID'])?null:$result[0]['CartID'];
+                if(empty($result[0]['CartID'])){
+                    throw new NoCart($clientId);                    
+                }
+                return $result[0]['CartID'];
             }
-            return null;
+            return false;
         }
 
         /**
@@ -557,34 +562,22 @@ class DatabaseRequests{
 
         ## Orders
 
-        public function makeOrder($userId):int|false{
-            // TODO: FIX, SQL not working
-            // Divide in multiple function?
-            throw new LogicException("Not Implemented!");
-            $query = <<<SQL
-            BEGIN;
-            INSERT INTO Order (CartID,TotalAmount)
-            VALUES (SELECT CartID
-                    FROM Client
-                    WHERE UserID = ?
-                    LIMIT 1,
-                    SELECT SUM(Price*CartItem.Quantity)
-                    FROM Cart
-                    JOIN CartItem ON CartItem.CartID=Cart.CartID
-                    JOIN Product ON CartItem.ProductID=Product.ProductID
-                    WHERE ClientID=?);
-            INSERT INTO Cart (ClientID)
-            VALUE(?);
-            UPDATE Client
-            SET CartID=LAST_INSERT_ID()
-            WHERE UserID=?;
-            COMMIT;          
-            SQL;
-            $result = $this->executeQuery($query,MYSQLI_ASSOC,'iiii',$userId,$userId,$userId,$userId);
-            if(!$result){
+        public function createOrderFromUserCart($userId):int|false{
+            $cart=$this->getClientCartId($userId)['CartID'];
+            if(!is_array($cart)){
                 return false;
             }
-            return false;
+            $this->db->begin_transaction();
+            $cartId=$cart[0]['CartID'];
+            if(!$this->createOrder($cartId)){
+                $this->db->rollback();
+                return false;
+            }
+            if($this->createCartForUser($userId)){
+                $this->db->rollback();
+                return false;
+            }
+            return $this->db->commit();
         }
 
         public function createOrder($cartId):bool{
