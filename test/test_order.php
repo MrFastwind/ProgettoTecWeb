@@ -1,16 +1,17 @@
 <?php
 namespace test{
+    include ("../bootstrap.php");
+    include_once("TestCase.php");
 
     use database\DatabaseManager;
+    use shop\exceptions\NoItemsInOrder;
     use shop\Shop;
 
-    include_once("../bootstrap.php");
-    include_once("TestCast.php");
 
     class TestOrder extends TestCase{
         private $user = "test_user";
-        private $password = "test_user_password";
-        private $email = "test@example.com";
+        private $userid = null;
+        private $itemid = null;
 
         function __construct(private Shop $shop, private DatabaseManager $dbm){
             parent::__construct();
@@ -18,15 +19,32 @@ namespace test{
 
         public function beforeAll()
         {
-            $this->userid = $this->dbm->getFactory()->getUserBy($this->user);
+            $this->userid = $this->dbm->getFactory()->getUserBy($this->user)->UserID;
+            $this->itemid = $this->dbm->getFactory()->getProducts(0,1,true)[0]->ProductID;
         }
 
-        public function order(){
-            $this->shop->getOrderManager()->makeOrdinationByUser($this->userid);
-        } 
+        public function beforeEach(){
+            $this->dbm->getRequests()->createCartForUser($this->userid);
+        }
+
+        public function afterEach(){
+            $this->dbm->getRequests()->deleteCartOfUser($this->userid);
+        }
+
+        public function testOrderWithEmptyCart(){
+            try{
+                $this->shop->getOrderManager()->makeOrdinationByUser($this->userid);
+            }catch(NoItemsInOrder $e){
+            }
+        }
+
+        public function testOrder(){
+            $this->dbm->getRequests()->addItemToCart($this->dbm->getFactory()->getUserCart($this->userid)->CartID,$this->itemid);
+            assert($this->shop->getOrderManager()->makeOrdinationByUser($this->userid),"Should have made the Order");
+        }
 
     }
-    new TestCart($shop,$dbm);
+    new TestOrder($shop,$dbm);
 
 
 }
