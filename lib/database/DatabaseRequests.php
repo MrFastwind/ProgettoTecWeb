@@ -523,7 +523,7 @@ class DatabaseRequests{
             SQL;
             return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$cartId,$productId);
         }
-        
+
         /**
          * createCartForUser
          *
@@ -531,17 +531,25 @@ class DatabaseRequests{
          * @return bool
          */
         public function createCartForUser($userId):bool{
+            $this->db->begin_transaction();
             $query =<<<SQL
-            BEGIN;
             INSERT INTO Cart (ClientID)
             VALUE(?);
-            UPDATE Client
-            SET CartID=LAST_INSERT_ID()
-            WHERE UserID=?;
-            COMMIT;
             SQL;
-
-            return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$userId,$userId);
+            if(!$this->executeQuery($query,MYSQLI_ASSOC,'i',$userId)){
+                $this->db->rollback();
+                return false;
+            }
+            $query=<<<SQL
+            UPDATE Client
+            SET CartID=?
+            WHERE UserID=?;
+            SQL;
+            if(!$this->executeQuery($query,MYSQLI_ASSOC,'ii',$this->db->insert_id,$userId)){
+                $this->db->rollback();
+                return false;
+            }
+            return $this->db->commit();
         }
         
         /**
@@ -560,15 +568,42 @@ class DatabaseRequests{
             return $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
         }
 
-        ## Orders
-
-        public function createOrderFromUserCart($userId):int|false{
-            $cart=$this->getClientCartId($userId)['CartID'];
-            if(!is_array($cart)){
+        /**
+         * deleteCart
+         *
+         * @param  mixed $cartId
+         * @return bool
+         */
+        //TODO: check if delete cascade works
+        public function deleteCartOfUser($userId):bool{
+            $cart = $this->getCartByUser($userId);
+            if(empty($cart)){
                 return false;
             }
-            $this->db->begin_transaction();
             $cartId=$cart[0]['CartID'];
+            if(!$this->deleteCart($cartId)){
+                return false;
+            }
+            $query =<<<SQL
+            UPDATE Client
+            SET CartID = null
+            WHERE UserID=?
+            SQL;
+            $this->executeQuery($query,MYSQLI_ASSOC,'i',$userId);
+            return true;
+        }
+
+        ## Orders
+        
+        /**
+         * createOrderFromUserCart
+         *
+         * @param  int $userId
+         * @return int
+         */
+        public function createOrderFromUserCart(int $userId):int|false{
+            $cartId=$this->getClientCartId($userId);
+            $this->db->begin_transaction();
             if(!$this->createOrder($cartId)){
                 $this->db->rollback();
                 return false;
@@ -579,10 +614,37 @@ class DatabaseRequests{
             }
             return $this->db->commit();
         }
-
-        public function createOrder($cartId):bool{
+        
+        /**
+         * calculateTotalSum
+         *
+         * @param  int $cartId
+         * @return array
+         */
+        public function calculateTotalSum(int $cartId):array{
             $query=<<<SQL
-            INSERT INTO Order (CartId)
+            SELECT sum(CartItem.Quantity * Product.Price) as Amount, sum(CartItem.Quantity) as Quantity  
+            FROM CartItem 
+            JOIN Product ON CartItem.ProductId=Product.ProductId
+            WHERE CartID=?
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
+            if(!$result || empty($result)){
+                return false;
+            }
+            return $result[0];
+        }
+        
+        /**
+         * createOrder
+         *
+         * @param  int $cartId
+         * @return bool
+         */
+        //TODO: Error to create order
+        public function createOrder(int $cartId):bool{
+            $query=<<<SQL
+            INSERT INTO `Order` (CartID)
             VALUES (?);
             SQL;
             $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
