@@ -146,15 +146,14 @@ namespace database{
             if(!$this->dbh->userHaveCart($userId)){
                 $this->dbh->createCartForUser($userId);
             }
-            $cart = $this->dbh->getClientCart($userId);
-
+            $cartId = $this->dbh->getClientCartId($userId);
             $result = $this->dbh->getCartByUser($userId);
             if(is_array($result)){
                 $items = array();
                 foreach($result as $item){
                     $items[$item['ProductID']]=new CartItem(...$item);
                 }
-                return new Cart($cart,$userId,$items);
+                return new Cart($cartId,$userId,$items);
             }
         }
 
