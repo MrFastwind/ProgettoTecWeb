@@ -673,9 +673,10 @@ class DatabaseRequests{
         public function deleteOrder(int $orderId):bool{
             $query=<<<SQL
             DELETE FROM `Order`
-            WHERE CartID=?;
+            WHERE OrderID=?;
             SQL;
             return $this->executeQuery($query,MYSQLI_ASSOC,'i',$orderId);
+
         }
 
         public function getOrderFromCart(int $cartId):array{
