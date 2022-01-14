@@ -99,10 +99,10 @@ class DatabaseRequests{
         }
         
         /**
-         * hasRowsChanged
+         * haveRowsChanged
          * @return bool
          */
-        private function hasRowsChanged():bool{
+        private function haveRowsChanged():bool{
             return $this->db->affected_rows>0;
         }
 
@@ -376,11 +376,7 @@ class DatabaseRequests{
             INSERT INTO Client (UserID)
             VALUES (?)
             SQL;
-            $this->executeQuery($query,MYSQLI_ASSOC,"i",$userId);
-            if($this->hasRowsChanged()){
-                return true;
-            }
-            return false;
+            return $this->executeQuery($query,MYSQLI_ASSOC,"i",$userId);
         }
 
         //Cart
@@ -423,6 +419,20 @@ class DatabaseRequests{
             return false;
         }
         
+        public function getUserCartId(int $userId):int{
+            $query = <<<SQL
+            SELECT Client.CartID as CartID
+            FROM Client, Cart
+            WHERE UserID = ? AND Client.CartID = Cart.CartID
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$userId);
+            if(is_array($result) && !empty($result)){
+                return $result[0]['CartID'];
+            }
+            throw new NoCart($userId);
+        }
+
+
         /**
          * userHaveCart
          *
@@ -527,7 +537,7 @@ class DatabaseRequests{
         /**
          * createCartForUser
          *
-         * @param  mixed $userId
+         * @param  int $userId
          * @return bool
          */
         public function createCartForUser($userId):bool{
@@ -571,17 +581,15 @@ class DatabaseRequests{
         /**
          * deleteCart
          *
-         * @param  mixed $cartId
+         * @param  int $cartId
          * @return bool
          */
         //TODO: check if delete cascade works
         public function deleteCartOfUser($userId):bool{
-            $cart = $this->getCartByUser($userId);
-            if(empty($cart)){
-                return false;
-            }
-            $cartId=$cart[0]['CartID'];
+            $cartId = $this->getUserCartId($userId);
+            $this->db->begin_transaction();
             if(!$this->deleteCart($cartId)){
+                $this->db->rollback();
                 return false;
             }
             $query =<<<SQL
@@ -589,7 +597,11 @@ class DatabaseRequests{
             SET CartID = null
             WHERE UserID=?
             SQL;
-            $this->executeQuery($query,MYSQLI_ASSOC,'i',$userId);
+            if(!$this->executeQuery($query,MYSQLI_ASSOC,'i',$userId)){
+                $this->db->rollback();
+                return false;
+            }
+            $this->db->commit();
             return true;
         }
 

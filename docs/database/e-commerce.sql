@@ -34,7 +34,6 @@ CREATE TABLE `Vendor` (
 CREATE TABLE `Order` (
     `OrderID` INT  NOT NULL AUTO_INCREMENT,
     `Time` datetime  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `TotalAmount` INT  NOT NULL ,
     `CartID` INT  NOT NULL ,
     `OrderStatusID` ENUM('AtStorage','Departed','Delivered','Collected')  NOT NULL DEFAULT 'AtStorage',
     PRIMARY KEY (
