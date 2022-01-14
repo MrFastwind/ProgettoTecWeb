@@ -7,6 +7,7 @@ namespace shop{
 
         public function __construct(private DatabaseManager $dbm){
             $this->um = new UserManager($dbm);
+            $this->om = new OrderManager($dbm);
         }
         
         /**
@@ -17,6 +18,10 @@ namespace shop{
         public function getUserManager():UserManager
         {
             return $this->um;
+        }
+
+        public function getOrderManager():OrderManager{
+            return $this->om;
         }
     }
 }

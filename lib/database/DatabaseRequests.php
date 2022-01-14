@@ -3,6 +3,8 @@
 namespace database{
 
     use database\exceptions\mysqliBindException;
+    use database\exceptions\NoCart;
+    use database\exceptions\NotClient;
     use database\exceptions\UserExistAlready;
     use database\exceptions\UserNotExist;
     use LengthException;
@@ -11,13 +13,20 @@ namespace database{
     use mysqli_driver;
     use UnexpectedValueException;
 
-//TODO:REFACTOR CODE (TO LONG)
+
+    //TODO:REFACTOR CODE (TO LONG)
 class DatabaseRequests{
         private $db;
+        private $connection_data;
 
         public function __construct($servername, $username, $password, $dbname, $report_mode=MYSQLI_REPORT_STRICT){
             $driver = new mysqli_driver();
             $driver->report_mode = $report_mode;
+            $this->connection_data = array(
+                "hostname" => $servername,
+                "username" => $username,
+                "password" => $password,
+                "database" => $dbname);
             $this->db = new mysqli($servername, $username, $password, $dbname);
             if ($this->db->connect_error) {
                 die("Connection failed: " . $this->db->connect_error);
@@ -51,9 +60,27 @@ class DatabaseRequests{
          * @throws mysqliBindException if the type of bind is wrong
          */
         private function executeQuery(string $query, int $result_mode=MYSQLI_ASSOC,string $params_string='', ...$params):array|bool{
-            $stmt = $this->db->prepare($query);
+            return $this->executeTransactionQuery($this->db, $query, $result_mode, $params_string, ...$params);
+        }
+        
+        /**
+         * executeTransactionQuery
+         *
+         * @param  mysqli $db
+         * @param  string $query
+         * @param  int $result_mode
+         * @param  string $params_string
+         * @param  array $params
+         * @return array|bool false if fails to execute true if is not a set
+         * @throws mysqli_sql_exception if statement syntax is wrong
+         * @throws LengthException if the number of parameters is different from the string
+         * @throws mysqliBindException if the type of bind is wrong
+         */
+        private function executeTransactionQuery(mysqli $db, string $query, int $result_mode=MYSQLI_ASSOC,string $params_string='', ...$params):array|bool{
+            //var_dump($query,$params_string,$params);
+            $stmt = $db->prepare($query);
             if (!$stmt){
-                throw new mysqli_sql_exception($this->db->error);
+                throw new mysqli_sql_exception($db->error);
             }
             if (strlen($params_string)>0){
                 if(strlen($params_string)!=count($params)){
@@ -64,7 +91,8 @@ class DatabaseRequests{
                 }
             }
             if(!$stmt->execute()){
-                return false;
+                throw new mysqli_sql_exception($this->db->error);
+                //return false;
             }
             $result = $stmt->get_result();
             if(!$result){
@@ -75,10 +103,10 @@ class DatabaseRequests{
         }
         
         /**
-         * hasRowsChanged
+         * haveRowsChanged
          * @return bool
          */
-        private function hasRowsChanged():bool{
+        private function haveRowsChanged():bool{
             return $this->db->affected_rows>0;
         }
 
@@ -352,11 +380,7 @@ class DatabaseRequests{
             INSERT INTO Client (UserID)
             VALUES (?)
             SQL;
-            $this->executeQuery($query,MYSQLI_ASSOC,"i",$userId);
-            if($this->hasRowsChanged()){
-                return true;
-            }
-            return false;
+            return $this->executeQuery($query,MYSQLI_ASSOC,"i",$userId);
         }
 
         //Cart
@@ -398,7 +422,43 @@ class DatabaseRequests{
             }
             return false;
         }
-        
+                
+        /**
+         * getUserCartId
+         *
+         * @param  int $userId
+         * @return int
+         * @throws NoCart
+         */
+        public function getUserCartId(int $userId):int{
+            $query = <<<SQL
+            SELECT Client.CartID as CartID
+            FROM Client, Cart
+            WHERE UserID = ? AND Client.CartID = Cart.CartID
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$userId);
+            if(is_array($result) && !empty($result)){
+                return $result[0]['CartID'];
+            }
+            throw new NoCart($userId);
+        }
+
+                /**
+         * getClientCartId
+         *
+         * @param  int $clientId
+         * @return int
+         * @throws NoCart if has no cart
+         * @throws NotClient if not a client 
+         */
+        public function getClientCartId(int $clientId):int{
+            if(!$this->getUserById($clientId)["isClient"]){
+                throw new NotClient();
+            }
+            return $this->getUserCartId($clientId);
+        }
+
+
         /**
          * userHaveCart
          *
@@ -420,27 +480,7 @@ class DatabaseRequests{
             return false;
         }
         
-        /**
-         * getClientCart
-         *
-         * @param  int $clientId
-         * @return null|int|false false if it's not a client
-         */
-        public function getClientCart(int $clientId):null|int|false{
-            if(!$this->getUserById($clientId)["isClient"]){
-                return false;
-            }
-            $query = <<<SQL
-            SELECT CartID
-            FROM Client
-            WHERE UserID = ?
-            SQL;
-            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$clientId);
-            if(is_array($result) && !empty($result)){
-                return empty($result[0]['CartID'])?null:$result[0]['CartID'];
-            }
-            return null;
-        }
+
 
         /**
          * addItemToCart
@@ -503,25 +543,33 @@ class DatabaseRequests{
             SQL;
             return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$cartId,$productId);
         }
-        
+
         /**
          * createCartForUser
          *
-         * @param  mixed $userId
+         * @param  int $userId
          * @return bool
          */
         public function createCartForUser($userId):bool{
+            $this->db->begin_transaction();
             $query =<<<SQL
-            BEGIN;
             INSERT INTO Cart (ClientID)
             VALUE(?);
-            UPDATE Client
-            SET CartID=LAST_INSERT_ID()
-            WHERE UserID=?;
-            COMMIT;
             SQL;
-
-            return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$userId,$userId);
+            if(!$this->executeQuery($query,MYSQLI_ASSOC,'i',$userId)){
+                $this->db->rollback();
+                return false;
+            }
+            $query=<<<SQL
+            UPDATE Client
+            SET CartID=?
+            WHERE UserID=?;
+            SQL;
+            if(!$this->executeQuery($query,MYSQLI_ASSOC,'ii',$this->db->insert_id,$userId)){
+                $this->db->rollback();
+                return false;
+            }
+            return $this->db->commit();
         }
         
         /**
@@ -538,6 +586,135 @@ class DatabaseRequests{
             SQL;
 
             return $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
+        }
+
+        /**
+         * deleteCartOfUser
+         *
+         * @param  int $userId
+         * @return bool
+         */
+        //TODO: check if delete cascade works
+        public function deleteCartOfUser($userId):bool{
+            $cartId = $this->getUserCartId($userId);
+            $this->db->begin_transaction();
+            if(!$this->deleteCart($cartId)){
+                $this->db->rollback();
+                return false;
+            }
+            $query =<<<SQL
+            UPDATE Client
+            SET CartID = null
+            WHERE UserID=?
+            SQL;
+            if(!$this->executeQuery($query,MYSQLI_ASSOC,'i',$userId)){
+                $this->db->rollback();
+                return false;
+            }
+            $this->db->commit();
+            return true;
+        }
+
+        ## Orders
+        
+        /**
+         * createOrderFromUserCart
+         *
+         * @param  int $userId
+         * @return int
+         * @throws NoCart if has no cart
+         * @throws NotClient if not a client 
+         */
+        public function createOrderFromUserCart(int $userId):int|false{
+            $cartId=$this->getClientCartId($userId);
+            $this->db->begin_transaction();
+            if(!$this->createOrder($cartId)){
+                $this->db->rollback();
+                return false;
+            }
+            if(!$this->createCartForUser($userId)){
+                $this->db->rollback();
+                return false;
+            }
+            return $this->db->commit();
+        }
+        
+        /**
+         * calculateTotalSum
+         *
+         * @param  int $cartId
+         * @return array
+         */
+        public function calculateTotalSum(int $cartId):array{
+            $query=<<<SQL
+            SELECT sum(CartItem.Quantity * Product.Price) as Amount, sum(CartItem.Quantity) as Quantity  
+            FROM CartItem 
+            JOIN Product ON CartItem.ProductId=Product.ProductId
+            WHERE CartID=?
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
+            if(!$result || empty($result)){
+                return false;
+            }
+            return $result[0];
+        }
+        
+        /**
+         * createOrder
+         *
+         * @param  int $cartId
+         * @return bool
+         */
+        public function createOrder(int $cartId):bool{
+            $query=<<<SQL
+            INSERT INTO `Order` (CartID)
+            VALUES (?);
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
+        }
+        
+        /**
+         * deleteOrder
+         *
+         * @param  int $orderId
+         * @return bool
+         */
+        public function deleteOrder(int $orderId):bool{
+            $query=<<<SQL
+            DELETE FROM `Order`
+            WHERE OrderID=?;
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'i',$orderId);
+
+        }
+
+        public function getOrderFromCart(int $cartId):array{
+            $query = <<<SQL
+            SELECT OrderID,Time,CartID,OrderStatusID
+            FROM `Order`
+            WHERE CartID=?
+            ORDER BY Time
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
+            if(!empty($result) && is_array($result)){
+                return $result[0];
+            }
+            return array();
+        }
+
+        public function getAllOrderOfUser(int $userid):array{
+            $query = <<<SQL
+            SELECT OrderID,Time,Cart.CartID as CartID,OrderStatusID
+            FROM `Order`
+            JOIN Cart ON Cart.CartID=`Order`.CartID
+            WHERE ClientID=?
+            ORDER BY Time
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$userid);
+            if(!is_array($result)){
+                return array();
+            }
+            return $result;
         }
     }
 }

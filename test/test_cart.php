@@ -2,6 +2,7 @@
 
 namespace test{
     include ("../bootstrap.php");
+    include_once("TestCase.php");
 
     use database\Cart;
     use database\DatabaseManager;
@@ -11,7 +12,8 @@ namespace test{
     use Exception;
     use UnexpectedValueException;
 
-class TestCart{
+
+    class TestCart extends TestCase{
 
             private $user = "test_user";
             private $password = "test_user_password";
@@ -21,6 +23,7 @@ class TestCart{
             private User $client;
 
         function __construct(private Shop $shop, private DatabaseManager $dbm){
+            parent::__construct();
         }
 
         public function beforeAll(){
@@ -33,10 +36,11 @@ class TestCart{
                 $products = $this->dbm->getFactory()->getProductsLike($this->product);
             }
             $this->prod = $products[0];
+            assert($this->dbm->getRequests()->createCartForUser($this->client->UserID));            
         }
 
         public function afterAll(){
-
+            assert($this->dbm->getRequests()->deleteCartOfUser($this->client->UserID));
         }
 
         public function getCartTest(){
@@ -63,20 +67,6 @@ class TestCart{
                 $this->dbm->getRequests()->updateQuantityInCart($cart->CartID,$this->prod->ProductID,0);
             }catch(UnexpectedValueException $e){
             }
-        }
-
-        public function runTests(){
-            $this->beforeAll();
-            foreach(["getCartTest","zeroItemTest"] as $it){
-                try{
-                    call_user_func([$this,$it]);
-                    echo "$it:OK<BR>";
-                }catch(Exception $e){
-                    echo "$it:Failed<BR>";
-                    throw $e;
-                }
-            }
-            $this->afterAll();
         }
 
     }
