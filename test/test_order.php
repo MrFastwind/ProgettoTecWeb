@@ -31,7 +31,7 @@ namespace test{
         }
 
         public function afterEach(){
-            var_dump($this->cart);
+            //var_dump($this->cart);
             $this->dbm->getRequests()->deleteCart($this->cart->CartID);
         }
 
@@ -47,6 +47,19 @@ namespace test{
             assert($this->shop->getOrderManager()->makeOrdinationByUser($this->userid),"Should have made the Order");
             $this->dbm->getRequests()->deleteCartOfUser($this->userid);
             $order = $this->dbm->getRequests()->getOrderFromCart($this->cart->CartID);
+            assert(!empty($order),"Order shouldn't be empty");
+            assert(is_array($order),"Order should be an array");
+            assert($this->dbm->getRequests()->deleteOrder($order['OrderID']),"Should have deleted the order");
+        }
+
+        public function testGetUserOrders(){
+            $num = count($this->dbm->getRequests()->getAllOrderOfUser($this->userid));
+            $this->dbm->getRequests()->addItemToCart($this->dbm->getFactory()->getUserCart($this->userid)->CartID,$this->itemid);
+            assert($this->shop->getOrderManager()->makeOrdinationByUser($this->userid),"Should have made the Order");
+            $this->dbm->getRequests()->deleteCartOfUser($this->userid);
+            $order = $this->dbm->getRequests()->getOrderFromCart($this->cart->CartID);
+            //var_dump($this->dbm->getRequests()->getAllOrderOfUser($this->userid));
+            assert(count($this->dbm->getRequests()->getAllOrderOfUser($this->userid))-$num==1,"Should be 1");
             assert(!empty($order),"Order shouldn't be empty");
             assert(is_array($order),"Order should be an array");
             assert($this->dbm->getRequests()->deleteOrder($order['OrderID']),"Should have deleted the order");

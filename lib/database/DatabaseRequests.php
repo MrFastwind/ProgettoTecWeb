@@ -695,10 +695,10 @@ class DatabaseRequests{
 
         public function getAllOrderOfUser(int $userid):array{
             $query = <<<SQL
-            SELECT OrderID,Time,CartID,OrderStatusID
+            SELECT OrderID,Time,Cart.CartID as CartID,OrderStatusID
             FROM `Order`
             JOIN Cart ON Cart.CartID=`Order`.CartID
-            WHERE UserID=?
+            WHERE ClientID=?
             ORDER BY Time
             SQL;
             $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$userid);
