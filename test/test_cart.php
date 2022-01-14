@@ -35,10 +35,11 @@ namespace test{
                 $products = $this->dbm->getFactory()->getProductsLike($this->product);
             }
             $this->prod = $products[0];
+            assert($this->dbm->getRequests()->createCartForUser($this->client->UserID));            
         }
 
         public function afterAll(){
-
+            assert($this->dbm->getRequests()->deleteCartOfUser($this->client->UserID));
         }
 
         public function getCartTest(){
