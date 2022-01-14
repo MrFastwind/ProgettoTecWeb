@@ -418,7 +418,14 @@ class DatabaseRequests{
             }
             return false;
         }
-        
+                
+        /**
+         * getUserCartId
+         *
+         * @param  int $userId
+         * @return int
+         * @throws NoCart
+         */
         public function getUserCartId(int $userId):int{
             $query = <<<SQL
             SELECT Client.CartID as CartID
@@ -430,6 +437,21 @@ class DatabaseRequests{
                 return $result[0]['CartID'];
             }
             throw new NoCart($userId);
+        }
+
+                /**
+         * getClientCartId
+         *
+         * @param  int $clientId
+         * @return int
+         * @throws NoCart if has no cart
+         * @throws NotClient if not a client 
+         */
+        public function getClientCartId(int $clientId):int{
+            if(!$this->getUserById($clientId)["isClient"]){
+                throw new NotClient();
+            }
+            return $this->getUserCartId($clientId);
         }
 
 
