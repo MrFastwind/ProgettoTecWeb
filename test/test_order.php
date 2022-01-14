@@ -3,15 +3,17 @@ namespace test{
     include ("../bootstrap.php");
     include_once("TestCase.php");
 
+    use database\Cart;
     use database\DatabaseManager;
     use shop\exceptions\NoItemsInOrder;
     use shop\Shop;
 
 
     class TestOrder extends TestCase{
-        private $user = "test_user";
-        private $userid = null;
-        private $itemid = null;
+        private string $user = "test_user";
+        private int $userid = -1;
+        private int $itemid = -1;
+        private Cart $cart;
 
         function __construct(private Shop $shop, private DatabaseManager $dbm){
             parent::__construct();
@@ -25,9 +27,15 @@ namespace test{
 
         public function beforeEach(){
             $this->dbm->getRequests()->createCartForUser($this->userid);
+            $this->cart = $this->dbm->getFactory()->getUserCart($this->userid);
         }
 
         public function afterEach(){
+            $order = $this->dbm->getRequests()->getOrderFromCart($this->cart->CartID);
+            if(!empty($order)){
+                $this->dbm->getRequests()->deleteOrder($order['OrderID']);
+            }
+            
             $this->dbm->getRequests()->deleteCartOfUser($this->userid);
         }
 
