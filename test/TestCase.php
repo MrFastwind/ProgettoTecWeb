@@ -44,7 +44,7 @@ namespace test{
                     $it=
                     $it=$method->name;
                     $method->invoke($this);
-                    echo nl2br("## $it:OK");
+                    echo nl2br("## $it:OK<BR>");
                 }catch(Exception $e){
                     $class=$e::class;
                     $message=$e->getMessage();
