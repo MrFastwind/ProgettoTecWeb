@@ -656,7 +656,6 @@ class DatabaseRequests{
          * @param  int $cartId
          * @return bool
          */
-        //TODO: Error to create order
         public function createOrder(int $cartId):bool{
             $query=<<<SQL
             INSERT INTO `Order` (CartID)
