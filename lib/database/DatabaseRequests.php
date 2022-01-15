@@ -687,7 +687,7 @@ class DatabaseRequests{
             return $this->executeQuery($query,MYSQLI_ASSOC,'i',$orderId);
 
         }
-
+        
         /**
          * getOrder
          *
@@ -726,7 +726,7 @@ class DatabaseRequests{
             }
             return array();
         }
-
+        
         /**
          * getAllOrderOfUser
          *
@@ -746,6 +746,23 @@ class DatabaseRequests{
                 return array();
             }
             return $result;
+        }
+
+        ## Notifications
+        
+        /**
+         * createNotification
+         *
+         * @param  int $message
+         * @param  int $userid
+         * @return bool
+         */
+        public function createNotification(int $message,int $userid):bool{
+            $query = <<<SQL
+            INSERT INTO `Notification` (`Text`,UserID)
+            VALUES (?,?)
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'si',$message,$userid);
         }
     }
 }
