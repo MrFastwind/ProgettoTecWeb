@@ -93,6 +93,7 @@ CREATE TABLE `CartItem` (
 
 CREATE TABLE `Notification` (
     `NotificationID` INT  NOT NULL AUTO_INCREMENT,
+    `Time` datetime  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `UserID` INT  NOT NULL ,
     `Text` text  NOT NULL ,
     PRIMARY KEY (
