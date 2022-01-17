@@ -748,6 +748,22 @@ class DatabaseRequests{
             return $result;
         }
 
+        /**
+         * updateOrderStatus
+         *
+         * @param  int $orderId
+         * @param  OrderStatus $status
+         * @return bool
+         */
+        public function updateOrderStatus(int $orderId,OrderStatus $status):bool{
+            $query = <<<SQL
+            UPDATE `Order`
+            SET OrderStatusID=?
+            WHERE OrderID=?
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'si',strval($status),$orderId);
+        }
+
         ## Notifications
         
         /**
