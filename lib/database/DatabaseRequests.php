@@ -790,11 +790,11 @@ class DatabaseRequests{
         /**
          * createNotification
          *
-         * @param  int $message
+         * @param  string $message
          * @param  int $userid
          * @return bool
          */
-        public function createNotification(int $message,int $userid):bool{
+        public function createNotification(string $message,int $userid):bool{
             $query = <<<SQL
             INSERT INTO `Notification` (`Text`,UserID)
             VALUES (?,?)
