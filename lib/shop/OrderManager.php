@@ -2,6 +2,7 @@
 namespace shop{
 
     use database\DatabaseManager;
+    use database\OrderStatus;
     use shop\exceptions\NoItemsInOrder;
 
 class OrderManager{
@@ -27,6 +28,25 @@ class OrderManager{
             $this->notify->notifyOrderCreation($user,$this->dbm->getRequests()->getOrderFromCart($cart->CartID)['OrderID']);
         }
         return $success;
+    }
+
+    public function updateOrderStatus(int $orderId,OrderStatus $status):bool
+    {
+        //Update Status
+        if(!$this->dbm->getRequests()->updateOrderStatus($orderId,$status)){
+            return false;
+        }
+        $order = $this->dbm->getRequests()->getOrder($orderId);
+        if(empty($order)){
+            return true;
+        }
+        $userId = $this->dbm->getRequests()->getUserIdByCart($order['CartID']);
+        if(!$userId){
+            return true;
+        }
+        $this->notify->notifyOrderProgress($userId,$orderId);
+        return true;
+
     }
 }
 }

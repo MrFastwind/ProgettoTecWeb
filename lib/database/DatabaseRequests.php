@@ -383,7 +383,7 @@ class DatabaseRequests{
             return $this->executeQuery($query,MYSQLI_ASSOC,"i",$userId);
         }
 
-        //Cart
+        ##Cart
         
         /**
          * getCartByUser
@@ -400,6 +400,27 @@ class DatabaseRequests{
             $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$userid);
             if(is_array($result)){
                 return $result;
+            }
+            return false;
+        }
+        
+        /**
+         * getUserIdByCart
+         *
+         * @param  int $cartId
+         * @return int|false
+         */
+        public function getUserIdByCart(int $cartId): int|false
+        {
+            $query=<<<SQL
+            SELECT ClientID
+            FROM Cart
+            WHERE CartID=? 
+            SQL;
+
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
+            if(is_array($result)&&!empty($result)){
+                return $result[0]["ClientID"];
             }
             return false;
         }
@@ -443,7 +464,7 @@ class DatabaseRequests{
             throw new NoCart($userId);
         }
 
-                /**
+        /**
          * getClientCartId
          *
          * @param  int $clientId
@@ -481,7 +502,7 @@ class DatabaseRequests{
         }
         
 
-
+        ## Cart Item
         /**
          * addItemToCart
          * add product to cart with a quantity, use {@see database\DatabaseRequests::updateQuantityInCart} to update the quantity
