@@ -1,3 +1,6 @@
+<?php
+    include_once("./bootstrap.php");
+?>
 <!DOCTYPE html>
 <html lang="it">
     <meta charset="UTF-8"/>
@@ -8,20 +11,28 @@
 <body>
     <header>
         <nav>
-            <div> <input type="text" id="menuSearch" name="menuSearch"></div> <!--TODO: make search bar-->
+            <div>
+                <form action="search.php" method="POST">
+                    <input type="text" id="search" name="search"/>
+                    <button type="submit" id="menuButton" name="menuButton"></button>
+                </form>
+            </div>
             <ul>
                 <li>
                     <a href="catalogo.php">Catalogo</a>
                 </li>
                 <li>
-                    <a href="#">Carrello</a> <!--TODO: add cart link-->
+                    <a href="cart.php">Carrello</a>
                 </li>
             </ul>
             <ul class="login">
-                <?php if(!isUserLoggedIn()): ?>
+                <li>
+                    <a href="signup.php">Sign up</a>
+                </li>
+                <?php if(!$shop->getUserManager()->isUserLogged()): ?>
                     <li><a href="login.php">Login</a></li>
                 <?php else: ?>
-                    <li><button>Logout</button></li> <!--TODO: add logout-->
+                    <li><a href="logout.php">Logout</a></li>
                 <?php endif; ?>
             </ul>
         </nav>
