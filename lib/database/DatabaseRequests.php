@@ -688,12 +688,37 @@ class DatabaseRequests{
 
         }
 
+        /**
+         * getOrder
+         *
+         * @param  int $orderId
+         * @return array
+         */
+        public function getOrder(int $orderId){
+            $query = <<<SQL
+            SELECT OrderID,Time,CartID,OrderStatusID
+            FROM `Order`
+            WHERE OrderID=?
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$orderId);
+            if(!empty($result) && is_array($result)){
+                return $result[0];
+            }
+            return array();
+        }
+
+        /**
+         * getOrderFromCart
+         *
+         * @param  int $cartId
+         * @return array
+         */
         public function getOrderFromCart(int $cartId):array{
             $query = <<<SQL
             SELECT OrderID,Time,CartID,OrderStatusID
             FROM `Order`
             WHERE CartID=?
-            ORDER BY Time
+            ORDER BY Time DESC
             SQL;
             $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$cartId);
             if(!empty($result) && is_array($result)){
@@ -702,13 +727,19 @@ class DatabaseRequests{
             return array();
         }
 
+        /**
+         * getAllOrderOfUser
+         *
+         * @param  int $userid
+         * @return array
+         */
         public function getAllOrderOfUser(int $userid):array{
             $query = <<<SQL
             SELECT OrderID,Time,Cart.CartID as CartID,OrderStatusID
             FROM `Order`
             JOIN Cart ON Cart.CartID=`Order`.CartID
             WHERE ClientID=?
-            ORDER BY Time
+            ORDER BY Time DESC
             SQL;
             $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$userid);
             if(!is_array($result)){

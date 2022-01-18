@@ -38,8 +38,7 @@ CREATE TABLE `Order` (
     `OrderStatusID` ENUM('AtStorage','Departed','Delivered','Collected')  NOT NULL DEFAULT 'AtStorage',
     PRIMARY KEY (
         `OrderID`
-    )
-
+    ),
     CONSTRAINT `uc_Order_CartID` UNIQUE (
         `CartID`
     )
@@ -93,6 +92,7 @@ CREATE TABLE `CartItem` (
 
 CREATE TABLE `Notification` (
     `NotificationID` INT  NOT NULL AUTO_INCREMENT,
+    `Time` datetime  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `UserID` INT  NOT NULL ,
     `Text` text  NOT NULL ,
     PRIMARY KEY (
@@ -151,5 +151,4 @@ REFERENCES `User` (`UserID`)
 ON DELETE CASCADE
 ON UPDATE CASCADE;
 
-END;
 COMMIT;
