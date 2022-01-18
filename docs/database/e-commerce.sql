@@ -38,8 +38,7 @@ CREATE TABLE `Order` (
     `OrderStatusID` ENUM('AtStorage','Departed','Delivered','Collected')  NOT NULL DEFAULT 'AtStorage',
     PRIMARY KEY (
         `OrderID`
-    )
-
+    ),
     CONSTRAINT `uc_Order_CartID` UNIQUE (
         `CartID`
     )
@@ -152,5 +151,4 @@ REFERENCES `User` (`UserID`)
 ON DELETE CASCADE
 ON UPDATE CASCADE;
 
-END;
 COMMIT;
