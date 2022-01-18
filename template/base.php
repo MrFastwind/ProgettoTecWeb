@@ -8,7 +8,7 @@
 <body>
     <header>
         <nav>
-            <div> <input type="text"></div> <!--TODO: make search bar-->
+            <div> <input type="text" id="menuSearch" name="menuSearch"></div> <!--TODO: make search bar-->
             <ul>
                 <li>
                     <a href="catalogo.php">Catalogo</a>
