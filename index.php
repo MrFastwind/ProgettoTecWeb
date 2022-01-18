@@ -3,7 +3,7 @@
 
     $templateParams["title"] = "Home";
     $templateParams["name"] = "home.php";
-    $templateParams["prodotti"] = $dbm->getRequests()->getRandomProducts($n=4);
+    $templateParams["prodotti"] = $dbm->getFactory()->getProducts(0, 4, true);
 
     require("./template/base.php");
 ?>

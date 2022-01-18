@@ -26,6 +26,7 @@ class UserManager{
 
             $userData = $this->dbm->getFactory()->getUserBy($user);
             if(PasswordUtils::verifyPassword($password,$userData->PasswordHash)){
+                $this->loginUser($userData);
                 return $userData;
             }
             throw new WrongPassword();
@@ -46,6 +47,25 @@ class UserManager{
             $salted = PasswordUtils::generatePassword($password);
             $id_user = $this->dbm->getRequests()->registerClient($user,$salted,$email);
             return $this->dbm->getFactory()->getUser($id_user);
+        }
+
+        public function isUserLogged():bool{
+            return !empty($_SESSION['User']);
+        }
+
+        public function logOut(){
+            $this->sessionDestroy();
+        }
+
+        private function sessionDestroy(){
+            session_destroy();
+            session_reset();
+            session_start();
+        }
+
+        private function loginUser(User $user){
+            $this->sessionDestroy();
+            $_SESSION['User']=$user;
         }
     }
 }
