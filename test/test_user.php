@@ -2,19 +2,24 @@
 
 namespace test{
     include ("../bootstrap.php");
+    include_once("TestCase.php");
 
+    use test\TestCase;
     use database\DatabaseManager;
     use database\User;
+    use Exception;
     use shop\Shop;
 
+    //TODO:Fix Auto deletition of user 
 
-    class UserTest{
+    class UserTest extends TestCase{
 
             private $user = "test_user";
             private $password = "test_user_password";
             private $email = "test@example.com";
 
         function __construct(private Shop $shop, private DatabaseManager $dbm){
+            parent::__construct();
         }
 
         public function registerUser()
@@ -37,29 +42,8 @@ namespace test{
             
         }
 
-        public function runTests(){
-            foreach(["registerUser","loginUser"] as $it){
-                try{
-                    call_user_func([$this,$it]);
-                }finally{}
-            }
-        }
-
-        public function legacy(){
-            
-        $testUser=(int)1;
-        $factory=$this->dbm->getFactory();
-        $user = $factory->getUser($testUser);
-
-        var_dump($user);
-
-        $productList = $factory->getProducts(0,5);
-
-        var_dump($productList);
-        }
-
     }
-    (new UserTest($shop,$dbm))->runTests();
+    new UserTest($shop,$dbm);
 
 }
 ?>

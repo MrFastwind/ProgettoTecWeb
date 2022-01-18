@@ -1,6 +1,8 @@
 <?php
 namespace database{
     //TODO: divide in multiple factories
+
+    use database\exceptions\NotClient;
     use password_utils as pu;
     class DatabaseObjectFactory{
 
@@ -14,7 +16,7 @@ namespace database{
         /**
          * getUser
          *
-         * @param  mixed $id
+         * @param  int $id
          * @return User
          */
         public function getUser(int $id): User
@@ -75,8 +77,16 @@ namespace database{
             }
             return new Product(...$item);
         }
-
-        public function getProductsLike(string $query,$start_position=0,$length=10):iterable{
+                
+        /**
+         * getProductsLike
+         *
+         * @param  string $query
+         * @param  int $start_position
+         * @param  int $length
+         * @return array
+         */
+        public function getProductsLike(string $query,int $start_position=0,int $length=10):array{
             if (!$this->areArgsCorrects($length,$start_position)){
                 return array();
             }
@@ -117,6 +127,36 @@ namespace database{
             $table = $this->dbh->getProducts($start_position, $length, $random);
             return $this->productList($table);
         }
+
+
+        //Cart
+        
+        /**
+         * getUserCart
+         *
+         * @param  mixed $userId
+         * @return Cart
+         * @throws NotClient
+         */
+        public function getUserCart(int $userId):Cart{
+            $user = $this->getUser($userId);
+            if(!$user->isClient){
+                throw new NotClient();
+            }
+            if(!$this->dbh->userHaveCart($userId)){
+                $this->dbh->createCartForUser($userId);
+            }
+            $cartId = $this->dbh->getClientCartId($userId);
+            $result = $this->dbh->getCartByUser($userId);
+            if(is_array($result)){
+                $items = array();
+                foreach($result as $item){
+                    $items[$item['ProductID']]=new CartItem(...$item);
+                }
+                return new Cart($cartId,$userId,$items);
+            }
+        }
+
 
         # Utility
         
