@@ -1,12 +1,36 @@
-body, header {
+*{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     background-color: #f57979;
+    font-family: 'Raleway', sans-serif;
+}
+
+h1{
+    font-weight: 700;
+    font-size: 20px;
+}
+
+input:placeholder-shown{
+    font-style: italic;
 }
 
 body > footer{
     background-color: #474545;
+}
+
+body > footer > ul{
+    padding: 35px 0 0 2%;
+}
+
+body > footer > ul > li{
+    padding: 5px 0 0 2%;
+}
+
+#social > li{
+    display: inline-block;
+    padding: 0 0 10px 2%;
 }
