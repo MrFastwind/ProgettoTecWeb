@@ -7,17 +7,16 @@ require_once("./bootstrap.php");
 
     if(isset($_POST["username"]) && isset($_POST["password"])){
         try{
-        $user = $shop->getUserManager()->login($_POST["username"], $_POST["password"]); //TODO: add errors and exceptions
+        $user = $shop->getUserManager()->login($_POST["username"], $_POST["password"]);
         }catch(WrongPassword $e){
             echo("<script type='text/javascript'>alert('Password Sbagliata!');</script>");
         }catch(UserNotExist $e){
-            echo("<script type='text/javascript'>alert('Utente non esiste!');</script>");
+            echo("<script type='text/javascript'>alert('Utente non esiste!');</script>"); //TODO: alerts da togliere assolutamente
         }
     }
 
     if($shop->getUserManager()->isUserLogged()){
-        $templateParams["title"] = "Home";
-        $templateParams["name"] = "home.php";
+        header("location: /index.php");
     }
     else{
         $templateParams["title"] = "Login";

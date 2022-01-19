@@ -8,8 +8,7 @@ require_once("./bootstrap.php");
     }
 
     if($shop->getUserManager()->isUserLogged()){
-        $templateParams["title"] = "Home";
-        $templateParams["name"] = "home.php";
+        header("location: /index.php");
     }
     else{
         $templateParams["title"] = "Sign up";
