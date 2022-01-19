@@ -1,17 +1,18 @@
 <section>
     <header>
-        <h1>Prodotti in evidenza</h1>
+        <h1 class="text-white">PRODOTTI IN EVIDENZA</h1>
     </header>
     <div>
         <!--TODO: carousel-->
     </div>
     <footer>
-        <a href="catalogo.php">Sfoglia le categorie</a>
+        <a class="text-decoration-none text-white" href="catalogo.php">Sfoglia le categorie</a>
     </footer>
 </section>
 <form action="search.php" method="POST">
-    <input type="text" name="search" id="search"/>
+    <input type="text" name="search" id="search" placeholder="Cerca un prodotto"/>
+    <button type="submit" id="homeButton" name="homeButton"></button>
     <footer>
-        <p>Hai un prodotto che ti interessa e non è disponibile? <a href="#">Scrivici</a></p> <!--TODO: add href-->
+        <p class="text-white">Hai un prodotto che ti interessa e non è disponibile? <a class="text-warning" href="#">Scrivici</a></p> <!--TODO: add href-->
     </footer>
 </form>
