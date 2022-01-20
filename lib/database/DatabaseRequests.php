@@ -13,8 +13,7 @@ namespace database{
     use mysqli_driver;
     use UnexpectedValueException;
 
-
-    //TODO:REFACTOR CODE (TO LONG)
+//TODO:REFACTOR CODE (TO LONG)
 class DatabaseRequests{
         private $db;
         private $connection_data;
@@ -277,6 +276,46 @@ class DatabaseRequests{
             SQL;
             return $this->executeQuery($query,MYSQLI_ASSOC,'sssiiii',
                 $name,$image,$description,$quantity,$price,$vendorId,$categoryId);
+        }
+        
+        /**
+         * changeProductPrice
+         *
+         * @param  int $productId
+         * @param  int $price
+         * @return bool
+         * @throws UnexpectedValueException for negative values
+         */
+        public function changeProductPrice(int $productId,int $price):bool{
+            if($price<0){
+                throw new UnexpectedValueException("Value is less than 0");
+            }
+            $query=<<<SQL
+            UPDATE Product
+            SET Price=?
+            WHERE ProductID=?
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$price,$productId);
+        }
+        
+        /**
+         * changeProductQuantity
+         *
+         * @param  int $productId
+         * @param  int $quantity
+         * @return bool
+         * @throws UnexpectedValueException for negative values
+         */
+        public function changeProductQuantity(int $productId,int $quantity):bool{
+            if($quantity<0){
+                throw new UnexpectedValueException("Value is less than 0");
+            }
+            $query=<<<SQL
+            UPDATE Product
+            SET Quantity=?
+            WHERE ProductID=?
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$quantity,$productId);
         }
 
         ## User
