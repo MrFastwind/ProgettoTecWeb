@@ -317,6 +317,26 @@ class DatabaseRequests{
             SQL;
             return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$quantity,$productId);
         }
+        
+        /**
+         * getDifferenceBetween
+         *
+         * @param  int $itemCartId
+         * @return int
+         */
+        private function getDifferenceBetween(int $itemCartId):int{
+            $query=<<<SQL
+            SELECT (Product.Quantity - CartItem.Quantity) AS Total
+            FROM CartItem
+            JOIN Product ON CartItem.ProductID = Product.ProductID
+            WHERE CartItemID = ?
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$itemCartId);
+            if(empty($result) || !is_array($result)){
+                return -1;
+            }
+            return $result[0]['Total'];
+        }
 
         ## User
         
@@ -451,7 +471,7 @@ class DatabaseRequests{
          */
         public function getCart(int $cartId):array|false{
             $query = <<<SQL
-            SELECT CartItemID, Cart.CartID as CartID, ProductID, CartItem.Quantity as Quantity
+            SELECT CartItemID, CartItem.CartID as CartID, Product.ProductID as ProductID, CartItem.Quantity as Quantity
             FROM CartItem, Product
             WHERE CartItem.CartID = ? AND Product.ProductID = CartItem.ProductID
             SQL;
@@ -654,6 +674,22 @@ class DatabaseRequests{
             return true;
         }
 
+        private function evaluateQuantitiesInCartAndUpdate(int $cart):bool{
+            $Cart = $this->getCart($cart);
+            if (!$Cart){
+                return false;
+            }
+            foreach($Cart as $item) {
+                $result = $this->getDifferenceBetween($item['CartItemID']);
+                if($result<0){
+                    return false;
+                }
+                $this->changeProductQuantity($item['ProductID'],$result);
+            }
+            return true;
+        }
+
+
         ## Orders
         
         /**
@@ -667,6 +703,9 @@ class DatabaseRequests{
         public function createOrderFromUserCart(int $userId):int|false{
             $cartId=$this->getClientCartId($userId);
             $this->db->begin_transaction();
+            if(!$this->evaluateQuantitiesInCartAndUpdate($cartId)){
+                return false;
+            }
             if(!$this->createOrder($cartId)){
                 $this->db->rollback();
                 return false;
@@ -704,7 +743,7 @@ class DatabaseRequests{
          * @param  int $cartId
          * @return bool
          */
-        public function createOrder(int $cartId):bool{
+        protected function createOrder(int $cartId):bool{
             $query=<<<SQL
             INSERT INTO `Order` (CartID)
             VALUES (?);
