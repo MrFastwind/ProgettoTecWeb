@@ -33,14 +33,16 @@
             </ul>
             <form action="search.php" method="POST">
                 <input type="text" id="search" name="search"/>
-                <button type="submit" id="menuButton" name="menuButton"></button>
+                <button type="submit">
+                    <img src="/img/search.png" alt="Search">
+                </button>
             </form>
         </nav>
         <div>
             <!--TODO: add logo-->
         </div>
     </header>
-    <main class="grid">
+    <main class="grid-container">
         <?php if(isset($templateParams["name"])){
             require($templateParams["name"]);
         }
