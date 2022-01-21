@@ -7,6 +7,7 @@ namespace database{
     use database\exceptions\NotClient;
     use database\exceptions\UserExistAlready;
     use database\exceptions\UserNotExist;
+    use DateTime;
     use LengthException;
     use mysqli;
     use mysqli_sql_exception;
@@ -793,13 +794,61 @@ class DatabaseRequests{
          * @param  string $message
          * @param  int $userid
          * @return bool
+         * @throws UserNotExist
          */
         public function createNotification(string $message,int $userid):bool{
+            $this->getUserById($userid);
             $query = <<<SQL
             INSERT INTO `Notification` (`Text`,UserID)
             VALUES (?,?)
             SQL;
             return $this->executeQuery($query,MYSQLI_ASSOC,'si',$message,$userid);
+        }
+        
+        /**
+         * getUserNotifications
+         *
+         * @param  int $userid
+         * @return array
+         * @throws UserNotExist
+         */
+        public function getUserNotifications(int $userid){
+            $this->getUserById($userid);
+            $query = <<<SQL
+            SELECT *
+            FROM `Notification`
+            WHERE UserID = ?
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$userid);
+            if(!is_array($result)){
+                return array();
+            }
+            return $result;
+        }
+        
+        /**
+         * deleteNotificationForUser
+         *
+         * @param  int $userid
+         * @return bool
+         * @throws UserNotExist
+         */
+        public function deleteNotificationForUser(int $userid):bool{
+            $this->getUserById($userid);
+            $query = <<<SQL
+            DELETE FROM `Notification`
+            WHERE UserID=?
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'i',$userid);
+        }
+
+        public function deleteNotificationForUserOlderThan(int $userid, DateTime $date):bool{
+            $this->getUserById($userid);
+            $query = <<<SQL
+            DELETE FROM `Notification`
+            WHERE UserID=? AND `Time` < ?
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'is',$userid,$date->format('Y-m-d H:i:s'));
         }
     }
 }
