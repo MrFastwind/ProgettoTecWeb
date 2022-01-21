@@ -2,6 +2,7 @@
 
 namespace database{
 
+    use database\exceptions\ExceedProductAvailability;
     use database\exceptions\mysqliBindException;
     use database\exceptions\NoCart;
     use database\exceptions\NotClient;
@@ -13,8 +14,7 @@ namespace database{
     use mysqli_driver;
     use UnexpectedValueException;
 
-
-    //TODO:REFACTOR CODE (TO LONG)
+//TODO:REFACTOR CODE (TO LONG)
 class DatabaseRequests{
         private $db;
         private $connection_data;
@@ -278,6 +278,66 @@ class DatabaseRequests{
             return $this->executeQuery($query,MYSQLI_ASSOC,'sssiiii',
                 $name,$image,$description,$quantity,$price,$vendorId,$categoryId);
         }
+        
+        /**
+         * changeProductPrice
+         *
+         * @param  int $productId
+         * @param  int $price
+         * @return bool
+         * @throws UnexpectedValueException for negative values
+         */
+        public function changeProductPrice(int $productId,int $price):bool{
+            if($price<0){
+                throw new UnexpectedValueException("Value is less than 0");
+            }
+            $query=<<<SQL
+            UPDATE Product
+            SET Price=?
+            WHERE ProductID=?
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$price,$productId);
+        }
+        
+        /**
+         * changeProductQuantity
+         *
+         * @param  int $productId
+         * @param  int $quantity
+         * @return bool
+         * @throws UnexpectedValueException for negative values
+         */
+        public function changeProductQuantity(int $productId,int $quantity):bool{
+            if($quantity<0){
+                throw new UnexpectedValueException("Value is less than 0");
+            }
+            $query=<<<SQL
+            UPDATE Product
+            SET Quantity=?
+            WHERE ProductID=?
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$quantity,$productId);
+        }
+        
+        /**
+         * getDifferenceBetween
+         *
+         * @param  int $itemCartId
+         * @return int
+         */
+        private function getDifferenceBetween(int $itemCartId):int{
+            $query=<<<SQL
+            SELECT (Product.Quantity - CartItem.Quantity) AS Total
+            FROM CartItem
+            JOIN Product ON CartItem.ProductID = Product.ProductID
+            WHERE CartItemID = ?
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$itemCartId);
+            if(empty($result) || !is_array($result)){
+                return -1;
+            }
+            return $result[0]['Total'];
+        }
 
         ## User
         
@@ -412,7 +472,7 @@ class DatabaseRequests{
          */
         public function getCart(int $cartId):array|false{
             $query = <<<SQL
-            SELECT CartItemID, Cart.CartID as CartID, ProductID, CartItem.Quantity as Quantity
+            SELECT CartItemID, CartItem.CartID as CartID, Product.ProductID as ProductID, CartItem.Quantity as Quantity
             FROM CartItem, Product
             WHERE CartItem.CartID = ? AND Product.ProductID = CartItem.ProductID
             SQL;
@@ -614,6 +674,29 @@ class DatabaseRequests{
             $this->db->commit();
             return true;
         }
+        
+        /**
+         * evaluateQuantitiesInCartAndUpdate
+         *
+         * @param  int $cart
+         * @return bool
+         * @throws ExceedProductAvailability if requested quantity exceed availability
+         */
+        private function evaluateQuantitiesInCartAndUpdate(int $cart):bool{
+            $Cart = $this->getCart($cart);
+            if (!$Cart){
+                return false;
+            }
+            foreach($Cart as $item) {
+                $result = $this->getDifferenceBetween($item['CartItemID']);
+                if($result<0){
+                    throw new ExceedProductAvailability($item['ProductID']);
+                }
+                $this->changeProductQuantity($item['ProductID'],$result);
+            }
+            return true;
+        }
+
 
         ## Orders
         
@@ -624,10 +707,20 @@ class DatabaseRequests{
          * @return int
          * @throws NoCart if has no cart
          * @throws NotClient if not a client 
+         * @throws ExceedProductAvailability
          */
         public function createOrderFromUserCart(int $userId):int|false{
             $cartId=$this->getClientCartId($userId);
             $this->db->begin_transaction();
+            try{
+            if(!$this->evaluateQuantitiesInCartAndUpdate($cartId)){
+                $this->db->rollback();
+                return false;
+            }
+        }catch(ExceedProductAvailability $e){
+            $this->db->rollback();
+            throw $e;
+        }
             if(!$this->createOrder($cartId)){
                 $this->db->rollback();
                 return false;
@@ -665,7 +758,7 @@ class DatabaseRequests{
          * @param  int $cartId
          * @return bool
          */
-        public function createOrder(int $cartId):bool{
+        protected function createOrder(int $cartId):bool{
             $query=<<<SQL
             INSERT INTO `Order` (CartID)
             VALUES (?);
