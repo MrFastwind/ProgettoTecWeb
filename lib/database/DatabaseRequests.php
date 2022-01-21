@@ -2,6 +2,7 @@
 
 namespace database{
 
+    use database\exceptions\ExceedProductAvailability;
     use database\exceptions\mysqliBindException;
     use database\exceptions\NoCart;
     use database\exceptions\NotClient;
@@ -673,7 +674,14 @@ class DatabaseRequests{
             $this->db->commit();
             return true;
         }
-
+        
+        /**
+         * evaluateQuantitiesInCartAndUpdate
+         *
+         * @param  int $cart
+         * @return bool
+         * @throws ExceedProductAvailability if requested quantity exceed availability
+         */
         private function evaluateQuantitiesInCartAndUpdate(int $cart):bool{
             $Cart = $this->getCart($cart);
             if (!$Cart){
@@ -682,7 +690,7 @@ class DatabaseRequests{
             foreach($Cart as $item) {
                 $result = $this->getDifferenceBetween($item['CartItemID']);
                 if($result<0){
-                    return false;
+                    throw new ExceedProductAvailability($item['ProductID']);
                 }
                 $this->changeProductQuantity($item['ProductID'],$result);
             }
@@ -699,13 +707,20 @@ class DatabaseRequests{
          * @return int
          * @throws NoCart if has no cart
          * @throws NotClient if not a client 
+         * @throws ExceedProductAvailability
          */
         public function createOrderFromUserCart(int $userId):int|false{
             $cartId=$this->getClientCartId($userId);
             $this->db->begin_transaction();
+            try{
             if(!$this->evaluateQuantitiesInCartAndUpdate($cartId)){
+                $this->db->rollback();
                 return false;
             }
+        }catch(ExceedProductAvailability $e){
+            $this->db->rollback();
+            throw $e;
+        }
             if(!$this->createOrder($cartId)){
                 $this->db->rollback();
                 return false;
