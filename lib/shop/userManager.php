@@ -11,7 +11,11 @@ namespace shop{
 
 class UserManager{
 
-        public function __construct(private DatabaseManager $dbm){}
+        protected NotificationFactory $notify;
+
+        public function __construct(private DatabaseManager $dbm){
+            $this->notify=new NotificationFactory($this->dbm->getRequests());
+        }
         
         /**
          * login
@@ -46,7 +50,9 @@ class UserManager{
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new EmailIsInvalid($email);
             $salted = PasswordUtils::generatePassword($password);
             $id_user = $this->dbm->getRequests()->registerClient($user,$salted,$email);
-            return $this->dbm->getFactory()->getUser($id_user);
+            $user = $this->dbm->getFactory()->getUser($id_user);
+            $this->notify->notifyNewUser($user);
+            return $user;
         }
 
         public function isUserLogged():bool{
