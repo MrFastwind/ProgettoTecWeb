@@ -1,5 +1,5 @@
 <header>
-    <h2>Categorie</h2>
+    <h2 class="text-white">CATEGORIE</h2>
 </header>
 <ul class="categories">
     <?php foreach($templateParams["categorie"] as $key=>$categoria): ?>
