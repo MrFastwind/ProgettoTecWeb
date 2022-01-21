@@ -61,6 +61,10 @@ form > ul > li{
     padding-bottom: 10px;
 }
 
+form > ul{
+    justify-content: center;
+}
+
 form > ul > li > a{
     font-size: 20px;
     text-decoration: none;
@@ -69,7 +73,8 @@ form > ul > li > a{
     border: solid #7ef176;
     border-radius: 50px;
     background-color: #7ef176;
-    padding: 0 25%;
+    padding: 0 15%;
+    margin: 0 15%;
 }
 
 body > footer{
