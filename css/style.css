@@ -11,6 +11,7 @@ body {
 
 body > header > nav > form{
     float: right;
+    margin-right: 5%;
 }
 
 .grid-container{
@@ -35,7 +36,7 @@ input{
 }
 
 main > form > input{
-    width: 85%;
+    width: 90%;
 }
 
 input:placeholder-shown{
@@ -44,7 +45,6 @@ input:placeholder-shown{
 }
 
 .searchbtn{
-    margin-left: 5%;
     background: transparent;
     border: none;
 }
@@ -63,10 +63,6 @@ input:placeholder-shown{
 form > ul > li{
     width: 100%;
     padding-bottom: 10px;
-}
-
-form > ul{
-    justify-content: center;
 }
 
 form > ul > li > a{
