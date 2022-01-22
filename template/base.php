@@ -48,7 +48,7 @@
         }
         ?>
     </main>
-    <footer><!--TODO: add links-->
+    <footer>
         <ul class="list-unstyled">
             <li><a class="text-decoration-none text-white" href="#">TERMINI DI SERVIZIO</a></li>
             <li><a class="text-decoration-none text-white" href="#">PRIVACY POLICY</a></li>

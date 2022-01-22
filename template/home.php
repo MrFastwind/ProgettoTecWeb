@@ -15,6 +15,6 @@
         <img src="/img/search.png" alt="Search">
     </button>
     <footer>
-        <p class="text-white">Hai un prodotto che ti interessa e non è disponibile? <a class="text-warning" href="#">Scrivici</a></p> <!--TODO: add href-->
+        <p class="text-white">Hai un prodotto che ti interessa e non è disponibile? <a class="text-warning" href="#">Scrivici</a></p>
     </footer>
 </form>
