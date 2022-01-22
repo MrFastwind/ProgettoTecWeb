@@ -45,6 +45,7 @@ input:placeholder-shown{
 }
 
 .searchbtn{
+    margin-left: 5px;
     background: transparent;
     border: none;
 }
