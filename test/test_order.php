@@ -5,6 +5,7 @@ namespace test{
 
     use database\Cart;
     use database\DatabaseManager;
+    use database\exceptions\ExceedProductAvailability;
     use shop\exceptions\NoItemsInOrder;
     use shop\Shop;
 
@@ -43,6 +44,8 @@ namespace test{
         }
 
         public function testOrder(){
+            //add item to product
+            $this->dbm->getRequests()->changeProductQuantity($this->itemid,1);
             $this->dbm->getRequests()->addItemToCart($this->dbm->getFactory()->getUserCart($this->userid)->CartID,$this->itemid);
             assert($this->shop->getOrderManager()->makeOrdinationByUser($this->userid),"Should have made the Order");
             $this->dbm->getRequests()->deleteCartOfUser($this->userid);
@@ -52,7 +55,16 @@ namespace test{
             assert($this->dbm->getRequests()->deleteOrder($order['OrderID']),"Should have deleted the order");
         }
 
+        public function testOrderWithExceedingQuantity(){
+            $this->dbm->getRequests()->addItemToCart($this->dbm->getFactory()->getUserCart($this->userid)->CartID,$this->itemid);
+            try{
+            $this->shop->getOrderManager()->makeOrdinationByUser($this->userid);
+            assert(false,"Should have throw ExceedProductAvailability");
+            }catch(ExceedProductAvailability $e){}
+        }
+
         public function testGetUserOrders(){
+            $this->dbm->getRequests()->changeProductQuantity($this->itemid,1);
             $num = count($this->dbm->getRequests()->getAllOrderOfUser($this->userid));
             $this->dbm->getRequests()->addItemToCart($this->dbm->getFactory()->getUserCart($this->userid)->CartID,$this->itemid);
             assert($this->shop->getOrderManager()->makeOrdinationByUser($this->userid),"Should have made the Order");
