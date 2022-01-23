@@ -199,6 +199,26 @@ class DatabaseRequests{
         }
 
         /**
+         * getVendorByProduct
+         *
+         * @param  int $productId
+         * @return int
+         * @throws NoUser
+         */
+        public function getVendorByProduct(int $productId):int{
+            $query = <<<SQL
+            SELECT VendorID
+            FROM Product
+            WHERE ProductID=?
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$productId);
+            if(is_array($result)&& !empty($result)){
+                return $result[0]['VendorID'];
+            }
+            throw new NoUser();            
+        }
+
+        /**
          * getRandomProducts
          * 
          * @param int $n the number of random item to return, default is 1
