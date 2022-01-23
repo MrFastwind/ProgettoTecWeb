@@ -69,11 +69,9 @@ namespace database{
          */
         public function getProduct(int $id): Product
         {
-            $item = $this->dbh->getUserById($id);
+            $item = $this->dbh->getProductById($id);
             if (empty($item)) {
                 return NULL;
-            }else {
-                $item=$item[0];
             }
             return new Product(...$item);
         }
