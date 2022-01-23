@@ -6,6 +6,7 @@ namespace database{
     use database\exceptions\mysqliBindException;
     use database\exceptions\NoCart;
     use database\exceptions\NotClient;
+    use database\exceptions\NoUser;
     use database\exceptions\UserExistAlready;
     use database\exceptions\UserNotExist;
     use DateTime;
