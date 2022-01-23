@@ -54,7 +54,7 @@ namespace database{
             $table = $this->dbh->getCategories();
             if(!empty($table)){
                 foreach ($table as $key => $value) {
-                    $collection[$value["Name"]] = $value["CategoryID"];
+                    $collection[$value["CategoryID"]] = $value["Name"];
                 }
             }
             return $collection;
