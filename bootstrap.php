@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 if (basename($_SERVER['SCRIPT_NAME']) == basename("bootstrap.php")) {
     header('Location: index.php');
   }
@@ -9,10 +9,10 @@ define("IMG_DIR", "./img/");
 
 //Load Libs
 include_once("lib/autoload.php");
-//LoadClasses();
 
-//Load other files
 
+//Load Session
+session_start();
 
 //Define Variables
 $database_connection = array(

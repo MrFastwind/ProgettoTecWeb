@@ -11,8 +11,8 @@ class User extends DatabaseObject{
             public string $Username,
             public string $Email,
             public string $PasswordHash,
-            public mixed $isClient,
-            public mixed $isVendor
+            public bool $isClient,
+            public bool $isVendor
         ){}
 
         public function pushToDatabase()
