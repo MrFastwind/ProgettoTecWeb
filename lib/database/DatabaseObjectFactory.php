@@ -155,6 +155,19 @@ namespace database{
             }
         }
 
+        //Order
+        
+        /**
+         * getOrder
+         *
+         * @param  int $orderId
+         * @return Order
+         */
+        public function getOrder(int $orderId):Order{
+            $order = $this->dbh->getOrder($orderId);
+            return new Order(...$order);
+        }
+
 
         # Utility
         
