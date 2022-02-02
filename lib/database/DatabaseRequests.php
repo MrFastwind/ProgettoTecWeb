@@ -409,7 +409,7 @@ class DatabaseRequests{
             WHERE Username = ? OR Email = ?
             SQL;
             $user = $this->executeQuery($query,MYSQLI_ASSOC, 'ss',$name,$name);
-            if(!is_array($user)){
+            if(!is_array($user) || empty($user)){
                 throw new exceptions\UserNotExist();
             }
             return $this->getUserById($user[0]["UserID"]);
