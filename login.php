@@ -11,7 +11,7 @@ require_once("./bootstrap.php");
         }catch(WrongPassword $e){
             $templateParams["erroreLogin"] = "Password sbagliata";
         }catch(UserNotExist $e){
-            $templateParams["erroreLogin"] = "Username non esiste";
+            $templateParams["erroreLogin"] = "User non esiste";
         }
     }
 
