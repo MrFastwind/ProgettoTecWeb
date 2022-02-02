@@ -1,7 +1,7 @@
 <form action="#" method="POST">
     <h2 class="text-white">LOGIN</h2>
     <?php if(isset($templateParams["erroreLogin"])): ?>
-            <p><?php echo $templateParams["erroreLogin"]; ?></p>
+        <p><?php echo $templateParams["erroreLogin"]; ?></p>
     <?php endif; ?>
     <ul class="list-unstyled">
         <li>

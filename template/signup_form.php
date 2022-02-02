@@ -1,5 +1,8 @@
 <form action="#" method="POST">
     <h2 class="text-white">SIGN UP</h2>
+    <?php if(isset($templateParams["erroreSignup"])): ?>
+        <p><?php echo $templateParams["erroreSignup"]; ?></p>
+    <?php endif; ?>
         <ul class="list-unstyled">
             <li>
                 <input type="text" id="username" name="username" placeholder="Username"/>

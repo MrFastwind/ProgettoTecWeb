@@ -9,9 +9,9 @@ require_once("./bootstrap.php");
         try{
         $user = $shop->getUserManager()->login($_POST["username"], $_POST["password"]);
         }catch(WrongPassword $e){
-            echo("<script type='text/javascript'>alert('Password Sbagliata!');</script>");
+            $templateParams["erroreLogin"] = "Password sbagliata";
         }catch(UserNotExist $e){
-            echo("<script type='text/javascript'>alert('Utente non esiste!');</script>"); //TODO: alerts da togliere assolutamente
+            $templateParams["erroreLogin"] = "Username non esiste";
         }
     }
 

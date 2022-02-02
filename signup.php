@@ -1,10 +1,17 @@
 <?php
 
+use shop\exceptions\EmailIsInvalid;
+
 require_once("./bootstrap.php");
 
     if(isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["email"])){
-        $user = $shop->getUserManager()->registerClient($_POST["username"], $_POST["password"], $_POST["email"]); //TODO: add error message in case of invalid email
-        $shop->getUserManager()->login($user->Username,$_POST["password"]);
+        try{
+            $user = $shop->getUserManager()->registerClient($_POST["username"], $_POST["password"], $_POST["email"]);
+            $shop->getUserManager()->login($user->Username,$_POST["password"]);
+        }
+        catch(EmailIsInvalid $e){
+            $templateParams["erroreSignup"] = "Email non valida";
+        }
     }
 
     if($shop->getUserManager()->isUserLogged()){
