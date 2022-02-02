@@ -11,7 +11,7 @@
             <input type="password" id="password" name="password" placeholder="Password" />
         </li>
         <li>
-            <a href="login.php"> Accedi </a>
+            <input type="submit" name="submit" value="Accedi"/>
         </li>
     </ul>
     <footer>

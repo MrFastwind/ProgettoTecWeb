@@ -14,7 +14,7 @@
                 <input type="password" id="password" name="password" placeholder="Password"/>
             </li>
             <li>
-                <a href="signup.php">Registrati</a>
+                <input type="submit" value="Registrati"/>
             </li>
         </ul>
         <footer>
