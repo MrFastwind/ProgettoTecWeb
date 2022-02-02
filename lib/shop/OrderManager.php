@@ -1,6 +1,7 @@
 <?php
 namespace shop{
 
+    use database\Cart;
     use database\DatabaseManager;
     use database\OrderStatus;
     use shop\exceptions\NoItemsInOrder;
@@ -26,6 +27,8 @@ class OrderManager{
         $success = $this->dbm->getRequests()->createOrderFromUserCart($user);
         if($success){
             $this->notify->notifyOrderCreation($user,$this->dbm->getRequests()->getOrderFromCart($cart->CartID)['OrderID']);
+            //Check Product For Out of Stock
+            $this->checkLastOrder($cart);
         }
         return $success;
     }
@@ -47,6 +50,17 @@ class OrderManager{
         $this->notify->notifyOrderProgress($userId,$orderId);
         return true;
 
+    }
+
+    private function checkLastOrder(Cart $cart){
+        $items = $cart->Items;
+        foreach ($items as $key => $value) {
+            $productId = $value->ProductID;
+            $product = $this->dbm->getFactory()->getProduct($productId);
+            if($product->Quantity<1){
+                $this->notify->notifyProductOutOfStock($product);
+            }
+        }
     }
 }
 }

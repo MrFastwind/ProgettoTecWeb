@@ -6,6 +6,7 @@ namespace database{
     use database\exceptions\mysqliBindException;
     use database\exceptions\NoCart;
     use database\exceptions\NotClient;
+    use database\exceptions\NoUser;
     use database\exceptions\UserExistAlready;
     use database\exceptions\UserNotExist;
     use DateTime;
@@ -196,6 +197,26 @@ class DatabaseRequests{
                 return $result[0];
             }
             return false;
+        }
+
+        /**
+         * getVendorByProduct
+         *
+         * @param  int $productId
+         * @return int
+         * @throws NoUser
+         */
+        public function getVendorByProduct(int $productId):int{
+            $query = <<<SQL
+            SELECT VendorID
+            FROM Product
+            WHERE ProductID=?
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$productId);
+            if(is_array($result)&& !empty($result)){
+                return $result[0]['VendorID'];
+            }
+            throw new NoUser();            
         }
 
         /**

@@ -12,7 +12,7 @@ namespace test{
 
     class TestOrder extends TestCase{
         private string $user = "test_user";
-        private int $userid = -1;
+        private int $userid = 43;
         private int $itemid = -1;
         private Cart $cart;
 

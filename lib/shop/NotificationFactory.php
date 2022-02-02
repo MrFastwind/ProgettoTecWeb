@@ -3,6 +3,7 @@ namespace shop{
 
     use database\DatabaseRequests;
     use database\exceptions\DatabaseException;
+    use database\Product;
     use database\User;
 
 class NotificationFactory{
@@ -34,6 +35,11 @@ class NotificationFactory{
 
             }
             return false;
+        }
+
+        public function notifyProductOutOfStock(Product $product):bool{
+            $productId=$product->ProductID;
+            return $this->dbr->createNotification("Product $productId, is out of stock!",$this->dbr->getVendorByProduct($productId));
         }
     }
 }
