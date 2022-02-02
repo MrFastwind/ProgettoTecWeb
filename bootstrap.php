@@ -9,7 +9,7 @@ define("IMG_DIR", "./img/");
 
 //Load Libs
 include_once("lib/autoload.php");
-
+include_once("lib/utils/logger.php");
 
 //Load Session
 session_start();
