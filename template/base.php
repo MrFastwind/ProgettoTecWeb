@@ -36,6 +36,15 @@
                 <?php else: ?>
                     <li><a class="text-decoration-none text-dark" href="logout.php">Logout</a></li>
                 <?php endif; ?>
+                <?php if($shop->getUserManager()->isUserLogged()): 
+                    $user = $_SESSION["User"];
+                    if($user->isVendor):
+                ?>
+                    <li>
+                        <a href="venditore.php" class="text-decoration-none text-dark">Vendi</a>
+                    </li>
+                    <?php endif;?>
+                <?php endif; ?>
             </ul>
         </nav>
         <div>
