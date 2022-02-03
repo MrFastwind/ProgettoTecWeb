@@ -1,5 +1,5 @@
 <header>
-    <h2><?php echo $templateParams["title"]; ?></h2>
+    <h2 class="text-white"><?php echo $templateParams["title"]; ?></h2>
 </header>
 <ul>
     <?php foreach($templateParams["products"] as $product): ?>
