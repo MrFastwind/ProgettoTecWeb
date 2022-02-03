@@ -30,12 +30,12 @@ h1, h2{
     font-size: 20px;
 }
 
-input{
+input[type="text"], input[type="password"]{
     border: solid white;
     border-radius: 10px;
 }
 
-main > form > input{
+main > form > input[type="text"]{
     width: 90%;
 }
 
@@ -66,16 +66,35 @@ form > ul > li{
     padding-bottom: 10px;
 }
 
-form > ul > li > a{
+input[type="submit"]{
     font-size: 20px;
-    text-decoration: none;
     text-align: center;
     color: white;
     border: solid #7ef176;
     border-radius: 50px;
     background-color: #7ef176;
-    padding: 0 15%;
-    margin: 0 15%;
+    padding: 0 15px;
+}
+
+main > form > p{
+    font-size: 20px;
+    color: white;
+}
+
+main > ul > li{
+    padding-bottom: 75px;
+}
+
+main > ul> li> a{
+    font-size: 20px;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    border: solid #f8d62c;
+    border-radius: 50px;
+    background-color: #f8d62c;
+    padding: 50px 25% 50px 25%;
+    width: 50%;
 }
 
 body > footer{
