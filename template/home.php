@@ -10,7 +10,7 @@
     </footer>
 </section>
 <form action="search.php" method="POST">
-    <input type="text" name="search" id="search" placeholder="Cerca un prodotto"/>
+    <input type="text" name="search" id="search" placeholder="Cerca un prodotto..."/>
     <button type="submit" class="searchbtn">
         <img src="/img/search.png" alt="Search">
     </button>
