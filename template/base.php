@@ -40,9 +40,14 @@
                     $user = $_SESSION["User"];
                     if($user->isVendor):
                 ?>
-                    <li>
-                        <a href="venditore.php" class="text-decoration-none text-dark">Vendi</a>
-                    </li>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="venditore.php" class="text-decoration-none text-dark">Vendi</a>
+                        </li>
+                        <li>
+                            <a href="modifica.php" class="text-decoration-none text-dark">Modifica un prodotto</a>
+                        </li>
+                    </ul>
                     <?php endif;?>
                 <?php endif; ?>
             </ul>
