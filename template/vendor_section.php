@@ -21,7 +21,9 @@
         <li>
             <select name="category">
                 <option value="" disabled selected>Scegli una categoria...</option>
-                
+                <?php foreach($categories as $categoria): ?>
+                    <option value=<?php echo($categoria);?>><?php echo($categoria);?></option>
+                <?php endforeach ?>
             </select>
         </li>
         <li>
