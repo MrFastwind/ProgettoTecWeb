@@ -3,7 +3,9 @@
 
     if(isset($_SESSION["User"])){
         $user = $_SESSION["User"];
-        $templateParams["cart"] = $dbm->getFactory()->getUserCart($user->UserID);
+        $cart = $dbm->getFactory()->getUserCart($user->UserID);
+        $items = $cart->getAsArray();
+        $requests = $dbm->getRequests();
         $templateParams["name"] = "cart_section.php";
         $templateParams["title"] = "Carrello";
     }
