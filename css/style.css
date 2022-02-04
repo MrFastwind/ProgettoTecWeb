@@ -31,6 +31,7 @@ body > header > nav > form > input[type="text"]{
 h1, h2{
     font-weight: 700;
     font-size: 20px;
+    text-transform: uppercase;
 }
 
 main > form > input[type="text"]{
@@ -71,7 +72,7 @@ form > ul > li{
     padding-bottom: 10px;
 }
 
-form > ul > li > div{
+.btnContainer{
     text-align: center;
 }
 
@@ -90,8 +91,21 @@ main > form > p{
     color: white;
 }
 
-main > ul > li{
-    padding-bottom: 75px;
+.categories > li{
+    margin-bottom: 75px;
+}
+
+.categories > li > a{
+    display: block;
+    font-size: 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    color: white;
+    border: solid #f8d62c;
+    border-radius: 50px;
+    background-color: #f8d62c;
+    padding: 20px 50px;
 }
 
 body > footer{
