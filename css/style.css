@@ -14,15 +14,18 @@ body > header > nav > form{
     margin-right: 5%;
 }
 
-.grid-container{
-    display: grid;
-    gap: 50px;
-    grid-template-columns: 1fr;
+body > header > nav > form > input[type="text"]{
+    border: solid white;
+    border-radius: 10px;
 }
 
-main > *{
-    margin-left: auto;
-    margin-right: auto;
+.flex-container{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
 }
 
 h1, h2{
@@ -30,13 +33,10 @@ h1, h2{
     font-size: 20px;
 }
 
-input[type="text"], input[type="password"]{
-    border: solid white;
-    border-radius: 10px;
-}
-
 main > form > input[type="text"]{
     width: 90%;
+    border: solid white;
+    border-radius: 10px;
 }
 
 input:placeholder-shown{
@@ -61,8 +61,13 @@ input:placeholder-shown{
     padding: 5px 20px;
 }
 
-form > ul > li{
+main > form > ul > li > input{
+    border: solid white;
+    border-radius: 10px;
     width: 100%;
+}
+
+form > ul > li{
     padding-bottom: 10px;
 }
 
@@ -83,18 +88,6 @@ main > form > p{
 
 main > ul > li{
     padding-bottom: 75px;
-}
-
-main > ul> li> a{
-    font-size: 20px;
-    text-decoration: none;
-    text-align: center;
-    color: white;
-    border: solid #f8d62c;
-    border-radius: 50px;
-    background-color: #f8d62c;
-    padding: 50px 25% 50px 25%;
-    width: 50%;
 }
 
 body > footer{

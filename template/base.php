@@ -56,7 +56,7 @@
             <!--TODO: add logo-->
         </div>
     </header>
-    <main class="grid-container">
+    <main class="flex-container">
         <?php if(isset($templateParams["name"])){
             require($templateParams["name"]);
         }
