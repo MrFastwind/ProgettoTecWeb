@@ -193,7 +193,7 @@ class DatabaseRequests{
             WHERE ProductID=? AND UserID=VendorID AND Product.CategoryID=Category.CategoryID
             SQL;
             $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$id);
-            if(is_array($result)){
+            if(is_array($result) && !empty($result)){
                 return $result[0];
             }
             return false;
