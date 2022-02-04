@@ -5,11 +5,12 @@ if (basename($_SERVER['SCRIPT_NAME']) == basename("bootstrap.php")) {
   }
 
 //Defines
-define("IMG_DIR", "./img/");
+define("IMG_DIR", $_SERVER["DOCUMENT_ROOT"]."/img/");
 
 //Load Libs
 include_once("lib/autoload.php");
 include_once("lib/utils/logger.php");
+include_once("lib/utils/imageRetrive.php");
 
 //Load Session
 session_start();
