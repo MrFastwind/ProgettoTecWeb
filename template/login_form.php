@@ -11,7 +11,9 @@
             <input type="password" id="password" name="password" placeholder="Password" />
         </li>
         <li>
-            <input type="submit" name="submit" value="Accedi"/>
+            <div class="btnContainer">
+                <input type="submit" name="submit" value="Accedi"/>
+            </div>
         </li>
     </ul>
     <footer>

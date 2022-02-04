@@ -71,6 +71,10 @@ form > ul > li{
     padding-bottom: 10px;
 }
 
+form > ul > li > div{
+    text-align: center;
+}
+
 input[type="submit"]{
     font-size: 20px;
     text-align: center;
@@ -78,7 +82,7 @@ input[type="submit"]{
     border: solid #7ef176;
     border-radius: 50px;
     background-color: #7ef176;
-    padding: 0 15px;
+    width: 75%;
 }
 
 main > form > p{

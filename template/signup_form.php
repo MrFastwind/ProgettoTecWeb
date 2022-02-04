@@ -14,7 +14,9 @@
                 <input type="password" id="password" name="password" placeholder="Password"/>
             </li>
             <li>
-                <input type="submit" value="Registrati"/>
+                <div class="btnContainer">
+                    <input type="submit" value="Registrati"/>
+                </div>
             </li>
         </ul>
         <footer>
