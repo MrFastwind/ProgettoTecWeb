@@ -38,26 +38,26 @@
                 <?php else: ?>
                     <li><a class="text-decoration-none text-dark" href="logout.php">Logout</a></li>
                 <?php endif; ?>
-                <?php if($shop->getUserManager()->isUserLogged()): 
-                    $user = $_SESSION["User"];
-                    if($user->isVendor):
-                ?>
-                    <ul class="list-unstyled">
-                        <li>
-                            <a href="venditore.php" class="text-decoration-none text-dark">Vendi</a>
-                        </li>
-                        <li>
-                            <a href="modifica.php" class="text-decoration-none text-dark">Modifica un prodotto</a>
-                        </li>
-                    </ul>
-                    <?php endif;?>
-                <?php endif; ?>
             </ul>
+            <?php if($shop->getUserManager()->isUserLogged()): 
+                $user = $_SESSION["User"];
+                    if($user->isVendor):
+            ?>
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="venditore.php" class="text-decoration-none text-dark">Vendi</a>
+                    </li>
+                    <li>
+                        <a href="modifica.php" class="text-decoration-none text-dark">Modifica un prodotto</a>
+                    </li>
+                </ul>
+                <?php endif;?>
+            <?php endif; ?>
         </nav>
         <div>
             <!--TODO: add logo-->
         </div>
-        <span style="font-size: 30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+        <span onclick="openNav()">&#9776;</span>
     </header>
     <main class="flex-container">
         <?php if(isset($templateParams["name"])){

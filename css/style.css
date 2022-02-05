@@ -16,6 +16,7 @@ body > header > nav > form{
 
 body > header > nav > form > input[type="text"]{
     border: solid white;
+    background-color: gray;
     border-radius: 10px;
 }
 
@@ -33,9 +34,24 @@ body > header > nav > form > input[type="text"]{
 
 .overlay .closebtn{
     position: absolute;
-    top: 20px;
-    right: 5%;
+    left: 1%;
     font-size: 60px;
+}
+
+nav > ul {
+    margin-top: 75px;
+    margin-left: 1%;
+}
+
+nav > ul > li > a{
+    font-size: 20px;
+}
+
+header > span {
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    margin-left: 0.5%;
 }
 
 .flex-container{
@@ -44,6 +60,7 @@ body > header > nav > form > input[type="text"]{
     flex-grow: 1;
     align-items: center;
     justify-content: center;
+    margin-top: 75px;
     gap: 30px;
 }
 
