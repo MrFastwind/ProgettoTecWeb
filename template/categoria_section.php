@@ -21,7 +21,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <a href="addToCart.php">Aggiungi al carrello</a>
+                                    <a href="#">Aggiungi al carrello</a>
                                 </li>
                             </ul>
                         </div>

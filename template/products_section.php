@@ -2,7 +2,7 @@
     <h1 class="text-white">PRODOTTI</h1>
 </header>
 <section>
-    <?php if(count($products)!=0): ?>
+    <?php if(isset($products)): ?>
         <ul class="list-unstyled accordion" id="accordion">
         <?php foreach ($products as $product): ?>
             <li>
