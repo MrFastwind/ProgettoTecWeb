@@ -195,7 +195,7 @@ main > form > p{
 /*TODO: da finire lo stile dei collapse*/
 
 section > ul > li{
-    min-width: 400px;
+    min-width: 350px;
     margin-top: 30px;
 }
 
@@ -217,7 +217,7 @@ section > ul > li:first-child{
     border: solid #f8d62c;
     border-radius: 50px;
     background-color: #f8d62c;
-    padding: 0 20%;
+    padding: 0 15%;
 }
 
 body > footer{
