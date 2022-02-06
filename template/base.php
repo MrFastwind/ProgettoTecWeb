@@ -31,7 +31,11 @@
             </ul>
             <ul class="login list-unstyled">
                 <li>
-                    <a class="text-decoration-none text-dark" href="signup.php">Sign up</a>
+                    <?php if(!$shop->getUserManager()->isUserLogged()): ?>
+                        <a class="text-decoration-none text-dark" href="signup.php">Sign up</a>
+                    <?php else: ?>
+                        <a class="text-decoration-none text-dark" href="notifiche.php">Notifiche</a>
+                    <?php endif ?>
                 </li>
                 <?php if(!$shop->getUserManager()->isUserLogged()): ?>
                     <li><a class="text-decoration-none text-dark" href="login.php">Login</a></li>

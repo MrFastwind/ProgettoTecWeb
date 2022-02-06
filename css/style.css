@@ -192,6 +192,18 @@ main > form > p{
     padding-top: 20px;
 }
 
+.notifications{
+    margin-top: 20px;
+}
+
+.notifications > ul{
+    margin-top: 10px;
+}
+
+.notifications > li > p{
+    font-size: 20px;
+}
+
 /*TODO: da finire lo stile dei collapse*/
 
 section > ul > li{
