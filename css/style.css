@@ -208,6 +208,7 @@ main > form > p{
 
 section > ul > li{
     min-width: 300px;
+    max-width: 300px;
     margin-top: 30px;
 }
 
