@@ -1,7 +1,7 @@
-<header>
-    <h1 class="text-white"><?php echo $templateParams["title"]; ?></h1>
-</header>
 <section>
+    <header>
+        <h1 class="text-white"><?php echo $templateParams["title"]; ?></h1>
+    </header>
     <ul class="list-unstyled accordion" id="accordion">
         <?php foreach($products as $product): ?>
             <li>

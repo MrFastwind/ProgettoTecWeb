@@ -1,7 +1,7 @@
-<header>
-    <h1 class="text-white">PRODOTTI</h1>
-</header>
 <section>
+    <header>
+        <h1 class="text-white">PRODOTTI</h1>
+    </header>
     <?php if(isset($products)): ?>
         <ul class="list-unstyled accordion" id="accordion">
         <?php foreach ($products as $product): ?>
