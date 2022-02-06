@@ -2,7 +2,7 @@
     require_once("./bootstrap.php");
 
     if(isset($_POST["search"])){
-        $templateParams["prodotti"] = $dbm->getFactory()->getProductsLike($_POST["search"], 0, 10);
+        $products = $dbm->getFactory()->getProductsLike($_POST["search"], 0, 10);
     }
 
     $templateParams["title"] = "Prodotti";

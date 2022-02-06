@@ -5,7 +5,7 @@
     if(!isset($_GET["id"])|| !key_exists($_GET["id"],$templateParams["categorie"])){
         header("location: catalogo.php");
     }
-    $templateParams["products"] = $dbm->getFactory()->getProductsByCategory($_GET["id"], 0, 10);
+    $products = $dbm->getFactory()->getProductsByCategory($_GET["id"], 0, 10);
     $templateParams["title"] = $templateParams["categorie"][$_GET["id"]];
     $templateParams["name"] = "categoria_section.php";
 
