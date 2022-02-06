@@ -192,8 +192,15 @@ main > form > p{
     padding-top: 20px;
 }
 
+/*TODO: da finire lo stile dei collapse*/
+
 section > ul > li{
     min-width: 400px;
+    margin-top: 30px;
+}
+
+section > ul > li:first-child{
+    margin-top: 0;
 }
 
 .addToCart > li > select{
