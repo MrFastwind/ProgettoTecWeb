@@ -13,10 +13,10 @@
             <textarea name="productDescription" id="description" cols="30" rows="5" placeholder="Breve descrizione del prodotto..."></textarea>
         </li>
         <li>
-            <input type="text" name="quantity" placeholder="Quantità"/>
+            <input type="number" min="0" name="quantity" placeholder="Quantità"/>
         </li>
         <li>
-            <input type="text" name="price" placeholder="Prezzo"/>
+            <input type="number" min="0" name="price" placeholder="Prezzo"/>
         </li>
         <li>
             <select name="category">
