@@ -12,7 +12,14 @@
                     </h2>
                     <div id="<?php echo($product->Name);?>" class="accordion-collapse collapse show" aria-labelledby="<?php echo($product->Name);?>Label" data-bs-parent="#accordion">
                         <div class="accordion-body">
-                            <?php echo($product->Description);?>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <p><?php echo($product->Description);?></p>
+                                </li>
+                                <li>
+                                    <p>Prezzo per singola unità: <?php echo($product->Price);?>.00€</p>
+                                </li>
+                            </ul>
                             <ul class="list-unstyled addToCart">
                                 <li>
                                     <select name="quantity">
