@@ -186,14 +186,14 @@ class DatabaseRequests{
          * @param  int $id of the Product
          * @return array|false as the dictionary of Product or false if not exist
          */
-        public function getProductById($id):array|false{
+        public function getProductById(int $id):array|false{
             $query = <<<SQL
             SELECT ProductID, Product.Name as Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
             FROM Product, User, Category
             WHERE ProductID=? AND UserID=VendorID AND Product.CategoryID=Category.CategoryID
             SQL;
             $result = $this->executeQuery($query,MYSQLI_ASSOC,'i',$id);
-            if(is_array($result)){
+            if(is_array($result) && !empty($result)){
                 return $result[0];
             }
             return false;
