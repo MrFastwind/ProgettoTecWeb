@@ -217,7 +217,7 @@ main form ul li select{
 
 .notifications {
     border-collapse: collapse;
-    width: 100%;
+    max-width: 300px;
     background-color: white;
   }
   
