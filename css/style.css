@@ -192,18 +192,6 @@ main > form > p{
     padding-top: 20px;
 }
 
-.notifications{
-    margin-top: 20px;
-}
-
-.notifications > ul{
-    margin-top: 10px;
-}
-
-.notifications > li > p{
-    font-size: 20px;
-}
-
 main form ul li textarea {
     border: solid white;
     border-radius: 10px;
@@ -215,11 +203,16 @@ main form ul li select{
     border-radius: 50px;
 }
 
+.tableContainer{
+    margin-left: 10%;
+}
+
 .notifications {
     border-collapse: collapse;
-    max-width: 300px;
+    max-width: 90%;
     background-color: white;
-  }
+    margin-top: 20px;
+}
   
 .notifications td, .notifications th {
     border: 1px solid black;
