@@ -155,7 +155,7 @@ form > ul > li{
     text-align: center;
 }
 
-input[type="submit"]{
+main > form ul li input[type="submit"]{
     font-size: 20px;
     text-align: center;
     color: white;
@@ -233,15 +233,14 @@ section > ul > li:first-child{
     border: solid white;
 }
 
-.addToCart > li > a{
+.addToCart > li > input[type="submit"]{
     font-size: 16px;
-    text-decoration: none;
-    color:black;
     text-align: center;
+    color: black;
     border: solid #f8d62c;
     border-radius: 50px;
     background-color: #f8d62c;
-    padding: 0 9%;
+    width: 75%;
 }
 
 body > footer{
