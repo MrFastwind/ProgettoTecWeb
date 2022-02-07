@@ -27,7 +27,9 @@
             </select>
         </li>
         <li>
-            <input type="submit" name="submitProduct" value="Aggiungi"/>
+            <div class="btnContainer">
+                <input type="submit" name="submitProduct" value="Aggiungi"/>
+            </div>
         </li>
     </ul>
 </form>

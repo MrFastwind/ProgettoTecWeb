@@ -215,11 +215,6 @@ main form ul li select{
     border-radius: 50px;
 }
 
-main form ul li input[type="submit"]{
-    text-align: center;
-    width: 100%;
-}
-
 /*TODO: da finire lo stile dei collapse*/
 
 section > ul > li{
@@ -233,7 +228,7 @@ section > ul > li:first-child{
 }
 
 .addToCart > li > select{
-    width: 15%;
+    width: 18%;
     border-radius: 50px;
     border: solid white;
 }
@@ -246,7 +241,7 @@ section > ul > li:first-child{
     border: solid #f8d62c;
     border-radius: 50px;
     background-color: #f8d62c;
-    padding: 0 10%;
+    padding: 0 9%;
 }
 
 body > footer{
