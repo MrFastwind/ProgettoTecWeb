@@ -2,11 +2,16 @@
     <header>
         <h2 class="text-white">NOTIFICHE</h2>
     </header>
-    <ul class="list-unstyled notifications">
+    <table class="notifications">
+        <tr>
+            <th>Data</th>
+            <th>Notifica</th>
+        </tr>
         <?php foreach($notifications as $notification): ?>
-            <li>
-                <p class="notifications text-white"><?php echo($notification["Text"]);?></p>
-            </li>
+            <tr>
+                <td><?php echo($notification["Time"]);?></td>
+                <td><?php echo($notification["Text"]);?></td>
+            </tr>
         <?php endforeach ?>
-    </ul>
+    </table>
 </section>

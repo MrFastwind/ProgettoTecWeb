@@ -215,6 +215,31 @@ main form ul li select{
     border-radius: 50px;
 }
 
+.notifications {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: white;
+  }
+  
+.notifications td, .notifications th {
+    border: 1px solid black;
+    padding: 10px 20px;
+}
+  
+.notifications tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+  
+.notifications tr:hover {
+    background-color: #ddd;
+}
+  
+.notifications th {
+    text-align: left;
+    background-color: #7ef176;
+    color: black;
+}
+
 /*TODO: da finire lo stile dei collapse*/
 
 section > ul > li{
