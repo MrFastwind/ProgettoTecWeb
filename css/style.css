@@ -204,6 +204,22 @@ main > form > p{
     font-size: 20px;
 }
 
+main form ul li textarea {
+    border: solid white;
+    border-radius: 10px;
+}
+
+main form ul li select{
+    border: solid white;
+    width: 100%;
+    border-radius: 50px;
+}
+
+main form ul li input[type="submit"]{
+    text-align: center;
+    width: 100%;
+}
+
 /*TODO: da finire lo stile dei collapse*/
 
 section > ul > li{
