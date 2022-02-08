@@ -5,7 +5,7 @@ if (basename($_SERVER['SCRIPT_NAME']) == basename("bootstrap.php")) {
   }
 
 //Defines
-define("IMG_DIR", $_SERVER["DOCUMENT_ROOT"]."/img/");
+define("IMG_DIR", "/img/");
 
 //Load Libs
 include_once("lib/autoload.php");
