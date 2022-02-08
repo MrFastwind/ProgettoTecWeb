@@ -66,9 +66,8 @@ header > span {
     flex-grow: 1;
     align-items: center;
     justify-content: center;
-    margin-top: 75px;
     gap: 30px;
-    margin: 0 0 221.5px;
+    margin: 75px 0 221.5px 0;
     bottom: 221.5px;
 }
 
@@ -79,7 +78,7 @@ h1, h2{
 }
 
 .carousel{
-    width: 100%;
+    width: 90%;
     position: relative;
     margin: auto;
 }
@@ -93,7 +92,7 @@ h1, h2{
     margin-top: -22px;
     color: white;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 11px;
     transition: 0.6s ease;
     border-radius: 0 3px 3px 0;
     user-select: none;
@@ -110,10 +109,25 @@ h1, h2{
 
 .carouselText{
     color: white;
-    font-size: 20px;
+    font-size: 16px;
     text-align: center;
     width: 100%;
     position: absolute;
+}
+
+.dot{
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6 ease;
+}
+
+.active, .dot:hover{
+    background-color: #717171;
 }
 
 main > form > input[type="text"]{
@@ -250,6 +264,27 @@ section > ul > li{
 
 section > ul > li:first-child{
     margin-top: 0;
+}
+
+div.accordion-item{
+    border: none;
+}
+h2.accordionHeader{
+    margin-bottom: 0%;
+}
+button.collapsed, div.accordion-item, h2.accordionHeader{
+    border-radius: 20px !important;
+}
+button.accordion-button{
+    border-top-left-radius: 20px !important;
+    border-top-right-radius: 20px !important;
+}
+
+div.accordion-collapse{
+    border-bottom-left-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    background-size: cover;
+    background-position: center;
 }
 
 .addToCart > li > select{

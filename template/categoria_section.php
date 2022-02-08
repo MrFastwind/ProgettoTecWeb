@@ -12,7 +12,7 @@
                     <h2 class="accordionHeader" id="<?php echo($product->Name);?>Label">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<?php echo($product->Name);?>" aria-expanded="false" aria-controls="<?php echo($product->Name);?>"><?php echo($product->Name);?></button>
                     </h2>
-                    <div id="<?php echo($product->Name);?>" class="accordion-collapse collapse" aria-labelledby="<?php echo($product->Name);?>Label" data-bs-parent="#accordion">
+                    <div id="<?php echo($product->Name);?>" class="accordion-collapse collapse" aria-labelledby="<?php echo($product->Name);?>Label" data-bs-parent="#accordion" style="background-image: linear-gradient(rgba(220,220,220,.6), rgba(220,220,220,.6)), url('<?php echo(retrieveImage($product->Image,IMG_DIR));?>');">
                         <div class="accordion-body">
                             <ul class="list-unstyled">
                                 <li>
@@ -32,7 +32,7 @@
                                         </select>
                                     </li>
                                     <li>
-                                        <input type="submit" name="add" value="Aggiungi al carrello" id="addToCart"/>
+                                        <input type="submit" name="add" value="🛒Aggiungi al carrello" id="addToCart"/>
                                     </li>
                                     <li>
                                         <input type="hidden" name="product" value="<?php echo($product->ProductID);?>"/>
