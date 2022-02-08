@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css"/>
     <script type="text/javascript" src="/js/nav.js"></script>
+    <script type="text/javascript" src="/js/carousel.js"></script>
     <title><?php echo $templateParams["title"];?></title>
 </html>
 <body>
@@ -15,7 +16,7 @@
     <header>
         <nav id="myNav" class="overlay">
             <a href="javascript:void(0)" class="closebtn text-decoration-none text-dark" onclick="closeNav()">&times;</a>
-            <form action="search.php" method="POST">
+            <form action="search.php" method="GET">
                 <input type="text" id="search" name="search"/>
                 <button type="submit" class="searchbtn">
                     <img src="/img/search.png" alt="Search">
