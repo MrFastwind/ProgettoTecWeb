@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+html{
+    position: relative;
+    min-height: 100%;
+}
+
 body {
     background-color: #f57979;
     font-family: 'Raleway', sans-serif;
@@ -63,6 +68,8 @@ header > span {
     justify-content: center;
     margin-top: 75px;
     gap: 30px;
+    margin: 0 0 221.5px;
+    bottom: 221.5px;
 }
 
 h1, h2{
@@ -266,6 +273,7 @@ body > footer{
     bottom: 0;
     width: 100%;
     background-color: #474545;
+    overflow: hidden;
 }
 
 body > footer > ul{
