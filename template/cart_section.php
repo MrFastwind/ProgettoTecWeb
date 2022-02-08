@@ -3,11 +3,11 @@
 </header>
 <table>
     <?php foreach($items as $item):
-        $product = $requests->getProductById($item->ProductID);
-        $img = $product->Image;
+        $product = $dbm->getFactory()->getProduct($item->ProductID);
+        //$img = $product->Image;
     ?>
         <tr>
-            <td><img src=<?php echo($img);?> alt=<?php echo ($product->Name);?>></td>
+            <!--<td><img src="<?php echo($img);?>" alt="<?php echo ($product->Name);?>"></td>-->
             <td><?php echo($product->Name);?></td>
             <td><?php echo($item->Quantity);?></td>
         </tr>
