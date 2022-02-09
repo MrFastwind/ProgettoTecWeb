@@ -79,9 +79,10 @@ h1, h2{
 
 .carousel{
     position: relative;
-    height: 175px;
+    height: 200px;
     min-width: 300px;
-    width: 100%;
+    text-align: center;
+    justify-content: center;
 }
 
 .carousel-img{
@@ -96,7 +97,6 @@ h1, h2{
     position: relative;
     overflow: hidden;
     border-radius: 30px;
-    margin-right: 5%;
 }
 
 .carousel-track{
@@ -125,11 +125,11 @@ h1, h2{
 }
 
 .carousel-btn-left{
-    left: -30px;
+    left: -20px;
 }
 
 .carousel-btn-right{
-    right: -30px;
+    right: -20px;
 }
 
 .carousel-btn img {
@@ -176,9 +176,9 @@ input:placeholder-shown{
     border: none;
 }
 
-section > footer{
+.homeBtnContainer{
     margin-top: 50px;
-    margin-left: 10%;
+    text-align: center;
 }
 
 .homeButton{

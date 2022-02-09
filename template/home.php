@@ -25,9 +25,9 @@
             <?php endfor ?>
         </div>
     </div>
-    <footer>
+    <div class="homeBtnContainer">
         <a class="homeButton" href="catalogo.php">Sfoglia le categorie</a>
-    </footer>
+    </div>
     <script src="js/carousel.js"></script>
 </section>
 <form action="search.php" method="GET">
