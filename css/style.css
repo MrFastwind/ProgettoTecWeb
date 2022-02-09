@@ -78,56 +78,85 @@ h1, h2{
 }
 
 .carousel{
-    width: 90%;
     position: relative;
-    margin: auto;
+    height: 175px;
+    min-width: 300px;
+    width: 100%;
 }
 
-.prev, .next{
-    cursor: pointer;
+.carousel-img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.6;
+}
+
+.carousel-track-container{
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 30px;
+    margin-right: 5%;
+}
+
+.carousel-track{
+    position: relative;
+    height: 100%;
+    transition: transform 250ms ease-in;
+}
+
+.carousel-slide{
+    position:absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+}
+
+.carousel-btn{
     position: absolute;
     top: 50%;
-    width: auto;
-    padding: 16px;
-    margin-top: -22px;
-    color: white;
-    font-weight: bold;
-    font-size: 11px;
-    transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
-}
-
-.next{
-    right: 0;
-    border-radius: 3px 0 0 3px;
-}
-
-.prev:hover, .next:hover{
-    background-color: rgba(0, 0, 0, 0, 8);
-}
-
-.carouselText{
-    color: white;
-    font-size: 16px;
-    text-align: center;
-    width: 100%;
-    position: absolute;
-}
-
-.dot{
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
     cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.6 ease;
 }
 
-.active, .dot:hover{
-    background-color: #717171;
+.carousel-btn-left{
+    left: -30px;
+}
+
+.carousel-btn-right{
+    right: -30px;
+}
+
+.carousel-btn img {
+    width: 20px;
+}
+
+.carousel-nav{
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.carousel-indicator{
+    border: 0;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;   
+    margin: 0 12px;
+    background: rgba(0, 0, 0, .3);
+}
+
+.carousel-indicator.current-slide{
+    background: rgba(0, 0, 0, .75);
+}
+
+.is-hidden{
+    display: none;
 }
 
 main > form > input[type="text"]{
@@ -145,6 +174,11 @@ input:placeholder-shown{
     margin-left: 2px;
     background: transparent;
     border: none;
+}
+
+section > footer{
+    margin-top: 50px;
+    margin-left: 10%;
 }
 
 .homeButton{
