@@ -254,8 +254,6 @@ main form ul li select{
     color: black;
 }
 
-/*TODO: da finire lo stile dei collapse*/
-
 section > ul > li{
     min-width: 300px;
     max-width: 300px;
@@ -301,6 +299,54 @@ div.accordion-collapse{
     border-radius: 50px;
     background-color: #f8d62c;
     width: 75%;
+}
+
+.cartTable{
+    border-collapse: collapse;
+    min-width: 300px;
+    max-width: 90%;
+    background-color: white;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.cartTable tr td{
+    max-width: 150px;
+    padding: 10px 20px;
+}
+
+.cartTable tr{
+    border: 1px solid black;
+}
+
+.tableImg{
+    width: 80%;
+    border-radius: 50px;
+}
+
+section footer ul {
+    display: inline-flex;
+}
+
+section footer ul li p{
+    font-size: 20px;
+    font-weight: 300;
+}
+
+section footer ul li a{
+    font-size: 20px;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    border: solid #7ef176;
+    border-radius: 50px;
+    background-color: #7ef176;
+    margin-left: 30%;
+    padding: 5px 20px;
+}
+
+p{
+    font-size: 16px;
 }
 
 body > footer{
