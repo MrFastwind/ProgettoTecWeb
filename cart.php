@@ -8,7 +8,7 @@
         $price = 0;
         foreach($items as $item){
             $product = $dbm->getFactory()->getProduct($item->ProductID);
-            $price += ($product->Price * $product->Quantity);
+            $price += ($product->Price * $item->Quantity);
         }
         $templateParams["name"] = "cart_section.php";
         $templateParams["title"] = "Carrello";
