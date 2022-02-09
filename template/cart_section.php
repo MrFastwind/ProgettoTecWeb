@@ -1,6 +1,6 @@
 <section>
     <header>
-        <h2 class="text-white">CARRELLO</h2>
+        <h2 class="text-white cartHeader">CARRELLO</h2>
     </header>
     <div>
         <?php if(isset($templateParams["cartSuccess"])): ?>

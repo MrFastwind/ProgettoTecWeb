@@ -301,13 +301,18 @@ div.accordion-collapse{
     width: 75%;
 }
 
+section header h2.cartHeader{
+    margin-left: 5%;
+}
+
 .cartTable{
     border-collapse: collapse;
-    min-width: 300px;
+    min-width: 90%;
     max-width: 90%;
     background-color: white;
     margin-top: 20px;
     margin-bottom: 20px;
+    margin-left: 5%;
 }
 
 .cartTable tr td{
@@ -326,6 +331,7 @@ div.accordion-collapse{
 
 section footer ul {
     display: inline-flex;
+    margin-left: 5%;
 }
 
 section footer ul li p{
