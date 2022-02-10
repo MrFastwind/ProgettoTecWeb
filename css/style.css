@@ -41,7 +41,7 @@ body > header > nav > form > input[type="text"]{
 .overlay .closebtn{
     position: absolute;
     left: 1%;
-    font-size: 60px;
+    font-size: 40px;
 }
 
 nav > ul {
@@ -267,6 +267,7 @@ main form ul li select{
     max-width: 90%;
     background-color: white;
     margin-top: 20px;
+    margin-bottom: 50px;
 }
   
 .notifications td, .notifications th {

@@ -14,9 +14,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <header>
         <nav id="myNav" class="overlay">
-            <a href="javascript:void(0)" class="closebtn text-decoration-none text-dark" onclick="closeNav()">&times;</a>
+            <a href="javascript:void(0)" class="closebtn text-decoration-none text-dark" onclick="closeNav()">&#9776;</a>
             <form action="search.php" method="GET">
-                <input type="text" id="search" name="search"/>
+                <input type="text" id="search" name="search" placeholder="Cerca..."/>
                 <button type="submit" class="searchbtn">
                     <img src="/img/search.png" alt="Search">
                 </button>
