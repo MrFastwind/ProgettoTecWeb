@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet"/> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="/js/nav.js"></script>
     <title><?php echo $templateParams["title"];?></title>
 </html>
@@ -52,16 +53,16 @@
                         <a href="venditore.php" class="text-decoration-none text-dark">Vendi</a>
                     </li>
                     <li>
-                        <a href="modifica.php" class="text-decoration-none text-dark">Modifica un prodotto</a>
+                        <a href="vendorSearch.php" class="text-decoration-none text-dark">Modifica un prodotto</a>
                     </li>
                 </ul>
                 <?php endif;?>
             <?php endif; ?>
         </nav>
-        <div>
-            <!--TODO: add logo-->
+        <div class="logo">
+            <a href="index.php">TSO</a>
         </div>
-        <span onclick="openNav()">&#9776;</span>
+        <a class="hamburger" href="#" onclick="openNav()">&#9776;</a>
     </header>
     <main class="flex-container">
         <?php if(isset($templateParams["name"])){

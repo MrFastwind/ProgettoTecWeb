@@ -1,7 +1,7 @@
 <section>
     <div class="tableContainer">
         <header>
-            <h2 class="text-white">NOTIFICHE</h2>
+            <h1>NOTIFICHE</h1>
         </header>
         <table class="notifications">
             <tr>

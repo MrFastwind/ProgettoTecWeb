@@ -1,5 +1,5 @@
 <form action="#" method="POST">
-    <h2 class="text-white">SIGN UP</h2>
+    <h1>SIGN UP</h1>
     <?php if(isset($templateParams["erroreSignup"])): ?>
         <p><?php echo $templateParams["erroreSignup"]; ?></p>
     <?php endif; ?>

@@ -1,5 +1,5 @@
 <header>
-    <h2 class="text-white">AGGIUNGI UN PRODOTTO</h2>
+    <h1>AGGIUNGI UN PRODOTTO</h1>
 </header>
 <form action="#" method="POST">
     <?php if(isset($templateParams["success"])): ?>

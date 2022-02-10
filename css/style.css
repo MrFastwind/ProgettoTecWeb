@@ -35,7 +35,7 @@ body > header > nav > form > input[type="text"]{
     left: 0;
     background-color: white;
     overflow-x: hidden;
-    transition: 0.5s;
+    transition: 0.25s;
 }
 
 .overlay .closebtn{
@@ -44,20 +44,38 @@ body > header > nav > form > input[type="text"]{
     font-size: 40px;
 }
 
+.logo{
+    float: right;
+    margin-right: 1rem;
+    margin-top: 5px;
+}
+
+.logo > a{
+    font-size: 38px;
+    color: #474545;
+    text-decoration: none;
+    font-weight: 700;
+}
+
 nav > ul {
-    margin-top: 75px;
+    margin-top: 50px;
     margin-left: 1%;
+}
+
+nav > ul:first-child{
+    margin-top: 75px;
 }
 
 nav > ul > li > a{
     font-size: 20px;
 }
 
-header > span {
+header > .hamburger {
     font-size: 40px;
-    color: white;
+    color: #474545;
     cursor: pointer;
     margin-left: 0.5%;
+    text-decoration: none;
 }
 
 .flex-container{
@@ -74,13 +92,14 @@ header > span {
 h1, h2{
     font-weight: 700;
     font-size: 20px;
+    color: #474545;
     text-transform: uppercase;
 }
 
 .carousel{
     position: relative;
     height: 200px;
-    min-width: 300px;
+    min-width: 22rem;
     text-align: center;
     justify-content: center;
 }
@@ -125,11 +144,11 @@ h1, h2{
 }
 
 .carousel-btn-left{
-    left: -20px;
+    left: -2px;
 }
 
 .carousel-btn-right{
-    right: -20px;
+    right: -2px;
 }
 
 .carousel-btn img {
@@ -236,15 +255,19 @@ main > form > p{
     text-transform: uppercase;
     text-align: center;
     color: white;
-    border: solid #f8d62c;
     border-radius: 50px;
-    background-color: #f8d62c;
-    padding: 20px 50px;
+    padding: 30px 50px;
+    font-weight: 700;
 }
 
 .addToCart > li{
     display: inline;
     padding-top: 20px;
+}
+
+.category ul li a{
+    background-size: cover;
+    background-position: center;
 }
 
 main form ul li textarea {
@@ -286,7 +309,7 @@ main form ul li select{
 .notifications th {
     text-align: left;
     background-color: #7ef176;
-    color: black;
+    color: #474545;
 }
 
 section > ul > li{
@@ -336,7 +359,7 @@ div.accordion-collapse{
     width: 75%;
 }
 
-section header h2.cartHeader{
+section header h1.cartHeader{
     margin-left: 5%;
 }
 

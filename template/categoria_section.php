@@ -1,6 +1,6 @@
 <section>
     <header>
-        <h1 class="text-white"><?php echo $templateParams["title"]; ?></h1>
+        <h1><?php echo $templateParams["title"]; ?></h1>
     </header>
     <?php if(isset($templateParams["cartSuccess"])): ?>
         <p class="text-white"><?php echo($templateParams["cartSuccess"]);?></p>

@@ -1,11 +1,8 @@
 <section>
     <header>
-        <h1 class="text-white">PRODOTTI IN EVIDENZA</h1>
+        <h1>PRODOTTI IN EVIDENZA</h1>
     </header>
     <div class="carousel">
-        <button class="carousel-btn carousel-btn-left is-hidden">
-            <img src="<?php echo(retrieveImage("left.svg", IMG_DIR));?>" alt="left"/>
-        </button>
         <div class="carousel-track-container">
             <div class="carousel-track">
                 <?php foreach($products as $product): ?>
@@ -15,6 +12,9 @@
                 <?php endforeach ?>
             </div>
         </div>
+        <button class="carousel-btn carousel-btn-left is-hidden">
+            <img src="<?php echo(retrieveImage("left.svg", IMG_DIR));?>" alt="left"/>
+        </button>
         <button class="carousel-btn carousel-btn-right">
             <img src="<?php echo(retrieveImage("right-arrow.svg", IMG_DIR));?>" alt="right"/>
         </button>
