@@ -39,7 +39,8 @@ class NotificationFactory{
 
         public function notifyProductOutOfStock(Product $product):bool{
             $productId=$product->ProductID;
-            return $this->dbr->createNotification("Product $productId, is out of stock!",$this->dbr->getVendorByProduct($productId));
+            $productName=$product->Name;
+            return $this->dbr->createNotification("Il prodotto #$productId \"$productName\" è esaurito!",$this->dbr->getVendorByProduct($productId));
         }
     }
 }
