@@ -3,6 +3,7 @@
 namespace database{
 
     use database\exceptions\ExceedProductAvailability;
+    use database\exceptions\CategoryDoesNotExist;
     use database\exceptions\mysqliBindException;
     use database\exceptions\NoCart;
     use database\exceptions\NotClient;
@@ -117,7 +118,12 @@ class DatabaseRequests{
         /**
          * getCategories
          *
-         * @return array
+         * @return array 
+         *  [row => {
+         *           CategoryID   => (int)
+         *           Name         => (string)
+         *      }
+         *  ]
          */
         public function getCategories():array{
             $query= "SELECT * FROM Category";
@@ -134,14 +140,15 @@ class DatabaseRequests{
          *
          * @param  int $idcategory the id of the category
          * @return string containing the name
+         * @throws CategoryDoesNotExist
          */
-        public function getCategoryById($idcategory):array|false{
+        public function getCategoryById($idcategory):array{
             $result = $this->executeQuery("SELECT Name FROM Category WHERE CategoryID=?"
                 ,MYSQLI_ASSOC,'i',$idcategory);
             if(is_array($result)){
                 return $result[0];
             }
-            return false;
+            throw new CategoryDoesNotExist($idcategory);
         }
         
         ## Product
@@ -339,6 +346,67 @@ class DatabaseRequests{
             WHERE ProductID=?
             SQL;
             return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$quantity,$productId);
+        }
+        
+        /**
+         * changeProductDescription
+         *
+         * @param  int $productId
+         * @param  string $description
+         * @return bool
+         */
+        public function changeProductDescription(int $productId, string $description):bool{
+            $query=<<<SQL
+            UPDATE Product
+            SET `Description`=?
+            WHERE ProductID=?
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'si',$description,$productId);
+        }
+        
+        /**
+         * changeProductCategory
+         *
+         * @param  mixed $productId
+         * @param  mixed $categoryId
+         * @return bool
+         * @throws CategoryDoesNotExist
+         */
+        public function changeProductCategory(int $productId, int $categoryId):bool{
+            $this->getCategoryById($categoryId);
+            $query=<<<SQL
+            UPDATE Product
+            SET CategoryID=?
+            WHERE ProductID=?
+            SQL;
+            return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$categoryId,$productId);
+        }
+        
+        /**
+         * changeProductInfo
+         *
+         * @param  int $productId
+         * @param  int $quantity
+         * @param  int $price
+         * @param  string $description
+         * @param  int $categoryId
+         * @return bool
+         * @throws UnexpectedValueException
+         * @throws CategoryDoesNotExist
+         */
+        public function changeProductInfo(int $productId,int $quantity, int $price, string $description, int $categoryId):bool{
+
+            $this->db->begin_transaction();
+            try{
+                $this->changeProductPrice($productId,$price);
+                $this->changeProductQuantity($productId,$quantity);
+                $this->changeProductDescription($productId,$description);
+                $this->changeProductCategory($productId,$categoryId);
+                $this->db->commit();
+                return true;    
+            }finally{}
+            $this->db->rollback();
+            return false;
         }
         
         /**
