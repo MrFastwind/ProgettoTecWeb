@@ -1,3 +1,5 @@
+
+<script src="js/cart.js"></script>
 <section>
     <header>
         <h1 class="cartHeader">CARRELLO</h1>
@@ -13,10 +15,17 @@
                 $product = $dbm->getFactory()->getProduct($item->ProductID);
                 $img = retrieveImage($product->Image, IMG_DIR);
             ?>
-                <tr>
+                <tr id="<?php echo($product->ProductID);?>">
                     <td><img class="tableImg" src="<?php echo($img);?>" alt="<?php echo ($product->Name);?>"></td>
                     <td><p><?php echo($product->Name);?></p></td>
                     <td><p>Quantità: <?php echo($item->Quantity);?></p></td>
+                    <td>
+                        <select id="<?php echo($product->ProductID);?>" name="quantity">
+                            <?php for($i=0; $i<=$product->Quantity; $i++): ?>
+                            <option value="<?php echo($i);?>" <?php if($item->Quantity==$i){echo('selected="selected"');}?>><?php echo($i);?></option>
+                            <?php endfor ?>
+                        </select>
+                    </td>
                 </tr>
             <?php endforeach ?>
         </table>
