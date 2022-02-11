@@ -83,6 +83,5 @@
             <li><a class="text-decoration-none text-white" href="#">FACEBOOK</a></li>
             <li><a class="text-decoration-none text-white" href="#">INSTAGRAM</a></li>
         </ul>
-        <!--TODO: add logo-->
     </footer>
 </body>

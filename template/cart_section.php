@@ -23,7 +23,8 @@
         <footer>
             <ul class="list-unstyled">
                 <li>
-                    <p class="text-white">Totale: <?php echo($price);?>.00 €</p>
+                    <label>Totale: </label>
+                    <p id="price"><?php echo($price);?>.00€</p>
                 </li>
                 <li>
                     <a href="checkout.php" class="checkoutBtn">Checkout</a>
