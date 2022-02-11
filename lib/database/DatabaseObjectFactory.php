@@ -159,7 +159,7 @@ namespace database{
         }
 
         /**
-         * getUserCart
+         * getCart
          *
          * @param  mixed $userId
          * @return Cart
