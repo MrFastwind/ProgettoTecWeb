@@ -1,4 +1,4 @@
-<form action="#" method="POST">
+<form action="#" method="POST" class="signup">
     <h1>SIGN UP</h1>
     <?php if(isset($templateParams["erroreSignup"])): ?>
         <p><?php echo $templateParams["erroreSignup"]; ?></p>
