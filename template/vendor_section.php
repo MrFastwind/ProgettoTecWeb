@@ -7,7 +7,7 @@
     <?php endif; ?>
     <ul class="list-unstyled">
         <li>
-            <input type="text" name="productName" placeholder="Nome del prodotto"/>
+            <input type="text" class="product-name" name="productName" placeholder="Nome del prodotto"/>
         </li>
         <li>
             <textarea name="productDescription" id="description" cols="30" rows="5" placeholder="Breve descrizione del prodotto..."></textarea>
