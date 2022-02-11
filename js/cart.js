@@ -76,7 +76,8 @@ function updatePrice() {
     function (data) {
       const response = parseResponseWithData(data);
       if (response.success) {
-        if (!isNaN(response.data.Amount)) {
+        response.data.Amount = parseInt(response.data.Amount);
+        if (isNaN(response.data.Amount)) {
           response.data.Amount = 0;
         }
         $("#price").text(response.data.Amount + ".00€");
