@@ -6,7 +6,7 @@
         $imageName = str_replace("/","",$_POST["productName"]);
         $user = $_SESSION["User"];
         $categoryId = array_search($_POST["category"],$dbm->getFactory()->getCategories());
-        $dbm->getRequests()->createProduct($_POST["productName"], $_POST["productDescription"], "$imageName.png", $_POST["quantity"], $_POST["price"], $user->UserID, $categoryId);
+        $dbm->getRequests()->createProduct($_POST["productName"], $_POST["productDescription"], "$imageName", $_POST["quantity"], $_POST["price"], $user->UserID, $categoryId);
         $templateParams["success"] = "Prodotto aggiunto";
     }
 

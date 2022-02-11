@@ -157,8 +157,8 @@ h1, h2{
     opacity: 1;
 }
 
-.carousel-overlay > ul >li{
-    padding-top: 15px;
+.carousel-overlay > ul >li:first-child{
+    padding-top: 30px;
 }
 
 .carousel-btn{
@@ -207,6 +207,10 @@ h1, h2{
     display: none;
 }
 
+.home-form{
+    max-width: 90%;
+}
+
 main > form > input[type="text"]{
     width: 90%;
     border: solid white;
@@ -244,13 +248,19 @@ main > form > footer{
     margin-top: 10px;
 }
 
-.login ul li input[type="text, password"]{
+.login ul li input[type="text"]{
     border: solid white;
     border-radius: 10px;
     width: 100%;
 }
 
 input[type="password"]{
+    border: solid white;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.product-name{
     border: solid white;
     border-radius: 10px;
     width: 100%;
@@ -405,7 +415,7 @@ div.accordion-collapse{
     width: 75%;
 }
 
-section header h1.cartHeader{
+.cartHeader{
     margin-left: 5%;
 }
 
@@ -472,6 +482,7 @@ input.vendor-search{
 }
 
 .vendor-search-container > ul > li{
+    width: 100%;
     margin-bottom: 75px;
 }
 

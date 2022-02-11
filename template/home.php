@@ -9,10 +9,10 @@
                     <div class="carousel-slide current-slide" style="background-image: linear-gradient(rgba(55,55,55,.6), rgba(55,55,55,.6)), url('<?php echo(retrieveImage($product->Image,IMG_DIR));?>');">
                         <ul class="carousel-text list-unstyled">
                             <li>
-                                <p class="text-white"><?php echo($product->Name); ?></p>
+                                <h2 class="text-white"><?php echo($product->Name); ?></h2>
                             </li>
                             <li>
-                                <p class="text-warning"><?php echo($product->Price); ?>.00€</p>
+                                <h2 class="text-warning"><?php echo($product->Price); ?>.00€</h2>
                             </li>
                         </ul>
                         <div class="carousel-overlay">
@@ -64,12 +64,14 @@
     </div>
     <script src="js/carousel.js"></script>
 </section>
-<form action="search.php" method="GET">
+<form action="search.php" method="GET" class="home-form">
+    <label hidden for="search">Cerca</label>
     <input type="text" name="search" id="search" placeholder="Cerca un prodotto..."/>
-    <button type="submit" class="searchbtn">
+    <label hidden for="searchbtn">Invia</label>
+    <button type="submit" class="searchbtn" name="searchbtn">
         <img src="/img/search.png" alt="Search">
     </button>
     <footer>
-        <p class="text-white">Hai un prodotto che ti interessa e non è disponibile? <a class="text-warning" href="#">Scrivici</a></p>
+        <p class="text-black">Hai un prodotto che ti interessa e non è disponibile? <a class="text-warning" href="#">Scrivici</a></p>
     </footer>
 </form>
