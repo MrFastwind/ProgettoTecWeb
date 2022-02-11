@@ -9,6 +9,8 @@
         if(isset($_POST["productDescription"]) && isset($_POST["quantity"]) && isset($_POST["price"]) && isset($_POST["category"])){
             $dbm->getRequests()->changeProductPrice($vendorChoice->ProductID, $_POST['price']);
             $dbm->getRequests()->changeProductQuantity($vendorChoice->ProductID, $_POST['quantity']);
+            $dbm->getRequests()->changeProductDescription($vendorChoice->ProductID, $_POST["productDescription"]);
+
             $templateParams['success'] = "Prodotto modificato correttamente";
             $vendorChoice = $dbm->getFactory()->getProduct($_GET['vendorChoice']);
         }
