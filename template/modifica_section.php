@@ -11,19 +11,10 @@
                 <textarea name="productDescription" id="description" cols="30" rows="5"><?php echo($vendorChoice->Description);?></textarea>
             </li>
             <li>
-                <input type="number" min="0" name="quantity" value="<?php echo($vendorChoice->Quantity);?>"/>
+                <input type="number" min="0" name="quantity" placeholder="Quantità"/>
             </li>
             <li>
-                <input type="number" min="0" name="price" value="<?php echo($vendorChoice->Price);?>"/>
-            </li>
-            <li>
-                <select name="category">
-                    <?php foreach($categories as $categoria): ?>
-                        <option value=<?php echo($categoria);?> <?php if($vendorChoice->Category==$categoria): ?> selected="selected" <?php endif ?>>
-                        <?php echo($categoria);?>
-                    </option>
-                    <?php endforeach ?>
-                </select>
+                <input type="number" min="0" name="price" placeholder="Prezzo"/>
             </li>
             <li>
                 <div class="btnContainer">
