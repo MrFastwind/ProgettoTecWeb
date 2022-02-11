@@ -2,7 +2,10 @@
 namespace database{
     //TODO: divide in multiple factories
 
+    use database\exceptions\DoesNotExist;
+    use database\exceptions\NoCart;
     use database\exceptions\NotClient;
+    use Exception;
     use password_utils as pu;
     class DatabaseObjectFactory{
 
@@ -146,6 +149,28 @@ namespace database{
             }
             $cartId = $this->dbh->getClientCartId($userId);
             $result = $this->dbh->getCartByUser($userId);
+            if(is_array($result)){
+                $items = array();
+                foreach($result as $item){
+                    $items[$item['ProductID']]=new CartItem(...$item);
+                }
+                return new Cart($cartId,$userId,$items);
+            }
+        }
+
+        /**
+         * getUserCart
+         *
+         * @param  mixed $userId
+         * @return Cart
+         * @throws DoesNotExist
+         */
+        public function getCart(int $cartId):Cart{
+            $userId = $this->dbh->getUserIdByCart($cartId);
+            if (!$userId){
+                throw new DoesNotExist("Cart doesn't exist");
+            }
+            $result = $this->dbh->getCart($cartId);
             if(is_array($result)){
                 $items = array();
                 foreach($result as $item){

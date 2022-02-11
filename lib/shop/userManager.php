@@ -7,6 +7,7 @@ namespace shop{
     use database\exceptions\UserNotExist;
     use database\exceptions\WrongPassword;
     use shop\exceptions\EmailIsInvalid;
+    use shop\exceptions\NotLoggedIn;
     use utils\PasswordUtils;
 
 class UserManager{
@@ -54,21 +55,55 @@ class UserManager{
             $this->notify->notifyNewUser($user);
             return $user;
         }
-
+        
+        /**
+         * isUserLogged
+         *
+         * @return bool
+         */
         public function isUserLogged():bool{
             return !empty($_SESSION['User']);
         }
-
+        
+        /**
+         * getSessionUser
+         *
+         * @return User
+         * @throws NotLoggedIn if user is not logged
+         */
+        public function getSessionUser():User{
+            if(!$this->isUserLogged()){
+                throw new NotLoggedIn();
+            }
+            return $_SESSION['User'];
+        }
+        
+        /**
+         * logOut
+         *
+         * @return void
+         */
         public function logOut(){
             $this->sessionDestroy();
         }
-
+        
+        /**
+         * sessionDestroy
+         *
+         * @return void
+         */
         private function sessionDestroy(){
             session_destroy();
             session_reset();
             session_start();
         }
-
+        
+        /**
+         * loginUser
+         *
+         * @param  User $user
+         * @return void
+         */
         private function loginUser(User $user){
             $this->sessionDestroy();
             $_SESSION['User']=$user;
