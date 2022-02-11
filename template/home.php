@@ -6,17 +6,44 @@
         <div class="carousel-track-container">
             <div class="carousel-track">
                 <?php foreach($products as $product): ?>
-                    <div class="carousel-slide current-slide" style="background-image: linear-gradient(rgba(220,220,220,.6), rgba(220,220,220,.6)), url('<?php echo(retrieveImage($product->Image,IMG_DIR));?>');">
-                        <p class="text-white"><?php echo($product->Name); ?></p>
+                    <div class="carousel-slide current-slide" style="background-image: linear-gradient(rgba(55,55,55,.6), rgba(55,55,55,.6)), url('<?php echo(retrieveImage($product->Image,IMG_DIR));?>');">
+                        <p class="carousel-text"><?php echo($product->Name); ?></p>
+                        <div class="carousel-overlay">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <p class="text-white"><?php echo($product->Description);?></p>
+                                </li>
+                                <li>
+                                    <p class="text-white">Prezzo per singola unità: <?php echo($product->Price);?>.00€</p>
+                                </li>
+                            </ul>
+                            <form action="addTocart.php" method="POST">
+                                <ul class="list-unstyled addToCart">
+                                    <li>
+                                        <select name="quantity">
+                                            <?php for($i=1; $i<=$product->Quantity; $i++): ?>
+                                                <option value="<?php echo($i);?>"><?php echo($i);?></option>
+                                            <?php endfor ?>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <input type="submit" name="add" value="🛒Aggiungi al carrello" id="addToCart"/>
+                                    </li>
+                                    <li>
+                                        <input type="hidden" name="product" value="<?php echo($product->ProductID);?>"/>
+                                    </li>
+                                </ul>
+                            </form>
+                        </div>
                     </div>
                 <?php endforeach ?>
             </div>
         </div>
         <button class="carousel-btn carousel-btn-left is-hidden">
-            <img src="<?php echo(retrieveImage("left.svg", IMG_DIR));?>" alt="left"/>
+            <p><</p>
         </button>
         <button class="carousel-btn carousel-btn-right">
-            <img src="<?php echo(retrieveImage("right-arrow.svg", IMG_DIR));?>" alt="right"/>
+            <p>></p>
         </button>
         <div class="carousel-nav">
         <button class="carousel-indicator current-slide"></button>
