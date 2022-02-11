@@ -60,7 +60,17 @@ if(key_exists("product_id",$_GET)){
         return;
     }
 }else{
-
+    if(key_exists("total",$_GET)){
+        try{
+            $dbm->getFactory()->getCart($cartId);
+            $total = $dbm->getRequests()->calculateTotalSum($cartId);
+        }catch(DoesNotExist $e){
+            echo Response::error($e->getMessage());
+            return;
+        }
+        echo Response::ok("Success",$total);
+        return;
+    }else{
     try{
         $cart = $dbm->getFactory()->getCart($cartId);
     }catch(DoesNotExist $e){
@@ -69,6 +79,7 @@ if(key_exists("product_id",$_GET)){
     }
     echo Response::ok("Success",$cart);
     return;
+    }
 }
 
 ?>
