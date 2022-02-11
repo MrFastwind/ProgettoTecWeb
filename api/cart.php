@@ -29,7 +29,7 @@ if(key_exists("cart_id",$_GET)){
 }
 
 if(key_exists("product_id",$_GET)){
-    $product_id=$_GET["product_id"];
+    $productId=$_GET["product_id"];
     
     $item = $dbm->getRequests()->getItemFromCartAndProduct($cartId,$productId);
     if(key_exists("quantity",$_GET)){
@@ -46,7 +46,7 @@ if(key_exists("product_id",$_GET)){
             echo Response::ok("Item added!");
             return;
         }else{
-            $dbm->getRequests()->updateQuantityInCart($cartId,$product_id,$quantity);
+            $dbm->getRequests()->updateQuantityInCart($cartId,$productId,$quantity);
             echo Response::ok("Item updated!");
             return;
         }
