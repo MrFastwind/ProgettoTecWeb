@@ -215,7 +215,7 @@ main > form > footer{
     margin-top: 10px;
 }
 
-main > form > ul > li > input{
+input[type="number"]{
     border: solid white;
     border-radius: 10px;
     width: 100%;
@@ -229,7 +229,7 @@ form > ul > li{
     text-align: center;
 }
 
-main > form ul li input[type="submit"]{
+main > form ul li input[type="submit"], .edit-btn{
     font-size: 20px;
     text-align: center;
     color: white;
@@ -267,7 +267,6 @@ main > form > p{
 
 .category ul li a{
     background-size: cover;
-    background-position: center;
 }
 
 main form ul li textarea {
@@ -409,8 +408,35 @@ section footer ul li a{
     padding: 5px 20px;
 }
 
-p{
-    font-size: 16px;
+input.vendor-search{
+    border: solid white;
+    border-radius: 10px;
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 20px;
+}
+
+.vendor-search-container{
+    text-align: center;
+}
+
+.vendor-search-container > ul{
+    margin-top: 50px;
+}
+
+.vendor-search-container > ul > li{
+    margin-bottom: 75px;
+}
+
+.vendor-search-product{
+    text-decoration: none;
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+    text-align: center;
+    padding: 30px 50px;
+    border-radius: 50px;
+    background-size: cover;
 }
 
 body > footer{

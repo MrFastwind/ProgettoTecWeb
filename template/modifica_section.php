@@ -27,7 +27,7 @@
             </li>
             <li>
                 <div class="btnContainer">
-                    <input type="submit" name="submitProduct" value="Aggiungi"/>
+                    <input class="edit-btn" type="submit" name="submitProduct" value="Modifica"/>
                 </div>
             </li>
         </ul>
