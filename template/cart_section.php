@@ -18,8 +18,7 @@
                 <tr id="<?php echo($product->ProductID);?>">
                     <td><img class="tableImg" src="<?php echo($img);?>" alt="<?php echo ($product->Name);?>"></td>
                     <td><p><?php echo($product->Name);?></p></td>
-                    <td><p>Quantità: <?php echo($item->Quantity);?></p></td>
-                    <td>
+                    <td><p>Quantità:</p>
                         <select id="<?php echo($product->ProductID);?>" name="quantity">
                             <?php for($i=0; $i<=$product->Quantity; $i++): ?>
                             <option value="<?php echo($i);?>" <?php if($item->Quantity==$i){echo('selected="selected"');}?>><?php echo($i);?></option>
