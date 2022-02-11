@@ -17,8 +17,10 @@
         <nav id="myNav" class="overlay">
             <a href="javascript:void(0)" class="closebtn text-decoration-none text-dark" onclick="closeNav()">&#9776;</a>
             <form action="search.php" method="GET">
+                <label hidden for="search">Cerca</label>
                 <input type="text" id="search" name="search" placeholder="Cerca..."/>
-                <button type="submit" class="searchbtn">
+                <label hidden for="">Invia</label>
+                <button type="submit" name="submit"class="searchbtn">
                     <img src="/img/search.png" alt="Search">
                 </button>
             </form>
@@ -81,6 +83,5 @@
             <li><a class="text-decoration-none text-white" href="#">FACEBOOK</a></li>
             <li><a class="text-decoration-none text-white" href="#">INSTAGRAM</a></li>
         </ul>
-        <!--TODO: add logo-->
     </footer>
 </body>

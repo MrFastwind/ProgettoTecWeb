@@ -237,11 +237,15 @@ input:placeholder-shown{
     font-size: 20px;
     text-decoration: none;
     text-align: center;
-    color: white;
+    color: #474545;
     border: solid #7ef176;
     border-radius: 50px;
     background-color: #7ef176;
     padding: 5px 20px;
+}
+
+.homeButton:hover{
+    color: #474545;
 }
 
 main > form > footer{
@@ -289,7 +293,7 @@ form > ul > li{
 main > form ul li input[type="submit"], .edit-btn{
     font-size: 20px;
     text-align: center;
-    color: white;
+    color: #474545;
     border: solid #7ef176;
     border-radius: 50px;
     background-color: #7ef176;
@@ -448,7 +452,18 @@ section footer ul {
     margin-left: 5%;
 }
 
+section footer ul li{
+    font-size: 20px;
+    font-weight: 300;
+    margin-left: 5%;
+}
+
 section footer ul li p{
+    font-size: 20px;
+    font-weight: 300;
+}
+
+section footer ul li label{
     font-size: 20px;
     font-weight: 300;
 }
@@ -457,12 +472,16 @@ section footer ul li a{
     font-size: 20px;
     text-decoration: none;
     text-align: center;
-    color: white;
+    color: #474545;
     border: solid #7ef176;
     border-radius: 50px;
     background-color: #7ef176;
-    margin-left: 30%;
+    margin-left: 60%;
     padding: 5px 20px;
+}
+
+section footer ul li a:hover{
+    color: #474545;
 }
 
 input.vendor-search{
@@ -495,6 +514,10 @@ input.vendor-search{
     padding: 30px 50px;
     border-radius: 50px;
     background-size: cover;
+}
+
+.vendor-search-product:hover{
+    color: white;
 }
 
 body > footer{
