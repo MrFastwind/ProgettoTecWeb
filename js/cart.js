@@ -55,7 +55,7 @@ function parseResponse(data) {
   var message = data["status"];
   var pl = data["data"];
   var flag = status == "OK" ? true : false;
-  return flag, message, pl === undefined ? {} : pl;
+  return flag;
 }
 
 function setValueInField(id, quantity) {
@@ -68,21 +68,29 @@ function resetValueInField(id) {
 }
 
 function updatePrice() {
-  var total = 0;
-  memory.forEach((it, k) => {
-    $get
-      .getJSON(PROD_URL, {
-        id: k,
-      })
-      .then(function (data) {
-        var success,
-          msg,
-          prod = parseResponse(data);
-        if (success) {
-          total += prod.Price * it;
+  $.getJSON(
+    CART_URL,
+    {
+      total: true,
+    },
+    function (data) {
+      const response = parseResponseWithData(data);
+      if (response.success) {
+        response.data.Amount = parseInt(response.data.Amount);
+        if (isNaN(response.data.Amount)) {
+          response.data.Amount = 0;
         }
-      });
-  });
+        $("#price").text(response.data.Amount + ".00€");
+      }
+    }
+  );
+}
 
-  $("#price").val(total);
+function parseResponseWithData(data) {
+  var status = data["status"];
+  var message = data["status"];
+  var pl = data["data"];
+  var flag = status == "OK" ? true : false;
+  var pl = pl === undefined ? {} : pl;
+  return { success: flag, msg: message, data: pl };
 }
