@@ -7,7 +7,14 @@
             <div class="carousel-track">
                 <?php foreach($products as $product): ?>
                     <div class="carousel-slide current-slide" style="background-image: linear-gradient(rgba(55,55,55,.6), rgba(55,55,55,.6)), url('<?php echo(retrieveImage($product->Image,IMG_DIR));?>');">
-                        <p class="carousel-text"><?php echo($product->Name); ?></p>
+                        <ul class="carousel-text list-unstyled">
+                            <li>
+                                <p class="text-white"><?php echo($product->Name); ?></p>
+                            </li>
+                            <li>
+                                <p class="text-warning"><?php echo($product->Price); ?>.00€</p>
+                            </li>
+                        </ul>
                         <div class="carousel-overlay">
                             <ul class="list-unstyled">
                                 <li>
