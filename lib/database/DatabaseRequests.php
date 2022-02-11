@@ -886,6 +886,9 @@ class DatabaseRequests{
             if(!$result || empty($result)){
                 return false;
             }
+            if($result[0]["Amount"]=="null"||$result[0]["Quantity"]=="null"){
+                return ["Amount"=>0,"Quantity"=>0];
+            }
             return $result[0];
         }
         
