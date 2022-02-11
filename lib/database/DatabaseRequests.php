@@ -714,6 +714,32 @@ class DatabaseRequests{
             SQL;
             return $this->executeQuery($query,MYSQLI_ASSOC,'ii',$cartId,$productId);
         }
+        
+        /**
+         * getItemFromCartAndProduct
+         *
+         * @param  int $cartId
+         * @param  int $productId
+         * @return array [row => {
+         *                  'CartItemID' => (int)
+         *                  'CartID'     => (int)
+         *                  'ProductID'  => (int)
+         *                  'Quantity'   => (int)
+         *               }] or empty if no CartItem is present
+         */
+        public function getItemFromCartAndProduct(int $cartId,int $productId):array{
+            
+            $query = <<<SQL
+            SELECT CartItemID, CartItem.CartID as CartID, CartItem.ProductID as ProductID, CartItem.Quantity as Quantity
+            FROM CartItem
+            WHERE CartItem.CartID = ? AND CartItem.ProductID = ?
+            SQL;
+            $result = $this->executeQuery($query,MYSQLI_ASSOC,'ii',$cartId,$productId);
+            if(is_array($result)&& !empty($result)){
+                return $result[0];
+            }
+            return array();
+        }
 
         /**
          * createCartForUser
