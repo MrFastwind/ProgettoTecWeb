@@ -22,7 +22,7 @@ $length= array_key_exists(LABEL_LENGTH,$_GET)?(int)$_GET[LABEL_LENGTH]:10;
 if(array_key_exists(LABEL_ID,$_GET)){
     try{
         $product = $dbm->getFactory()->getProduct($_GET[LABEL_ID]);
-        echo(Response::ok($product));
+        echo(Response::ok("Success",$product));
     }catch(Exception $e){
         echo(Response::error(Response::ERROR_NO_ELEMENT_FOR_ID));
     }
