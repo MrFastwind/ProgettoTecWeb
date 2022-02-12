@@ -73,6 +73,6 @@
         <img src="/img/search.png" alt="Search">
     </button>
     <footer>
-        <p class="text-black">Hai un prodotto che ti interessa e non è disponibile? <a href="#">Scrivici</a></p>
+        <p class="text-black">Hai un prodotto che ti interessa e non è disponibile? <a href="https://gmail.com">Scrivici</a></p>
     </footer>
 </form>
