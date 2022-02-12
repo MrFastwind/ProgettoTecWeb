@@ -16,9 +16,9 @@ searchBar.addEventListener('keyup', (e) => {
     for(let i=0; i<searchItems.length; i++){
         let a =searchItems[i].text;
         if( a.toLowerCase().includes(searchString)){
-            searchItems[i].classList.remove('is-hidden');
+            searchItems[i].parentElement.classList.remove('is-hidden');
         }else{
-            searchItems[i].classList.add('is-hidden');
+            searchItems[i].parentElement.classList.add('is-hidden');
         }
     }
 });

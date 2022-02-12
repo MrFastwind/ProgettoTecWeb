@@ -4,17 +4,22 @@
     </header>
     <form action="#" method="POST">
         <?php if(isset($templateParams["success"])): ?>
-            <p class="text-white"><?php echo $templateParams["success"]; ?></p>
+            <p class="text-black"><?php echo $templateParams["success"]; ?></p>
+        <?php endif; ?>
+        <?php if(isset($templateParams["error"])): ?>
+            <p class="text-black"><?php echo $templateParams["error"]; ?></p>
         <?php endif; ?>
         <ul class="list-unstyled">
             <li>
                 <textarea name="productDescription" id="description" cols="30" rows="5"><?php echo($vendorChoice->Description);?></textarea>
             </li>
             <li>
-                <input type="number" min="0" name="quantity" placeholder="Quantità"/>
+                <label for="quantity">Quantità: </label>
+                <input type="number" min="0" name="quantity" placeholder="Quantità" value="<?php echo($vendorChoice->Quantity);?>"/>
             </li>
             <li>
-                <input type="number" min="0" name="price" placeholder="Prezzo"/>
+                <label for="price">Prezzo:</label>
+                <input type="number" min="0" name="price" placeholder="Prezzo" value="<?php echo($vendorChoice->Price);?>"/>
             </li>
             <li>
                 <div class="btnContainer">

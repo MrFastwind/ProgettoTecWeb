@@ -7,12 +7,18 @@
         $templateParams["name"] = "modifica_section.php";
         $templateParams["title"] = "modifica";
         if(isset($_POST["productDescription"]) && isset($_POST["quantity"]) && isset($_POST["price"])){
-            $dbm->getRequests()->changeProductPrice($vendorChoice->ProductID, $_POST['price']);
-            $dbm->getRequests()->changeProductQuantity($vendorChoice->ProductID, $_POST['quantity']);
-            $dbm->getRequests()->changeProductDescription($vendorChoice->ProductID, $_POST["productDescription"]);
+            if(!empty($_POST["quantity"]) && !empty($_POST["price"])){
+                $dbm->getRequests()->changeProductPrice($vendorChoice->ProductID, $_POST['price']);
+                $dbm->getRequests()->changeProductQuantity($vendorChoice->ProductID, $_POST['quantity']);
+                $dbm->getRequests()->changeProductDescription($vendorChoice->ProductID, $_POST["productDescription"]);
+                
 
-            $templateParams['success'] = "Prodotto modificato correttamente";
-            $vendorChoice = $dbm->getFactory()->getProduct($_GET['vendorChoice']);
+                $templateParams['success'] = "Prodotto modificato correttamente";
+                $vendorChoice = $dbm->getFactory()->getProduct($_GET['vendorChoice']);
+            }
+            else{
+                $templateParams["error"] = "Errore nella modifica del prodotto";
+            }
         }
     }
 

@@ -1,5 +1,4 @@
 const CART_URL = "api/cart.php";
-const PROD_URL = "api/product.php";
 
 $("document").ready(function () {
   prepare();

@@ -168,11 +168,12 @@ class DatabaseRequests{
             LEFT JOIN Category
             ON Product.CategoryID=Category.CategoryID
             WHERE UserID=VendorID 
-            ORDER BY Category.Name
+            ORDER BY
             SQL;
             if($random){
-                $query .= ", rand()";
+                $query .= " rand(),";
             }
+            $query.=" Category.Name";
             if($n > 0 && $start>-1){
                 $query .= " LIMIT ? OFFSET ?";
                 $params[] = $n;
