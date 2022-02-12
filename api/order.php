@@ -9,10 +9,18 @@ header("Content-Type: application/json; charset=UTF-8");
 
 
 if(!key_exists('id',$_GET)){
-    echo Response::error("no order id!");
+    echo Response::error("No order id!");
     return;
 }
 $id = $_GET['id'];
+
+$order = $dbm->getRequests()->getOrder($id);
+
+if(empty($order)){
+    echo Response::error("Order doesn't exist!");
+    return;
+}
+
 $logged=$shop->getUserManager()->isUserLogged();
 
 
