@@ -27,6 +27,7 @@
                             <form action="addTocart.php" method="POST">
                                 <ul class="list-unstyled addToCart">
                                     <li>
+                                        <label class="text-white" for="quantity">Quantità: </label>
                                         <select name="quantity">
                                             <?php for($i=1; $i<=$product->Quantity; $i++): ?>
                                                 <option value="<?php echo($i);?>"><?php echo($i);?></option>
@@ -34,7 +35,7 @@
                                         </select>
                                     </li>
                                     <li>
-                                        <input type="submit" name="add" value="🛒Aggiungi al carrello" id="addToCart"/>
+                                        <input class="cart-btn"type="submit" name="add" value="&#128722;" id="addToCart"/>
                                     </li>
                                     <li>
                                         <input type="hidden" name="product" value="<?php echo($product->ProductID);?>"/>

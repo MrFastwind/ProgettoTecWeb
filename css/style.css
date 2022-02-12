@@ -207,6 +207,18 @@ h1, h2{
     display: none;
 }
 
+.cart-btn{
+    width: 20%;
+    border-radius: 50px;
+    font-size: 16px;
+    text-align: center;
+    color: black;
+    border: solid #f8d62c;
+    border-radius: 50px;
+    background-color: #f8d62c;
+    margin-left: 20%;
+}
+
 .home-form{
     max-width: 90%;
 }
@@ -409,7 +421,7 @@ div.accordion-collapse{
     border: solid white;
 }
 
-.addToCart > li > input[type="submit"]{
+#addToCart{
     font-size: 16px;
     text-align: center;
     color: black;
@@ -417,7 +429,7 @@ div.accordion-collapse{
     border-radius: 50px;
     background-color: #f8d62c;
     width: 75%;
-}
+}*/
 
 .cart-section div p{
     margin-left: 5%;
