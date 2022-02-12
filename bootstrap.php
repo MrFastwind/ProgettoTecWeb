@@ -1,16 +1,31 @@
 <?php
-session_start();
+
+if (basename($_SERVER['SCRIPT_NAME']) == basename("bootstrap.php")) {
+    header('Location: index.php');
+  }
 
 //Defines
-define("IMG_DIR", "./img/");
+define("IMG_DIR", "/img/");
 
 //Load Libs
 include_once("lib/autoload.php");
-LoadClasses();
+include_once("lib/utils/logger.php");
+include_once("lib/utils/imageRetrive.php");
 
-//Load other files
-
+//Load Session
+session_start();
 
 //Define Variables
-$dbh = new database\DatabaseHelper("localhost", "root", "", "e-commerce");
+$database_connection = array(
+    "servername"=>"localhost", 
+    "username"=>"root",
+    "password"=>"",
+    "dbname"=>"e-commerce"
+);
+
+// Database Manager
+$dbm = new database\DatabaseManager(...$database_connection);
+
+// Shop Manager
+$shop = new shop\Shop($dbm);
 ?>
