@@ -11,8 +11,8 @@
                 <h2><?php echo($name);?></h2>
                 <?php foreach($products as $product): ?>
                     <ul class="list-unstyled products">
-                        <li>
-                            <a class="vendor-search-product" href="modifica.php?vendorChoice=<?php echo($product->ProductID)?>" style="background-image: linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)), url('<?php echo(retrieveImage($product->Image,IMG_DIR));?>');"><?php echo($product->Name);?></a>
+                        <li class="vendor-search-product-container"style="background-image: linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)), url('<?php echo(retrieveImage($product->Image,IMG_DIR));?>');">
+                            <a class="vendor-search-product" href="modifica.php?vendorChoice=<?php echo($product->ProductID)?>"><?php echo($product->Name);?></a>
                         </li>
                     </ul>
                 <?php endforeach ?>

@@ -506,6 +506,7 @@ input.vendor-search{
 
 .vendor-search-container{
     text-align: center;
+    justify-content: center;
 }
 
 .vendor-search-container > ul{
@@ -517,15 +518,19 @@ input.vendor-search{
     margin-bottom: 75px;
 }
 
+.vendor-search-product-container{
+    background-size: cover;
+    padding: 40px 0;
+    border-radius: 50px;
+    text-align: center;
+}
+
 .vendor-search-product{
     text-decoration: none;
     color: white;
     font-weight: 700;
     font-size: 20px;
-    text-align: center;
-    padding: 30px 50px;
-    border-radius: 50px;
-    background-size: cover;
+    display: inline-block;
 }
 
 .vendor-search-product:hover{
