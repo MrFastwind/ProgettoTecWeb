@@ -35,7 +35,7 @@
                                         </select>
                                     </li>
                                     <li>
-                                        <input class="cart-btn"type="submit" name="add" value="&#128722;" id="addToCart"/>
+                                        <input class="cart-btn"type="submit" name="add" value="&#128722;"/>
                                     </li>
                                     <li>
                                         <input type="hidden" name="product" value="<?php echo($product->ProductID);?>"/>
