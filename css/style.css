@@ -419,6 +419,18 @@ div.accordion-collapse{
     width: 75%;
 }
 
+.cart-section div p{
+    margin-left: 5%;
+}
+
+p a{
+    color: #0F0F0F;
+}
+
+p a:hover{
+    color: #0F0F0F;
+}
+
 .cartHeader{
     margin-left: 5%;
 }
