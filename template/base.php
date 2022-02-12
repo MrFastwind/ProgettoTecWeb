@@ -79,9 +79,9 @@
             <li><a class="text-decoration-none text-white" href="#">SPEDIZIONE</a></li>
         </ul>
         <ul class="list-unstyled" id="social">
-            <li><a class="text-decoration-none text-white" href="#">TWITTER</a></li>
-            <li><a class="text-decoration-none text-white" href="#">FACEBOOK</a></li>
-            <li><a class="text-decoration-none text-white" href="#">INSTAGRAM</a></li>
+            <li><a class="text-decoration-none text-white" href="https://twitter.com">TWITTER</a></li>
+            <li><a class="text-decoration-none text-white" href="https://facebook.com">FACEBOOK</a></li>
+            <li><a class="text-decoration-none text-white" href="https://instagram.com">INSTAGRAM</a></li>
         </ul>
     </footer>
 </body>
