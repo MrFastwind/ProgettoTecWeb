@@ -203,6 +203,16 @@ h1, h2{
     background: rgba(0, 0, 0, .75);
 }
 
+#order{
+    margin-top: 10%;
+}
+
+#order select{
+    border: solid white;
+    border-radius: 10px;
+    width: 50%;
+}
+
 .is-hidden{
     display: none;
 }

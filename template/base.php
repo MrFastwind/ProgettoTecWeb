@@ -57,6 +57,9 @@
                     <li>
                         <a href="vendorSearch.php" class="text-decoration-none text-dark">Modifica un prodotto</a>
                     </li>
+                    <li>
+                        <a href="modifica_ordine.php" class="text-decoration-none text-dark">Modifica lo stato di un ordine</a>
+                    </li>
                 </ul>
                 <?php endif;?>
             <?php endif; ?>
