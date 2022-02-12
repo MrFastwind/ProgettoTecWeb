@@ -1,12 +1,13 @@
 
 <script src="js/cart.js"></script>
-<section>
+<section class="cart-section">
     <header>
         <h1 class="cartHeader">CARRELLO</h1>
     </header>
     <div>
+        <p>Non hai finito di fare acquisti? Torna al <a href="catalogo.php">catalogo</a></p>
         <?php if(isset($templateParams["cartSuccess"])): ?>
-            <p><?php echo($templateParams["cartSuccess"]);?> <a href="notifiche.php" class="text-warning">notifiche</a></p>
+            <p><?php echo($templateParams["cartSuccess"]);?> <a href="notifiche.php">notifiche</a></p>
         <?php endif ?>
     </div>
     <?php if (!empty($items) && count($items)!=0): ?>
