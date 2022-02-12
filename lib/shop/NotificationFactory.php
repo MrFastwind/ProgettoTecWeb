@@ -1,10 +1,13 @@
 <?php
 namespace shop{
 
+    use database\Cart;
     use database\DatabaseRequests;
     use database\exceptions\DatabaseException;
+    use database\exceptions\NoUser;
     use database\Product;
     use database\User;
+    use Exception;
 
 class NotificationFactory{
 
@@ -18,7 +21,18 @@ class NotificationFactory{
 
 
         public function notifyOrderCreation(int $userid,int $orderId):bool{
-            return $this->dbr->createNotification("L'ordine $orderId è stato creato",$userid);
+            return $this->dbr->createNotification("L'ordine #$orderId è stato creato",$userid);
+        }
+
+        public function notifyVendorWithProductToSend(int $orderId,Cart $cart):bool{
+            foreach($cart->Items as $item){
+                try{
+                $userid = $this->dbr->getVendorByProduct($item->ProductID);
+                $product = $this->dbr->getProductById($item->ProductID)["Name"];
+                $this->dbr->createNotification("Spedire '$product' x$item->Quantity, per l'ordine $orderId!",$userid);
+                }catch(NoUser $e){}
+            }
+            return true;
         }
 
         public function notifyOrderProgress(int $userid,int $orderId):bool{

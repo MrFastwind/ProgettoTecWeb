@@ -26,7 +26,9 @@ class OrderManager{
         }
         $success = $this->dbm->getRequests()->createOrderFromUserCart($user);
         if($success){
-            $this->notify->notifyOrderCreation($user,$this->dbm->getRequests()->getOrderFromCart($cart->CartID)['OrderID']);
+            $orderId = $this->dbm->getRequests()->getOrderFromCart($cart->CartID)['OrderID'];
+            $this->notify->notifyOrderCreation($user,$orderId);
+            $this->notify->notifyVendorWithProductToSend($orderId,$cart);
             //Check Product For Out of Stock
             $this->checkLastOrder($cart);
         }
