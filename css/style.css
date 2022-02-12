@@ -158,7 +158,11 @@ h1, h2{
 }
 
 .carousel-overlay > ul >li:first-child{
-    padding-top: 30px;
+    padding-top: 10%;
+}
+
+.carousel-overlay > ul > li > p{
+    margin-top: 8%;
 }
 
 .carousel-btn{
@@ -583,4 +587,27 @@ body > footer > ul > li{
     display: inline-block;
     padding: 0 0 10px 2%;
     font-size: 11px;
+}
+
+#order-id{
+    max-width: 30%;
+}
+
+@media screen and (min-width:600px) {
+    .carousel{
+        min-width: 500px;
+        min-height: 280px;
+    }
+    .cartTable{
+        min-width: 450px !important;
+    }
+    body{
+        font-size: 20px;
+    }
+    h1, h2{
+        font-size: 30px;
+    }
+    p{
+        font-size: 20px;
+    }
 }
