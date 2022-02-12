@@ -7,7 +7,7 @@ $stati=['AtStorage','Departed','Delivered','Collected'];
         <h1>Modifica ordine</h1>
     </header>
     <div>
-        <label for="edit-select">Digita l'ordine da modificare:</label>
+        <label for="edit-select">Digita l'ID dell'ordine da modificare:</label>
         <input type="number" id="order-id">
     </div>
     <div class="is-hidden" id="order">
