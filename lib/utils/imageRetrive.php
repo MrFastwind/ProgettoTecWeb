@@ -1,6 +1,6 @@
 <?php
 
-const DEFAULT_IMAGE="noimage.png";
+const DEFAULT_IMAGE="noimage.jpg";
 
 function retrieveImage(string $imagePath, string $dir):string{
     $imagePath = str_replace("/","",$imagePath);
