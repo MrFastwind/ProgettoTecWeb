@@ -511,8 +511,7 @@ section footer ul li a:hover{
 input.vendor-search{
     border: solid white;
     border-radius: 10px;
-    width: 90%;
-    margin-left: 5%;
+    width: 100%;
     margin-bottom: 20px;
 }
 

@@ -1,9 +1,9 @@
 <section>
     <header>
-        <h1>SCEGLI UN PRODOTTO DA MODIFICARE</h1>
+        <h1>SCEGLI UN PRODOTTO</h1>
     </header>
     <form action="#" method="POST">
-        <input class="vendor-search" id="vendor-search" type="text" placeholder="Cerca il prodotto da modificare..."/>
+        <input class="vendor-search" id="vendor-search" type="text" placeholder="Cerca il prodotto..."/>
     </form>
     <div class="vendor-search-container">
         <?php foreach($categories as $key=>$name): ?>
