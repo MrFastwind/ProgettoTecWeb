@@ -16,7 +16,6 @@ function prepareInput(){
       },function (data) {
         var response = parseResponseWithData(data);
           if(response.success){
-              console.log(response);
             //show div
             $("#order").removeClass("is-hidden");
             //select actual status
@@ -25,6 +24,8 @@ function prepareInput(){
             //hide div
             $("#order").addClass("is-hidden");
           }
+      }).fail(function(data){
+        $("#order").addClass("is-hidden");
       })
     });
   }
@@ -88,3 +89,13 @@ function parseResponseWithData(data) {
   var pl = pl === undefined ? {} : pl;
   return { success: flag, msg: message, data: pl };
 }
+
+
+/*"<br />
+<b>Fatal error</b>:  Uncaught ArgumentCountError: Too few arguments to function database\Order::__construct(), 0 passed in C:\xampp\htdocs\ProgettoTecWeb\lib\database\DatabaseObjectFactory.php on line 193 and exactly 4 expected in C:\xampp\htdocs\ProgettoTecWeb\lib\database\Order.php:9
+Stack trace:
+#0 C:\xampp\htdocs\ProgettoTecWeb\lib\database\DatabaseObjectFactory.php(193): database\Order-&gt;__construct()
+#1 C:\xampp\htdocs\ProgettoTecWeb\api\order.php(44): database\DatabaseObjectFactory-&gt;getOrder(1883)
+#2 {main}
+  thrown in <b>C:\xampp\htdocs\ProgettoTecWeb\lib\database\Order.php</b> on line <b>9</b><br />
+" */
