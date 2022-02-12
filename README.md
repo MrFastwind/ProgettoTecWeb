@@ -1,18 +1,12 @@
 # Progetto di Tecnologie Web
 
-Progetto di tecnologie web, su un e-commerce
+Progetto di tecnologie web su un e-commerce
 
 ## Technology
 
-Stack: ~~MEAN~~ LAMP (DAMP)
+Stack: LAMP
 
-- Docker/Linux/Windows
+- Linux/Windows
 - Apache
 - MySQL
 - PHP
-
-## TODO
-
-- [ ] Back-End
-- [ ] Front-End
-- [ ] Mockup
