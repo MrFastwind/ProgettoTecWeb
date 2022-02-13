@@ -282,10 +282,10 @@ class DatabaseRequests{
             $query = <<<SQL
             SELECT ProductID, Product.Name, Image, Description, Quantity, Price, Username as Vendor, Category.Name as Category
             FROM Product, User, Category
-            WHERE ( Product.Name LIKE ? OR Product.Description LIKE ?) AND UserID=VendorID AND Product.CategoryID=Category.CategoryID
+            WHERE ( Product.Name LIKE ? OR Product.Description LIKE ? OR Category.Name LIKE ?) AND UserID=VendorID AND Product.CategoryID=Category.CategoryID
             LIMIT ? OFFSET ?
             SQL;
-            $result=$this->executeQuery($query,MYSQLI_ASSOC,'ssii',$search,$search,$n,$start);
+            $result=$this->executeQuery($query,MYSQLI_ASSOC,'sssii',$search, $search,$search,$n,$start);
             if(is_array($result)){
                 return $result;
             }
