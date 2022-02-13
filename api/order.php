@@ -2,6 +2,7 @@
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bootstrap.php");
 use api\response;
 use database\OrderStatus;
+use database\User;
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
@@ -50,7 +51,15 @@ if(key_exists('status',$_GET)){
 }else{
     try{
         $order=$dbm->getFactory()->getOrder($id);
-        echo Response::ok(data: ["status"=>$order->OrderStatusID]);
+        $pl;
+        try{
+            $userId = $dbm->getRequests()->getUserIdByCart($order->CartID);
+            $user = $dbm->getFactory()->getUser($userId);
+            $pl = ["status"=>$order->OrderStatusID,"user"=>$user->Username];
+        }catch(User $e){
+            $pl = ["status"=>$order->OrderStatusID];
+        }
+        echo Response::ok(data: $pl);
     }catch(Exception $e){
         echo Response::error("No order with that id");
     }

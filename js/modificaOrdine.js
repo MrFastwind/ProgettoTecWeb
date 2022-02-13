@@ -22,6 +22,7 @@ function prepareInput() {
           $("#order").removeClass("is-hidden");
           //select actual status
           $("select").val(response.data.status);
+          $("#order-user").text(response.data.user);
         } else {
           //hide div
           $("#order").addClass("is-hidden");

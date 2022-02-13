@@ -11,6 +11,8 @@ $stati=['AtStorage','Departed','Delivered','Collected'];
         <input type="number" id="order-id">
     </div>
     <div class="is-hidden" id="order">
+        <label for="order-user">Utente del ordine:</label>
+        <label id="order-user">Utente del ordine:</label><br>
         <label for="order-status">Modifica l'ordine: </label>
         <select name="order-status" id="order-status">
             <?php foreach($stati as $stato): ?>
