@@ -44,7 +44,7 @@ class NotificationFactory{
                     $orderStatus=$orderStatus['OrderStatusID'];
                 }
                 //ask for order status
-                return $this->dbr->createNotification("lo stato dell'ordine $orderId, è stato cambiato in: $orderStatus",$userid);
+                return $this->dbr->createNotification("lo stato dell'ordine #$orderId, è stato cambiato in: $orderStatus",$userid);
             }catch(DatabaseException $e){
 
             }
