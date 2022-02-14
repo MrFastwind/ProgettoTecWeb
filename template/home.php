@@ -54,9 +54,9 @@
             >
         </button>
         <div class="carousel-nav">
-        <button class="carousel-indicator current-slide"></button>
+        <button alt="carousel product selector" class="carousel-indicator current-slide">opzione 1</button>
             <?php for($i=1; $i<count($products); $i++): ?>
-                <button class="carousel-indicator"></button>
+                <button alt="carousel product selector" class="carousel-indicator">opzione <?php echo($i+1); ?></button>
             <?php endfor ?>
         </div>
     </div>
