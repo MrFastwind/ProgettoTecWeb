@@ -48,10 +48,10 @@
             </div>
         </div>
         <button class="carousel-btn carousel-btn-left is-hidden">
-            <p><</p>
+            <
         </button>
         <button class="carousel-btn carousel-btn-right">
-            <p>></p>
+            >
         </button>
         <div class="carousel-nav">
         <button class="carousel-indicator current-slide"></button>

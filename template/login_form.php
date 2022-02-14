@@ -19,6 +19,6 @@
         </li>
     </ul>
     <footer>
-        <p>Non hai un account? <a href="signup.php" class="text-warning">Registrati</a></p>
+        <p>Non hai un account? <a href="signup.php">Registrati</a></p>
     </footer>
 </form>

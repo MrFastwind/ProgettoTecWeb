@@ -24,6 +24,6 @@
             </li>
         </ul>
         <footer>
-            <p>Hai già un account? <a href="login.php" class="text-warning">Accedi</a></p>
+            <p>Hai già un account? <a href="login.php">Accedi</a></p>
         </footer>
 </form>

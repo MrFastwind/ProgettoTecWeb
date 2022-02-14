@@ -7,12 +7,12 @@ $stati=['AtStorage','Departed','Delivered','Collected'];
         <h1>Modifica ordine</h1>
     </header>
     <div>
-        <label for="edit-select">Digita l'ID dell'ordine da modificare:</label>
+        <label for="order-id">Digita l'ID dell'ordine da modificare:</label>
         <input type="number" id="order-id">
     </div>
     <div class="is-hidden" id="order">
         <label for="order-user">Utente del ordine:</label>
-        <label id="order-user">Utente del ordine:</label><br>
+        <label id="order-user"></label><br>
         <label for="order-status">Modifica l'ordine: </label>
         <select name="order-status" id="order-status">
             <?php foreach($stati as $stato): ?>

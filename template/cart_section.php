@@ -16,7 +16,7 @@
                 $product = $dbm->getFactory()->getProduct($item->ProductID);
                 $img = retrieveImage($product->Image, IMG_DIR);
             ?>
-                <tr id="<?php echo($product->ProductID);?>">
+                <tr>
                     <td><img class="tableImg" src="<?php echo($img);?>" alt="<?php echo ($product->Name);?>"></td>
                     <td><p><?php echo($product->Name);?></p></td>
                     <td><p>Quantità:</p>

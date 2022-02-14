@@ -1,6 +1,6 @@
 <section>
     <header>
-        <h1 class="text-white">PRODOTTI</h1>
+        <h1 class="">PRODOTTI</h1>
     </header>
     <?php if(isset($templateParams["cartSuccess"])): ?>
         <p class="text-white"><?php echo($templateParams["cartSuccess"]);?></p>
@@ -34,7 +34,7 @@
                                             </select>
                                         </li>
                                         <li>
-                                            <input type="submit" name="add" value="🛒Aggiungi al carrello" id="addToCart"/>
+                                            <input class="addToCart-item" type="submit" name="add" value="🛒Aggiungi al carrello"/>
                                         </li>
                                         <li>
                                             <input type="hidden" name="product" value="<?php echo($product->ProductID);?>"/>

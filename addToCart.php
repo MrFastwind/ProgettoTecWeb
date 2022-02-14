@@ -1,7 +1,7 @@
 <?php
     require_once("./bootstrap.php");
 
-    if($shop->getUserManager()->isUserLogged()){
+    if($shop->getUserManager()->isUserLogged() && $shop->getUserManager()->getSessionUser()->isClient){
         $user = $_SESSION["User"];
         $cart = $dbm->getFactory()->getUserCart($user->UserID);
         if(isset($_POST["product"]) && isset($_POST["quantity"])){
